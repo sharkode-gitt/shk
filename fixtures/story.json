@@ -1,0 +1,45 @@
+{
+  "title": "My Sister Stole My Birthday",
+  "music": "tense",
+  "cast": [
+    { "id": "emily", "ref": "hero" },
+    { "id": "mia", "name": "Mia", "voice": "teen_girl",
+      "look": { "skin": "#f2c79b", "shirt": "#7b5cff", "pants": "#2b2b2b", "hair": "long", "hat": "crown" } },
+    { "id": "mom", "name": "Mom", "voice": "mom",
+      "look": { "shirt": "#e8718d", "pants": "#3a4a6b", "hair": "bun", "hat": null } }
+  ],
+  "scenes": [
+    {
+      "set": "bedroom", "time": "morning", "music": "happy",
+      "beats": [
+        { "narrate": "[sad] On my 10th birthday, my sister ruined everything.",
+          "shot": "wide",
+          "do": [{ "who": "emily", "act": "idle", "face": "sad" }] },
+        { "say": { "who": "mia", "line": "[smug] Mom said it's MY party now!" },
+          "shot": "closeup:mia",
+          "do": [{ "who": "mia", "act": "point", "at": "emily", "face": "smug" }] },
+        { "narrate": "I could not believe it.",
+          "shot": "push_in:emily",
+          "do": [{ "who": "emily", "act": "shocked", "face": "shocked" }] }
+      ]
+    },
+    {
+      "set": "living_room", "time": "afternoon",
+      "beats": [
+        { "say": { "who": "mom", "line": "Girls, calm down!" },
+          "shot": "orbit",
+          "do": [
+            { "who": "mom", "act": "walk_to", "at": "table", "face": "neutral" },
+            { "who": "emily", "act": "sit", "at": "chair" }
+          ] },
+        { "say": { "who": "emily", "line": "[shouting] It is not fair!" },
+          "shot": "shake",
+          "do": [{ "who": "emily", "act": "cry", "face": "crying" }] },
+        { "narrate": "That was the worst birthday ever.",
+          "shot": "wide",
+          "do": [{ "who": "mia", "act": "idle", "face": "smug" }] }
+      ]
+    }
+  ],
+  "wants": []
+}
