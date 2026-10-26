@@ -50,6 +50,34 @@ test('5 cast members rejected; 1 rejected; 2 and 4 accepted', () => {
   assert.equal(validateStory(five).ok, false);
 });
 
+test('cast member errors cite the field path', () => {
+  const voice = clone();
+  voice.cast[1].voice = 'alien';
+  assert.ok(errorsOf(voice).some((e) => e.includes('cast[1].voice')));
+
+  const hair = clone();
+  hair.cast[1].look.hair = 'mohawk';
+  assert.ok(errorsOf(hair).some((e) => e.includes('cast[1].look.hair')));
+
+  const noLook = clone();
+  delete noLook.cast[1].look;
+  assert.ok(errorsOf(noLook).some((e) => e.includes('cast[1].look')));
+});
+
+test('hero entry rules', () => {
+  const withLook = clone();
+  withLook.cast[0].look = clone().cast[1].look;
+  assert.ok(errorsOf(withLook).some((e) => e.includes('cast[0].look')));
+
+  const wrongId = clone();
+  wrongId.cast[0].id = 'mia2';
+  assert.ok(errorsOf(wrongId).some((e) => e.includes('cast[0].id')));
+
+  const reserved = clone();
+  reserved.cast[1].id = 'emily';
+  assert.ok(errorsOf(reserved).some((e) => e.includes('cast[1].id')));
+});
+
 test('duplicate cast ids rejected', () => {
   const s = clone();
   s.cast.push(extra('mia'));

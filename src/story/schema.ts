@@ -13,10 +13,14 @@ const Look = z.object({
   hat: z.literal([...HATS]),
 });
 
-const CastMember = z.union([
-  z.object({ id: z.literal(HERO), ref: z.literal('hero') }),
-  z.object({ id: z.string().regex(IDENT), name: z.string().min(1), voice: z.enum(VOICES), look: Look }),
-]);
+// One flat shape (not a union) so zod reports field-level paths; hero vs non-hero is enforced in StorySchema.
+const CastMember = z.object({
+  id: z.string().regex(IDENT),
+  ref: z.literal('hero').optional(),
+  name: z.string().min(1).optional(),
+  voice: z.enum(VOICES).optional(),
+  look: Look.optional(),
+});
 
 const Do = z.object({
   who: z.string(),
@@ -66,7 +70,16 @@ export const StorySchema = z
   .superRefine((story, ctx) => {
     const bad = (path: (string | number)[], message: string) => ctx.addIssue({ code: 'custom', path, message });
     const ids = story.cast.map((c) => c.id);
-    if (!story.cast.some((c) => 'ref' in c)) bad(['cast'], 'cast must include emily as { "id": "emily", "ref": "hero" }');
+    if (!story.cast.some((c) => c.ref === 'hero')) bad(['cast'], 'cast must include emily as { "id": "emily", "ref": "hero" }');
+    story.cast.forEach((c, i) => {
+      if (c.ref === 'hero') {
+        if (c.id !== HERO) bad(['cast', i, 'id'], `hero entry must have id "${HERO}"`);
+        (['name', 'voice', 'look'] as const).forEach((k) => c[k] !== undefined && bad(['cast', i, k], `hero entry must not have ${k}`));
+      } else {
+        if (c.id === HERO) bad(['cast', i, 'id'], `id "${HERO}" is reserved for { "ref": "hero" }`);
+        (['name', 'voice', 'look'] as const).forEach((k) => c[k] === undefined && bad(['cast', i, k], `${k} is required for non-hero cast members`));
+      }
+    });
     ids.forEach((id, i) => ids.indexOf(id) !== i && bad(['cast', i, 'id'], `duplicate cast id "${id}"`));
     const isCast = (id: string) => ids.includes(id);
     const castError = (id: string) => `"${id}" is not a cast id (${ids.join(', ')})`;

@@ -3,8 +3,8 @@ import type { StorySchema } from './story/schema.ts';
 import type { SETS, TIMES, ACTS, FACES, PROPS, MUSIC, SHOT_KINDS } from './vocab.ts';
 
 export type Story = z.infer<typeof StorySchema>;
-// The hero cast entry has no look, so pick the member that does.
-export type Look = Extract<Story['cast'][number], { look: unknown }>['look'];
+// The hero cast entry has no look, so it is optional on the cast type.
+export type Look = NonNullable<Story['cast'][number]['look']>;
 export type Shot = { kind: ShotKind; targets: string[] };
 
 export type SetName = (typeof SETS)[number];
