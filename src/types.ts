@@ -25,6 +25,15 @@ export type PartName =
   | 'LeftUpperArm' | 'RightUpperArm' | 'LeftLowerArm' | 'RightLowerArm' | 'LeftHand' | 'RightHand'
   | 'LeftUpperLeg' | 'RightUpperLeg' | 'LeftLowerLeg' | 'RightLowerLeg' | 'LeftFoot' | 'RightFoot';
 
+export type Vec3 = [number, number, number];
+/** Joint rotations are euler XYZ radians; yaw rotates around +Y. */
+export type Pose = {
+  root: { pos: Vec3; yaw: number };
+  joints: Partial<Record<JointName, Vec3>>;
+  face: Face;
+  mouth: 0 | 1 | 2;
+};
+
 // --- Timeline (seconds) ---
 export type WordTiming = { word: string; start: number; end: number };
 /** `words` are relative to the start of the audio file. */
