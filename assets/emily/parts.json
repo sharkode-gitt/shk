@@ -1,0 +1,66 @@
+{
+  "offset": [
+    0,
+    0,
+    0
+  ],
+  "groups": {
+    "Hero1": {
+      "part": "RightFoot"
+    },
+    "Hero2": {
+      "part": "RightLowerLeg"
+    },
+    "Hero3": {
+      "part": "RightUpperLeg"
+    },
+    "Hero4": {
+      "part": "LeftFoot"
+    },
+    "Hero5": {
+      "part": "LeftLowerLeg"
+    },
+    "Hero6": {
+      "part": "LeftUpperLeg"
+    },
+    "Hero7": {
+      "part": "LeftHand"
+    },
+    "Hero8": {
+      "part": "LeftLowerArm"
+    },
+    "Hero9": {
+      "part": "LeftUpperArm"
+    },
+    "Hero10": {
+      "part": "Head"
+    },
+    "Hero11": {
+      "part": "RightHand"
+    },
+    "Hero12": {
+      "part": "RightLowerArm"
+    },
+    "Hero13": {
+      "part": "RightUpperArm"
+    },
+    "Hero14": {
+      "part": "LowerTorso"
+    },
+    "Hero15": {
+      "part": "UpperTorso"
+    },
+    "Handle1": {
+      "accessory": "hair",
+      "attach": "Head"
+    },
+    "Handle2": {
+      "accessory": "crown",
+      "attach": "Head"
+    },
+    "Handle3": {
+      "accessory": "bag",
+      "attach": "UpperTorso"
+    }
+  }
+}
