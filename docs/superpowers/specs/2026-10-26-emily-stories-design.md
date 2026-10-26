@@ -75,7 +75,7 @@ O Agendador de Tarefas do Windows roda `story new --count 3` toda manhã e `stor
 
 O Claude preenche um schema fixo via *structured outputs*. O código valida com zod.
 
-- **Modelo padrão:** `claude-sonnet-5-5`, configurável para `claude-opus-5-5` em `config.json`.
+- **Modelo padrão:** `claude-opus-5-5` (cerca de US$ 0,05 a 0,08 por roteiro), configurável em `config.json`. Usa structured outputs com `fallbacks: "default"` para recusas.
 
 ```json
 {
