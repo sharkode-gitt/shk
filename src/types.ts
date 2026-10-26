@@ -24,3 +24,19 @@ export type PartName =
   | 'Head' | 'UpperTorso' | 'LowerTorso'
   | 'LeftUpperArm' | 'RightUpperArm' | 'LeftLowerArm' | 'RightLowerArm' | 'LeftHand' | 'RightHand'
   | 'LeftUpperLeg' | 'RightUpperLeg' | 'LeftLowerLeg' | 'RightLowerLeg' | 'LeftFoot' | 'RightFoot';
+
+// --- Timeline (seconds) ---
+export type WordTiming = { word: string; start: number; end: number };
+/** `words` are relative to the start of the audio file. */
+export type LineTiming = { beatId: string; file: string; duration: number; words: WordTiming[] };
+/** `beatId` is `${scene}.${beat}`, both 0-based. */
+export type Timing = { lines: LineTiming[] };
+export type TimedAction = { who: string; act: Act; face?: Face; at?: string; start: number; end: number };
+export type TimedBeat = {
+  id: string; scene: number; start: number; end: number; speaker: string; kind: 'narrate' | 'say';
+  text: string; audio: { file: string; start: number; duration: number };
+  words: WordTiming[]; // absolute
+  shot: Shot; actions: TimedAction[];
+};
+export type TimedScene = { index: number; set: SetName; time: TimeOfDay; music: Mood; start: number; end: number };
+export type Timeline = { duration: number; fps: 30; scenes: TimedScene[]; beats: TimedBeat[] };
