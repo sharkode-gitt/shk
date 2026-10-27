@@ -7,11 +7,35 @@
       "skillPath": "skills/agent-browser/SKILL.md",
       "computedHash": "dd491d53824ad9286ec950aee667098446332429a6d41fe28b4ba11f1959264c"
     },
+    "hyperframes": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes/SKILL.md",
+      "computedHash": "754d909e943e97050d544cebedc21b24138a4e805518dc9603fa914e9aed6261"
+    },
+    "hyperframes-cli": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-cli/SKILL.md",
+      "computedHash": "f6c8a9b2aa4518d3b3b4520c55979cd955899a4928e15a6e00397ac46040b361"
+    },
+    "hyperframes-registry": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-registry/SKILL.md",
+      "computedHash": "1acf359546af75f92fdcfa7fe685d53f0e85a121f145a4b90f8e4d9e763b8990"
+    },
     "lemo-opuscar": {
       "source": "lemomo-ai/lemo-opuscar",
       "sourceType": "github",
       "skillPath": "plugin/skills/lemo-opuscar/SKILL.md",
       "computedHash": "9eac59ef358adfea6d30ac6053b3543847cc72a435db30d4bb0708a6f39b9344"
+    },
+    "media-use": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/media-use/SKILL.md",
+      "computedHash": "372fda62380e0d70f540c4d413af8bc2d89b03c99d85cb557e0e1f0e3e7d79b5"
     },
     "motionmaxxing": {
       "source": "Tejashmakwana/motionmaxxing",
