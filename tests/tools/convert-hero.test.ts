@@ -16,14 +16,14 @@ test('mini.obj: offset is recovered and groups get the right parts', () => {
 });
 
 test('real export: 15 Hero groups map to 15 distinct parts', () => {
-  const map = mapParts(readFileSync('assets/emily/emily.obj', 'utf8'), rig);
+  const map = mapParts(readFileSync('assets/characters/emily/emily.obj', 'utf8'), rig);
   const parts = Object.entries(map.groups).flatMap(([g, v]) => (g.startsWith('Hero') && 'part' in v ? [v.part] : []));
   assert.equal(parts.length, 15);
   assert.deepEqual([...new Set(parts)].sort(), Object.keys(rig.parts).sort());
 });
 
 test('real export: Handle groups become hair, crown and bag once each', () => {
-  const map = mapParts(readFileSync('assets/emily/emily.obj', 'utf8'), rig);
+  const map = mapParts(readFileSync('assets/characters/emily/emily.obj', 'utf8'), rig);
   const acc = Object.entries(map.groups).flatMap(([g, v]) => (g.startsWith('Handle') && 'accessory' in v ? [{ g, ...v }] : []));
   assert.deepEqual(acc.map((a) => a.accessory).sort(), ['bag', 'crown', 'hair']);
   const attach = Object.fromEntries(acc.map((a) => [a.accessory, a.attach]));
@@ -31,7 +31,7 @@ test('real export: Handle groups become hair, crown and bag once each', () => {
 });
 
 test('real export: the crown is the Handle with the highest y', () => {
-  const obj = readFileSync('assets/emily/emily.obj', 'utf8');
+  const obj = readFileSync('assets/characters/emily/emily.obj', 'utf8');
   const map = mapParts(obj, rig);
   const maxY: Record<string, number> = {};
   let g = '';
@@ -44,6 +44,6 @@ test('real export: the crown is the Handle with the highest y', () => {
 });
 
 test('real export matches the rig 1:1 (offset zero, no scale or mirror)', () => {
-  const map = mapParts(readFileSync('assets/emily/emily.obj', 'utf8'), rig);
+  const map = mapParts(readFileSync('assets/characters/emily/emily.obj', 'utf8'), rig);
   map.offset.forEach((v) => assert.ok(Math.abs(v) <= 0.01, `offset ${map.offset}`));
 });

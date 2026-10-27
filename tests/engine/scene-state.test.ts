@@ -9,7 +9,7 @@ import type { Story, Timing } from '../../src/types.ts';
 
 const story = storyJson as Story;
 const timeline = compileTimeline(story, timingJson as Timing);
-const payload: ScenePayload = { story, timeline, seed: 42 };
+const payload: ScenePayload = { story, timeline, seed: 42, roster: {} };
 const layout: SetLayout = Object.fromEntries(timeline.scenes.map((s) => [s.index, buildSet(s.set, s.time)]));
 const at = (t: number) => sceneState(t, payload, layout);
 const beat = (id: string) => timeline.beats.find((b) => b.id === id)!;

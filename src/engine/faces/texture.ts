@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import type { Face } from '../../types.ts';
+import { drawClassicFace } from './classic.ts';
 import { drawFace, type Rect } from './draw.ts';
+
+export type FaceStyle = 'emily' | 'classic';
 
 /**
  * Head-front UV box of the Head mesh (Hero10) in assets/emily/Hero1_diff.png (916×568).
@@ -14,9 +17,10 @@ export class FaceTexture {
   private readonly ctx: CanvasRenderingContext2D;
   private readonly rect: Rect;
   private readonly skin: string;
+  private readonly style: FaceStyle;
   private current = '';
 
-  constructor(atlas: HTMLImageElement | HTMLCanvasElement, rect: Rect, skin: string) {
+  constructor(atlas: HTMLImageElement | HTMLCanvasElement, rect: Rect, skin: string, style: FaceStyle = 'emily') {
     const canvas = document.createElement('canvas');
     canvas.width = atlas.width;
     canvas.height = atlas.height;
@@ -26,6 +30,7 @@ export class FaceTexture {
     this.ctx = ctx;
     this.rect = rect;
     this.skin = skin;
+    this.style = style;
     this.texture = new THREE.CanvasTexture(canvas);
     this.texture.colorSpace = THREE.SRGBColorSpace;
   }
@@ -34,7 +39,7 @@ export class FaceTexture {
     const key = `${face}/${mouth}`;
     if (key === this.current) return;
     this.current = key;
-    drawFace(this.ctx, face, mouth, this.rect, this.skin);
+    (this.style === 'classic' ? drawClassicFace : drawFace)(this.ctx, face, mouth, this.rect, this.skin);
     this.texture.needsUpdate = true;
   }
 }

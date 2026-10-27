@@ -1,3 +1,4 @@
+import { protagonistOf } from '../story/cast.ts';
 import { parseBeatSpeaker, parseShot } from '../story/schema.ts';
 import { stripTags } from '../story/text.ts';
 import type { Act, Story, TimedAction, TimedBeat, TimedScene, Timeline, Timing } from '../types.ts';
@@ -54,7 +55,7 @@ export function compileTimeline(story: Story, timing: Timing): Timeline {
 
       beats.push({
         id, scene: si, start, end,
-        speaker: parseBeatSpeaker(beat),
+        speaker: parseBeatSpeaker(beat, protagonistOf(story)),
         kind: beat.say ? 'say' : 'narrate',
         text: stripTags(beat.say ? beat.say.line : beat.narrate!),
         audio: { file: line.file, start, duration: line.duration },

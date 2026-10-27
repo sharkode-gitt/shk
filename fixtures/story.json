@@ -2,7 +2,7 @@
   "title": "My Sister Stole My Birthday",
   "music": "tense",
   "cast": [
-    { "id": "emily", "ref": "hero" },
+    { "id": "emily", "ref": "emily" },
     { "id": "mia", "name": "Mia", "voice": "teen_girl",
       "look": { "skin": "#f2c79b", "shirt": "#7b5cff", "pants": "#2b2b2b", "hair": "long", "hat": "crown" } },
     { "id": "mom", "name": "Mom", "voice": "mom",

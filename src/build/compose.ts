@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { musicAutomation, musicClips, sfxEvents } from './audio.ts';
 import { bundleEngine } from './bundle.ts';
 import { captionChunks, captionColor } from './captions.ts';
+import { charactersDir, loadRoster, type Roster } from '../characters/roster.ts';
+import { rosterIdOf } from '../story/cast.ts';
 import type { Mood, Story, Timeline } from '../types.ts';
 
 export type CompositionOptions = {
@@ -18,6 +20,8 @@ export type CompositionOptions = {
   music: Record<Mood, string[]>;
   /** `act:<name>` / `cut` -> sound file, absolute or relative to `audioDir`. */
   sfxMap: Record<string, string>;
+  /** Where `characters/<id>/` live; defaults to the project's assets folder. */
+  assetsDir?: string;
 };
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
@@ -45,9 +49,24 @@ async function stage(compDir: string, audioDir: string, group: string, file: str
 /** Writes jobDir/comp/ (index.html plus everything it loads) and returns its path. */
 export async function writeComposition(opts: CompositionOptions): Promise<string> {
   const { jobDir, story, timeline, seed, audioDir, music, sfxMap } = opts;
+  const assetsDir = opts.assetsDir ?? join(ROOT, 'assets');
+  const allRoster = loadRoster(assetsDir);
+  // Only the characters this story uses go into the composition (id -> info).
+  const roster: Roster = {};
+  for (const member of story.cast) {
+    const id = rosterIdOf(member);
+    if (!id) continue;
+    if (!allRoster[id]) throw new Error(`cast member "${member.id}" refers to character "${id}", which is not in ${charactersDir(assetsDir)}`);
+    roster[id] = allRoster[id];
+  }
   const compDir = join(jobDir, 'comp');
   await mkdir(compDir, { recursive: true });
   const taken = new Map<string, string>();
+
+  const speakerName = (id: string) => {
+    const member = story.cast.find((m) => m.id === id);
+    return member?.name ?? roster[rosterIdOf(member ?? {}) ?? id]?.name ?? id;
+  };
 
   // --- captions ---
   const chunks = captionChunks(timeline.beats);
@@ -57,7 +76,7 @@ export async function writeComposition(opts: CompositionOptions): Promise<string
     const id = `cap-${i}`;
     const dur = Math.max(c.end - c.start, 0.05);
     const name = c.kind === 'say'
-      ? `<div class="who" style="color:${captionColor(c.speaker, story, c.kind)}">${esc(story.cast.find((m) => m.id === c.speaker)?.name ?? c.speaker)}</div>`
+      ? `<div class="who" style="color:${captionColor(c.speaker, story, c.kind, roster)}">${esc(speakerName(c.speaker))}</div>`
       : '';
     const words = c.words.map((w, j) => `<span id="${id}-w${j}" class="w">${esc(w.word)}</span>`).join(' ');
     capHtml.push(`<div id="${id}" class="cap clip" data-start="${num(c.start)}" data-duration="${num(dur)}" data-track-index="2">${name}<div class="line">${words}</div></div>`);
@@ -94,7 +113,7 @@ export async function writeComposition(opts: CompositionOptions): Promise<string
   await bundleEngine(join(compDir, 'engine.js'));
   await copyFile(join(ROOT, 'node_modules/gsap/dist/gsap.min.js'), join(compDir, 'gsap.min.js'));
   await cp(join(ROOT, 'assets/fonts'), join(compDir, 'fonts'), { recursive: true });
-  await cp(join(ROOT, 'assets/emily'), join(compDir, 'emily'), { recursive: true });
+  for (const id of Object.keys(roster)) await cp(join(charactersDir(assetsDir), id), join(compDir, 'characters', id), { recursive: true });
 
   const duration = num(timeline.duration);
   const html = `<!doctype html>
@@ -123,7 +142,7 @@ ${capHtml.join('\n')}
 </div>
 ${audioHtml.join('\n')}
 </div>
-<script type="application/json" id="scene">${json({ story, timeline, seed })}</script>
+<script type="application/json" id="scene">${json({ story, timeline, seed, roster })}</script>
 <script src="gsap.min.js"></script>
 <script>
 window.__timelines = window.__timelines || {};

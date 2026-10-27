@@ -45,7 +45,7 @@ export function galleryStory(): { story: Story; timing: Timing } {
   });
   const story = {
     title: 'Emily Stories: QA gallery', music: 'happy',
-    cast: [{ id: 'emily', ref: 'hero' }, { id: 'mia', name: 'Mia', voice: 'teen_girl', look: { skin: '#f2c79b', shirt: '#7b5cff', pants: '#2b2b2b', hair: 'long', hat: 'crown' } }],
+    cast: [{ id: 'emily', ref: 'emily' }, { id: 'mia', name: 'Mia', voice: 'teen_girl', look: { skin: '#f2c79b', shirt: '#7b5cff', pants: '#2b2b2b', hair: 'long', hat: 'crown' } }],
     scenes, wants: [],
   } as unknown as Story;
   return { story, timing: { lines } };

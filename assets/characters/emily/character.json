@@ -1,0 +1,26 @@
+{
+  "id": "emily",
+  "name": "Emily",
+  "age": 12,
+  "personality": "kind, a little shy, underestimated, gets the last word",
+  "look": "long black hair, tilted gold crown, coral sweater, grey denim shorts, black crossbody bag",
+  "color": "#ff8fb1",
+  "model": {
+    "obj": "emily.obj",
+    "mtl": "emily.mtl",
+    "atlas": "Hero1_diff.png",
+    "face": {
+      "style": "emily",
+      "rect": {
+        "x": 147,
+        "y": 293,
+        "w": 226,
+        "h": 247
+      },
+      "skin": "#f0cdc4"
+    },
+    "unflipped": [
+      "crown"
+    ]
+  }
+}

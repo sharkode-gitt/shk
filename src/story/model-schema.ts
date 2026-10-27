@@ -9,9 +9,10 @@ import { SETS, TIMES, ACTS, FACES, HAIRS, HATS, MUSIC, VOICES } from '../vocab.t
 export const StorySchemaForModel = z.object({
   title: z.string(),
   music: z.enum(MUSIC),
+  protagonist: z.string().optional(),
   cast: z.array(z.object({
     id: z.string(),
-    ref: z.literal('hero').optional(),
+    ref: z.string().optional(),
     name: z.string().optional(),
     voice: z.enum(VOICES).optional(),
     look: z.object({

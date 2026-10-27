@@ -2,6 +2,7 @@ import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from
 import { join } from 'node:path';
 import type { Config } from '../config.ts';
 import { jobPath, readStatus, setStatus } from '../jobs/store.ts';
+import { protagonistOf, rosterIdOf } from '../story/cast.ts';
 import type { Story, Timing } from '../types.ts';
 import { synthesize, type ElevenDeps } from './eleven.ts';
 
@@ -10,12 +11,11 @@ export type VoiceDeps = ElevenDeps & { config: Config; voices: Record<string, st
 export const loadVoices = (assetsDir: string): Record<string, string> =>
   JSON.parse(readFileSync(join(assetsDir, 'voices.json'), 'utf8')) as Record<string, string>;
 
-const HERO_VOICE = 'emily';
-
 function voiceIdFor(story: Story, who: string, voices: Record<string, string>): { key: string; id: string } {
   const member = story.cast.find((c) => c.id === who);
   if (!member) throw new Error(`beat speaker "${who}" is not in the cast`);
-  const key = member.ref === 'hero' ? HERO_VOICE : member.voice!;
+  // A roster character is voiced by the entry named after them in voices.json; anyone else by their voice archetype.
+  const key = rosterIdOf(member) ?? member.voice!;
   const id = voices[key];
   if (!id) throw new Error(`no ElevenLabs voice id for "${key}": fill it in assets/voices.json`);
   return { key, id };
@@ -35,7 +35,7 @@ export async function voiceJob(deps: VoiceDeps, root: string, id: string): Promi
   const lines: Timing['lines'] = [];
   for (const [si, scene] of story.scenes.entries()) {
     for (const [bi, beat] of scene.beats.entries()) {
-      const { id: voiceId } = voiceIdFor(story, beat.say?.who ?? 'emily', deps.voices);
+      const { id: voiceId } = voiceIdFor(story, beat.say?.who ?? protagonistOf(story), deps.voices);
       const text = beat.say?.line ?? beat.narrate!;
       const r = await synthesize(deps, { text, voiceId, model: deps.config.voice.model, format: deps.config.voice.format });
       const file = `audio/${si}.${bi}.mp3`;

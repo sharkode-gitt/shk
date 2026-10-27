@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import type { TimeOfDay } from '../types.ts';
 import { buildBlockCharacter } from './characters/block.ts';
-import { loadEmily } from './characters/emily.ts';
+import { loadCharacter } from './characters/model.ts';
+import { rosterIdOf } from '../story/cast.ts';
 import { FaceTexture } from './faces/texture.ts';
 import { applyPose, type Rig } from './rig.ts';
 import { buildSet } from './sets/index.ts';
@@ -50,10 +51,15 @@ async function build(): Promise<(t: number) => void> {
     scene.add(layout[s.index].group);
   }
 
-  const emily = await loadEmily(new URL('emily/', location.href).href);
+  // Roster characters are loaded once from characters/<id>/ (each has its own model, textures and face style).
+  const loaded: Record<string, { rig: Rig; face: FaceTexture }> = {};
+  await Promise.all(Object.entries(payload.roster).map(async ([id, info]) => {
+    loaded[id] = await loadCharacter(new URL(`characters/${id}/`, location.href).href, info);
+  }));
   const cast: Record<string, { rig: Rig; face: FaceTexture }> = {};
   for (const c of story.cast) {
-    if (c.ref === 'hero') cast[c.id] = emily;
+    const rosterId = rosterIdOf(c);
+    if (rosterId) cast[c.id] = loaded[rosterId];
     else {
       const face = blockFace(c.look!.skin ?? DEFAULT_SKIN);
       const rig = buildBlockCharacter(c.look!, { faceMap: face.texture });

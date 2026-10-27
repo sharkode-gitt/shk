@@ -1,5 +1,5 @@
 // One-off: map the OBJ groups of Emily's Studio export to R15 parts / accessories.
-// Usage: npx tsx tools/convert-hero.ts   (writes assets/emily/parts.json)
+// Usage: npx tsx tools/convert-hero.ts   (writes assets/characters/emily/parts.json)
 import { readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import type { PartName } from '../src/types.ts';
@@ -81,7 +81,7 @@ export function mapParts(objText: string, rig: HeroRig): PartsMap {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const rig: HeroRig = JSON.parse(readFileSync('reference/hero-rig.json', 'utf8'));
-  const map = mapParts(readFileSync('assets/emily/emily.obj', 'utf8'), rig);
-  writeFileSync('assets/emily/parts.json', JSON.stringify(map, null, 2) + '\n');
-  console.log(`wrote assets/emily/parts.json (offset ${map.offset}, ${Object.keys(map.groups).length} groups)`);
+  const map = mapParts(readFileSync('assets/characters/emily/emily.obj', 'utf8'), rig);
+  writeFileSync('assets/characters/emily/parts.json', JSON.stringify(map, null, 2) + '\n');
+  console.log(`wrote assets/characters/emily/parts.json (offset ${map.offset}, ${Object.keys(map.groups).length} groups)`);
 }

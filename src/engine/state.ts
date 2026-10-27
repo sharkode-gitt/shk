@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import type { CharacterInfo } from '../characters/roster.ts';
 import type { Face, Pose, Story, TimedBeat, Timeline, Vec3 } from '../types.ts';
 import { poseAt } from './actions/index.ts';
 import { cameraAt, type Cam } from './camera.ts';
@@ -6,7 +7,7 @@ import { buildBlockCharacter } from './characters/block.ts';
 import { applyPose, type Rig } from './rig.ts';
 import type { BuiltSet } from './sets/index.ts';
 
-export type ScenePayload = { story: Story; timeline: Timeline; seed: number };
+export type ScenePayload = { story: Story; timeline: Timeline; seed: number; roster: Record<string, CharacterInfo> };
 export type SetLayout = Record<number, BuiltSet>;
 export type SceneState = { sceneIndex: number; poses: Record<string, Pose>; camera: Cam };
 

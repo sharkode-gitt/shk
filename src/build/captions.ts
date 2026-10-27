@@ -1,3 +1,4 @@
+import { rosterIdOf } from '../story/cast.ts';
 import type { Story, TimedBeat, WordTiming } from '../types.ts';
 
 export type CaptionChunk = { start: number; end: number; speaker: string; kind: 'narrate' | 'say'; words: WordTiming[] };
@@ -34,11 +35,13 @@ export function captionChunks(beats: TimedBeat[]): CaptionChunk[] {
 const WHITE = '#ffffff';
 const hex = (n: number) => Math.round(n).toString(16).padStart(2, '0');
 
-/** Narration white, Emily pink, others their shirt lightened 35% toward white; unknown -> white. */
-export function captionColor(speaker: string, story: Story, kind: 'narrate' | 'say' = 'say'): string {
+/** Narration white, roster characters their own colour (default pink), others their shirt lightened 35% toward white; unknown -> white. */
+export function captionColor(speaker: string, story: Story, kind: 'narrate' | 'say' = 'say', roster: Record<string, { color: string }> = {}): string {
   if (kind === 'narrate') return WHITE;
-  if (speaker === 'emily') return '#ff8fb1';
-  const shirt = story.cast.find((c) => c.id === speaker)?.look?.shirt;
+  const member = story.cast.find((c) => c.id === speaker);
+  const id = member && rosterIdOf(member);
+  if (id) return roster[id]?.color ?? '#ff8fb1';
+  const shirt = member?.look?.shirt;
   const m = shirt && /^#([0-9a-f]{6})$/i.exec(shirt);
   if (!m) return WHITE;
   const n = parseInt(m[1], 16);

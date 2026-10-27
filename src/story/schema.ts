@@ -1,9 +1,12 @@
 import { z } from 'zod';
 import { SETS, TIMES, ACTS, FACES, HAIRS, HATS, MUSIC, VOICES, SHOT_KINDS } from '../vocab.ts';
 import type { Shot, ShotKind, Story } from '../types.ts';
+import { DEFAULT_PROTAGONIST, protagonistOf, rosterIdOf } from './cast.ts';
+
+export { protagonistOf, rosterIdOf };
 
 const IDENT = /^[a-z_]+$/;
-const HERO = 'emily';
+const IDENT_ID = /^[a-z][a-z0-9_]*$/;
 
 const Look = z.object({
   skin: z.string().optional(), // default skin tone is applied later by the character builder
@@ -16,7 +19,7 @@ const Look = z.object({
 // One flat shape (not a union) so zod reports field-level paths; hero vs non-hero is enforced in StorySchema.
 const CastMember = z.object({
   id: z.string().regex(IDENT),
-  ref: z.literal('hero').optional(),
+  ref: z.string().regex(IDENT_ID).optional(), // a roster character: { id: "bacon", ref: "bacon" }
   name: z.string().min(1).optional(),
   voice: z.enum(VOICES).optional(),
   look: Look.optional(),
@@ -63,6 +66,8 @@ export const StorySchema = z
   .object({
     title: z.string().min(1),
     music: z.enum(MUSIC),
+    /** Cast id of the character the story is about; narration is their voice-over. Default: the first roster character. */
+    protagonist: z.string().optional(),
     cast: z.array(CastMember).min(2).max(4),
     scenes: z.array(Scene).min(1),
     wants: z.array(z.string()),
@@ -70,16 +75,20 @@ export const StorySchema = z
   .superRefine((story, ctx) => {
     const bad = (path: (string | number)[], message: string) => ctx.addIssue({ code: 'custom', path, message });
     const ids = story.cast.map((c) => c.id);
-    if (!story.cast.some((c) => c.ref === 'hero')) bad(['cast'], 'cast must include emily as { "id": "emily", "ref": "hero" }');
+    if (!story.cast.some((c) => c.ref)) bad(['cast'], 'cast must include at least one roster character, e.g. { "id": "emily", "ref": "emily" }');
     story.cast.forEach((c, i) => {
-      if (c.ref === 'hero') {
-        if (c.id !== HERO) bad(['cast', i, 'id'], `hero entry must have id "${HERO}"`);
-        (['name', 'voice', 'look'] as const).forEach((k) => c[k] !== undefined && bad(['cast', i, k], `hero entry must not have ${k}`));
+      const roster = rosterIdOf(c);
+      if (roster) {
+        if (c.id !== roster) bad(['cast', i, 'id'], `a roster entry must have id "${roster}" (the same as its ref)`);
+        (['name', 'voice', 'look'] as const).forEach((k) => c[k] !== undefined && bad(['cast', i, k], `a roster entry must not have ${k}`));
       } else {
-        if (c.id === HERO) bad(['cast', i, 'id'], `id "${HERO}" is reserved for { "ref": "hero" }`);
-        (['name', 'voice', 'look'] as const).forEach((k) => c[k] === undefined && bad(['cast', i, k], `${k} is required for non-hero cast members`));
+        if (c.id === DEFAULT_PROTAGONIST) bad(['cast', i, 'id'], `id "${DEFAULT_PROTAGONIST}" is reserved for { "id": "emily", "ref": "emily" }`);
+        (['name', 'voice', 'look'] as const).forEach((k) => c[k] === undefined && bad(['cast', i, k], `${k} is required for cast members that are not roster characters`));
       }
     });
+    if (story.protagonist !== undefined && !story.cast.some((c) => c.id === story.protagonist && rosterIdOf(c))) {
+      bad(['protagonist'], 'protagonist must be the id of a roster character in the cast');
+    }
     ids.forEach((id, i) => ids.indexOf(id) !== i && bad(['cast', i, 'id'], `duplicate cast id "${id}"`));
     const isCast = (id: string) => ids.includes(id);
     const castError = (id: string) => `"${id}" is not a cast id (${ids.join(', ')})`;
@@ -103,8 +112,8 @@ export const StorySchema = z
     );
   });
 
-/** Who voices this beat: `say.who`, or Emily for narration. */
-export const parseBeatSpeaker = (beat: { say?: { who: string } }): string => beat.say?.who ?? HERO;
+/** Who voices this beat: `say.who`, or the protagonist for narration. */
+export const parseBeatSpeaker = (beat: { say?: { who: string } }, protagonist: string = DEFAULT_PROTAGONIST): string => beat.say?.who ?? protagonist;
 
 const formatPath = (path: PropertyKey[]) =>
   path.map((p, i) => (typeof p === 'number' ? `[${p}]` : i ? `.${String(p)}` : String(p))).join('');
