@@ -1,4 +1,7 @@
 import { readFileSync } from 'node:fs';
+import { addCharacter } from './characters/add.ts';
+import type { HeroRig } from './characters/geometry.ts';
+import { loadRoster } from './characters/roster.ts';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
@@ -34,13 +37,17 @@ const USAGE = `story <command>
   make <id> | --approved     voice, build and render (resumes where it stopped)
   list                       every job with its state and title
   gallery                    render the QA video that shows every action, face and shot
-  voices [--fill]            list the ElevenLabs voices; --fill puts a suggested voice into every empty slot of assets/voices.json`;
+  voices [--fill]            list the ElevenLabs voices; --fill puts a suggested voice into every empty slot of assets/voices.json
+  character list             the characters stories can be about
+  character add <folder> --id <id> --name <Name> [--age N] [--personality "..."] [--look "..."] [--color #rrggbb] [--style classic|emily] [--force]
+                             register a Roblox Studio export (.obj, .mtl and textures) as a character
+  new ... --character <id>   write the story about that character (otherwise Claude picks the best fit)`;
 
 export async function main(argv: string[], deps: CliDeps): Promise<number> {
   const { config, out, err } = deps;
   const root = config.paths.jobs;
   try {
-    const { values, positionals } = parseArgs({ args: argv, allowPositionals: true, options: { count: { type: 'string' }, approved: { type: 'boolean' }, fill: { type: 'boolean' }, help: { type: 'boolean', short: 'h' } } });
+    const { values, positionals } = parseArgs({ args: argv, allowPositionals: true, options: { count: { type: 'string' }, approved: { type: 'boolean' }, fill: { type: 'boolean' }, force: { type: 'boolean' }, character: { type: 'string' }, id: { type: 'string' }, name: { type: 'string' }, age: { type: 'string' }, personality: { type: 'string' }, look: { type: 'string' }, color: { type: 'string' }, style: { type: 'string' }, help: { type: 'boolean', short: 'h' } } });
     const [cmd, ...rest] = positionals;
     if (!cmd || values.help) { out(USAGE); return cmd || values.help ? EXIT.ok : EXIT.error; }
 
@@ -51,7 +58,7 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
         const client = deps.storyClient();
         let failed = 0;
         for (let i = 0; i < count; i++) {
-          const id = await writeStory({ client, root, config }, { idea: rest[0] });
+          const id = await writeStory({ client, root, config }, { idea: rest[0], character: values.character });
           const job = listJobs(root).find((j) => j.id === id)!;
           if (job.state === 'drafted') out(`${id}\t${jobPath(root, id, 'story.md')}`);
           else { failed++; err(`${id}: ${job.state}: ${job.error}`); }
@@ -105,6 +112,31 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
           if (missing.length) err(`no suitable voice found for: ${missing.join(', ')}. Add voices to your ElevenLabs account and run again.`);
           if (!current.emily) err('assets/voices.json has no voice for "emily": paste its voice id there.');
         }
+        return EXIT.ok;
+      }
+      case 'character': {
+        const [sub, folder] = rest;
+        if (sub === 'list') {
+          const roster = loadRoster(config.paths.assets);
+          const voices = JSON.parse(readFileSync(join(config.paths.assets, 'voices.json'), 'utf8')) as Record<string, string>;
+          if (!Object.keys(roster).length) out('no characters yet; try: story character add <folder> --id <id> --name <Name>');
+          for (const c of Object.values(roster)) out(`${c.id}\t${c.name}\t${c.age}\t${voices[c.id] ? 'voice ok' : 'NO VOICE'}\t${c.personality}`);
+          return EXIT.ok;
+        }
+        if (sub !== 'add') throw new Error('usage: character list | character add <folder> --id <id> --name <Name> ...');
+        if (!folder || !values.id || !values.name) throw new Error('usage: character add <folder> --id <id> --name <Name> [--age N] [--personality "..."] [--look "..."]');
+        if (values.style && values.style !== 'classic' && values.style !== 'emily') throw new Error('--style must be classic or emily');
+        const age = values.age === undefined ? 12 : Number(values.age);
+        if (!Number.isInteger(age) || age < 1) throw new Error('--age must be a whole number');
+        const rig = JSON.parse(readFileSync(new URL('../reference/hero-rig.json', import.meta.url), 'utf8')) as HeroRig;
+        const r = addCharacter({
+          srcDir: folder, assetsDir: config.paths.assets, id: values.id, name: values.name, age, rig, force: values.force,
+          personality: values.personality ?? 'cheerful and curious', look: values.look ?? 'classic Roblox look',
+          color: values.color, faceStyle: values.style as 'classic' | 'emily' | undefined,
+        });
+        out(`${r.info.id}: ${r.bodyGroups} body parts, ${r.accessories.length} accessories (${r.accessories.map((a) => `${a.accessory} on ${a.attach}`).join(', ') || 'none'}), face box ${r.info.model.face.rect.w}x${r.info.model.face.rect.h}, skin ${r.info.model.face.skin}`);
+        out(`saved in ${r.dir}`);
+        for (const w of r.warnings) err(`note: ${w}`);
         return EXIT.ok;
       }
       case 'gallery':

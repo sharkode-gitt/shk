@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { EXIT, main, type CliDeps } from '../src/cli.ts';
@@ -162,4 +162,47 @@ test('voices without the key fails naming it', async (t) => {
   const { deps, err } = setup(t, { requireEnv: (n) => requireEnv(n, {}) });
   assert.equal(await main(['voices'], deps), EXIT.error);
   assert.match(err[0], /ELEVENLABS_API_KEY/);
+});
+
+const withAssets = (t: test.TestContext) => {
+  const base = setup(t);
+  const assets = join(base.deps.config.paths.jobs, '..', 'assets');
+  mkdirSync(assets, { recursive: true });
+  writeFileSync(join(assets, 'voices.json'), JSON.stringify({ emily: 'E' }));
+  const src = join(assets, '..', 'export');
+  mkdirSync(src, { recursive: true });
+  for (const f of readdirSync('assets/characters/emily')) if (/\.(obj|mtl|png)$/.test(f)) copyFileSync(join('assets/characters/emily', f), join(src, f));
+  return { ...base, deps: { ...base.deps, config: { ...base.deps.config, paths: { ...base.deps.config.paths, assets } } }, src, assets };
+};
+
+test('character add registers an export, character list shows it with its missing voice, and new --character pins the protagonist', async (t) => {
+  const { deps, out, err, src, assets } = withAssets(t);
+  assert.equal(await main(['character', 'list'], deps), EXIT.ok);
+  assert.match(out[0], /no characters yet/);
+  out.length = 0;
+  assert.equal(await main(['character', 'add', src, '--id', 'bacon', '--name', 'Bacon', '--age', '13', '--personality', 'cheerful and clumsy'], deps), EXIT.ok);
+  assert.match(out[0], /^bacon: 15 body parts, 3 accessories .*face box \d+x\d+/);
+  assert.match(err[0], /no ElevenLabs voice yet/);
+  out.length = 0;
+  await main(['character', 'list'], deps);
+  assert.match(out[0], /^bacon\tBacon\t13\tNO VOICE\tcheerful and clumsy$/);
+  writeFileSync(join(assets, 'voices.json'), JSON.stringify({ bacon: 'V' }));
+  out.length = 0;
+  await main(['character', 'list'], deps);
+  assert.match(out[0], /voice ok/);
+
+  let seen = '';
+  const client: StoryClient = { async generate(_s, user) { seen = user; return { kind: 'ok', json: validStory('Bacon Story') }; } };
+  // the stand-in story is about emily, which this roster lacks, so the writer reports it instead of accepting it
+  await main(['new', '--character', 'bacon'], { ...deps, storyClient: () => client });
+  assert.match(seen, /protagonist must be "bacon" \(Bacon\)/);
+});
+
+test('character add without an id or name, an unknown subcommand and a bad style fail with a usage message', async (t) => {
+  const { deps, err, src } = withAssets(t);
+  assert.equal(await main(['character', 'add', src], deps), EXIT.error);
+  assert.match(err.at(-1)!, /usage: character add/);
+  assert.equal(await main(['character', 'remove'], deps), EXIT.error);
+  assert.equal(await main(['character', 'add', src, '--id', 'x', '--name', 'X', '--style', 'weird'], deps), EXIT.error);
+  assert.match(err.at(-1)!, /--style/);
 });
