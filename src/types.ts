@@ -40,7 +40,7 @@ export type WordTiming = { word: string; start: number; end: number };
 export type LineTiming = { beatId: string; file: string; duration: number; words: WordTiming[] };
 /** `beatId` is `${scene}.${beat}`, both 0-based. */
 export type Timing = { lines: LineTiming[] };
-export type TimedAction = { who: string; act: Act; face?: Face; at?: string; start: number; end: number };
+export type TimedAction = { who: string; act: Act; face?: Face; at?: string; item?: Prop | 'none'; start: number; end: number };
 export type TimedBeat = {
   id: string; scene: number; start: number; end: number; speaker: string; kind: 'narrate' | 'say';
   text: string; audio: { file: string; start: number; duration: number };

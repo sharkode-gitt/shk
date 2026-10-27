@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SETS, TIMES, ACTS, FACES, HAIRS, HATS, MUSIC, VOICES } from '../vocab.ts';
+import { SETS, TIMES, ACTS, FACES, HAIRS, HATS, MUSIC, PROPS, VOICES } from '../vocab.ts';
 
 /**
  * The shape the model is constrained to (structured outputs): the same fields as StorySchema, but only
@@ -36,6 +36,7 @@ export const StorySchemaForModel = z.object({
         act: z.enum(ACTS),
         face: z.enum(FACES).optional(),
         at: z.string().optional(),
+        item: z.enum([...PROPS, 'none']).optional(),
       })),
     })),
   })),

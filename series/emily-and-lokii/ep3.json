@@ -1,0 +1,196 @@
+{
+  "title": "Bacon Is Angry",
+  "music": "funny",
+  "protagonist": "emily",
+  "cast": [
+    {
+      "id": "emily",
+      "ref": "emily"
+    },
+    {
+      "id": "lokii",
+      "ref": "lokii"
+    },
+    {
+      "id": "bacon",
+      "ref": "bacon"
+    }
+  ],
+  "scenes": [
+    {
+      "set": "school_hallway",
+      "time": "morning",
+      "music": "funny",
+      "beats": [
+        {
+          "narrate": "We found Bacon at his locker.",
+          "shot": "wide",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "idle",
+              "face": "angry",
+              "at": "lockers"
+            },
+            {
+              "who": "emily",
+              "act": "walk_to",
+              "face": "neutral",
+              "at": "bacon"
+            },
+            {
+              "who": "lokii",
+              "act": "walk_to",
+              "face": "neutral",
+              "at": "bacon",
+              "item": "backpack"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "bacon",
+            "line": "[shouting] Who took my backpack?!"
+          },
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "talk",
+              "face": "angry"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "emily",
+            "line": "Nobody took it. Lokii found it."
+          },
+          "shot": "two_shot:emily,bacon",
+          "do": [
+            {
+              "who": "emily",
+              "act": "talk",
+              "face": "neutral"
+            },
+            {
+              "who": "bacon",
+              "act": "idle",
+              "face": "angry"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "bacon",
+            "line": "[whispers] The skeleton? Please don't scare me."
+          },
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "talk",
+              "face": "scared"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "lokii",
+            "line": "Here is your backpack."
+          },
+          "shot": "medium",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "talk",
+              "face": "neutral",
+              "item": "none"
+            },
+            {
+              "who": "bacon",
+              "act": "idle",
+              "face": "shocked",
+              "item": "backpack"
+            }
+          ]
+        },
+        {
+          "narrate": "Bacon blinked. Then he smiled.",
+          "shot": "push_in:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "laugh",
+              "face": "happy"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "bacon",
+            "line": "Thanks, spooky guy! My birthday party is tomorrow. You can come."
+          },
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "talk",
+              "face": "happy"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "bacon",
+            "line": "But only if you take off the mask."
+          },
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "talk",
+              "face": "smug"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "lokii",
+            "line": "[sad] I... cannot."
+          },
+          "shot": "closeup:lokii",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "talk",
+              "face": "neutral"
+            }
+          ]
+        },
+        {
+          "narrate": "[excited] Want the finale? Like and subscribe!",
+          "shot": "closeup:emily",
+          "do": [
+            {
+              "who": "emily",
+              "act": "wave",
+              "face": "happy"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "episode": {
+    "series": "emily-and-lokii",
+    "number": 3,
+    "of": 4
+  },
+  "cta": {
+    "kind": "subscribe",
+    "next": 4
+  },
+  "wants": [],
+  "teaser": "Will Lokii go to the party?"
+}

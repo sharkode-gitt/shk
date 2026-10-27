@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SETS, TIMES, ACTS, FACES, HAIRS, HATS, MUSIC, VOICES, SHOT_KINDS } from '../vocab.ts';
+import { SETS, TIMES, ACTS, FACES, HAIRS, HATS, MUSIC, PROPS, VOICES, SHOT_KINDS } from '../vocab.ts';
 import type { Shot, ShotKind, Story } from '../types.ts';
 import { DEFAULT_PROTAGONIST, protagonistOf, rosterIdOf } from './cast.ts';
 
@@ -30,6 +30,8 @@ const Do = z.object({
   act: z.enum(ACTS),
   face: z.enum(FACES).optional(),
   at: z.string().regex(IDENT).optional(), // cast id or a set mark; marks are resolved by the engine
+  /** The prop this character carries from this action on (until another action says otherwise); `none` puts it down. */
+  item: z.enum([...PROPS, 'none']).optional(),
 });
 
 const Beat = z.object({
@@ -68,6 +70,14 @@ export const StorySchema = z
     music: z.enum(MUSIC),
     /** Cast id of the character the story is about; narration is their voice-over. Default: the first roster character. */
     protagonist: z.string().optional(),
+    /** Part of a series: `number` of `of` (default 4). */
+    episode: z.object({ series: z.string(), number: z.number().int().min(1), of: z.number().int().min(1).default(4) }).optional(),
+    /** What a viewer sees at the end: ask to subscribe for the next part, or pick A or B. */
+    cta: z.object({
+      kind: z.enum(['subscribe', 'choice']),
+      next: z.number().int().optional(),
+      question: z.string().optional(), a: z.string().optional(), b: z.string().optional(),
+    }).optional(),
     cast: z.array(CastMember).min(2).max(4),
     scenes: z.array(Scene).min(1),
     wants: z.array(z.string()),

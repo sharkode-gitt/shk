@@ -49,7 +49,7 @@ export function compileTimeline(story: Story, timing: Timing): Timeline {
         ds.forEach((d, i) => {
           const s = at;
           at = i === ds.length - 1 ? end : at + minOf(d.act);
-          timed.set(d, { who: d.who, act: d.act, face: d.face, at: d.at, start: s, end: at });
+          timed.set(d, { who: d.who, act: d.act, face: d.face, at: d.at, ...(d.item ? { item: d.item } : {}), start: s, end: at });
         });
       }
 

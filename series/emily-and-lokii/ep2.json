@@ -1,0 +1,179 @@
+{
+  "title": "Whose Backpack?",
+  "music": "funny",
+  "protagonist": "emily",
+  "cast": [
+    {
+      "id": "emily",
+      "ref": "emily"
+    },
+    {
+      "id": "lokii",
+      "ref": "lokii"
+    },
+    {
+      "id": "lexi",
+      "ref": "lexi"
+    }
+  ],
+  "scenes": [
+    {
+      "set": "classroom",
+      "time": "morning",
+      "music": "funny",
+      "beats": [
+        {
+          "narrate": "Today, Lokii and I had a mission: find the backpack's owner.",
+          "shot": "wide",
+          "do": [
+            {
+              "who": "emily",
+              "act": "idle",
+              "face": "happy"
+            },
+            {
+              "who": "lokii",
+              "act": "idle",
+              "face": "neutral",
+              "item": "backpack"
+            },
+            {
+              "who": "lexi",
+              "act": "idle",
+              "face": "neutral"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "emily",
+            "line": "Let's ask Lexi!"
+          },
+          "shot": "medium",
+          "do": [
+            {
+              "who": "emily",
+              "act": "walk_to",
+              "face": "happy",
+              "at": "lexi"
+            },
+            {
+              "who": "lokii",
+              "act": "walk_to",
+              "face": "neutral",
+              "at": "lexi"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "lexi",
+            "line": "[screams] Aaah! A skeleton!"
+          },
+          "shot": "closeup:lexi",
+          "do": [
+            {
+              "who": "lexi",
+              "act": "jump",
+              "face": "scared"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "emily",
+            "line": "Relax, Lexi. He is nice. I think."
+          },
+          "shot": "two_shot:emily,lexi",
+          "do": [
+            {
+              "who": "emily",
+              "act": "talk",
+              "face": "smug"
+            },
+            {
+              "who": "lexi",
+              "act": "idle",
+              "face": "scared"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "lexi",
+            "line": "[whispers] Then why is he so spooky?"
+          },
+          "shot": "closeup:lexi",
+          "do": [
+            {
+              "who": "lexi",
+              "act": "talk",
+              "face": "scared"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "lokii",
+            "line": "I like spooky. But I like friends more."
+          },
+          "shot": "closeup:lokii",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "talk",
+              "face": "neutral"
+            }
+          ]
+        },
+        {
+          "narrate": "Lexi looked at the backpack. Her eyes got huge.",
+          "shot": "push_in:lexi",
+          "do": [
+            {
+              "who": "lexi",
+              "act": "shocked",
+              "face": "shocked"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "lexi",
+            "line": "[shouting] That's Bacon's backpack!"
+          },
+          "shot": "closeup:lexi",
+          "do": [
+            {
+              "who": "lexi",
+              "act": "jump",
+              "face": "shocked"
+            }
+          ]
+        },
+        {
+          "narrate": "[excited] Want part three? Like and subscribe!",
+          "shot": "closeup:emily",
+          "do": [
+            {
+              "who": "emily",
+              "act": "wave",
+              "face": "happy"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "episode": {
+    "series": "emily-and-lokii",
+    "number": 2,
+    "of": 4
+  },
+  "cta": {
+    "kind": "subscribe",
+    "next": 3
+  },
+  "wants": [],
+  "teaser": "Bacon is very angry."
+}

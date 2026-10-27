@@ -1,0 +1,168 @@
+{
+  "title": "The Kid in the Skull Mask",
+  "music": "tense",
+  "protagonist": "emily",
+  "cast": [
+    {
+      "id": "emily",
+      "ref": "emily"
+    },
+    {
+      "id": "lokii",
+      "ref": "lokii"
+    },
+    {
+      "id": "bacon",
+      "ref": "bacon"
+    }
+  ],
+  "scenes": [
+    {
+      "set": "school_hallway",
+      "time": "morning",
+      "music": "tense",
+      "beats": [
+        {
+          "narrate": "[whispers] A new kid walked into school wearing a golden skull mask.",
+          "shot": "wide",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "walk_to",
+              "face": "neutral",
+              "at": "center",
+              "item": "backpack"
+            },
+            {
+              "who": "emily",
+              "act": "idle",
+              "face": "scared"
+            },
+            {
+              "who": "bacon",
+              "act": "idle",
+              "face": "scared"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "bacon",
+            "line": "[shouting] A skeleton! Run!"
+          },
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "run_to",
+              "face": "scared",
+              "at": "door"
+            }
+          ]
+        },
+        {
+          "narrate": "Everybody ran. My legs wanted to run too.",
+          "shot": "push_in:emily",
+          "do": [
+            {
+              "who": "emily",
+              "act": "shocked",
+              "face": "scared"
+            }
+          ]
+        },
+        {
+          "narrate": "But I stayed.",
+          "shot": "medium",
+          "do": [
+            {
+              "who": "emily",
+              "act": "idle",
+              "face": "neutral"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "lokii",
+            "line": "Hello. I am Lokii."
+          },
+          "shot": "closeup:lokii",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "talk",
+              "face": "neutral"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "emily",
+            "line": "Um... hi. Why are you holding a backpack?"
+          },
+          "shot": "two_shot:emily,lokii",
+          "do": [
+            {
+              "who": "emily",
+              "act": "talk",
+              "face": "neutral"
+            },
+            {
+              "who": "lokii",
+              "act": "idle",
+              "face": "neutral"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "lokii",
+            "line": "It is not mine. I must find its owner."
+          },
+          "shot": "closeup:lokii",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "talk",
+              "face": "neutral"
+            }
+          ]
+        },
+        {
+          "narrate": "He sounded sad. And his mask never smiled.",
+          "shot": "push_in:emily",
+          "do": [
+            {
+              "who": "emily",
+              "act": "idle",
+              "face": "sad"
+            }
+          ]
+        },
+        {
+          "narrate": "[excited] Want part two? Like and subscribe!",
+          "shot": "closeup:emily",
+          "do": [
+            {
+              "who": "emily",
+              "act": "wave",
+              "face": "happy"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "episode": {
+    "series": "emily-and-lokii",
+    "number": 1,
+    "of": 4
+  },
+  "cta": {
+    "kind": "subscribe",
+    "next": 2
+  },
+  "wants": [],
+  "teaser": "Whose backpack is it?"
+}
