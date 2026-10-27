@@ -55,6 +55,25 @@ A job folder (`jobs/<id>/`) holds `story.json`, `story.md`, `audio/`, `timing.js
 
 `npm run story -- gallery` renders a QA video in which Emily performs every action, face and camera shot.
 
+## Characters
+
+Stories can be about any character in the roster (`assets/characters/<id>/`). Emily is the first one. To add another
+(Bacon, a friend's avatar, ...):
+
+1. In Roblox Studio, bring the avatar in as an **R15** character (Avatar Settings -> R15), select the whole character model and use
+   *File -> Export Selection* as `.obj`. Put the `.obj`, the `.mtl` and every texture `.png` it produced in one folder.
+2. `npm run story -- character add <folder> --id bacon --name Bacon --age 13 --personality "cheerful and clumsy"`
+   It finds the 15 body parts and the accessories (the groups named `Handle...`), the face box and the skin colour, and writes
+   `character.json` and `parts.json`. Edit `character.json` to change the personality, the caption colour or the face style
+   (`classic` = the simple Roblox face, `emily` = big anime eyes).
+3. Give the character a voice: put an ElevenLabs voice id under its id in `assets/voices.json`.
+4. `npm run story -- character list` shows who is registered and who still has no voice.
+5. `npm run story -- new --character bacon "..."` writes a story about that character. Without `--character`, Claude picks
+   the one that fits the idea best.
+
+Only R15 exports work (6-part R6 models are rejected with a message). The default Roblox face is a decal that Studio does not
+export, so the head is drawn with the engine's own face.
+
 ## Music and sound effects
 
 Optional and off until you add files. Put `.mp3` tracks in `assets/music/<mood>/` (`sad`, `tense`, `happy`, `funny`, `twist`);
