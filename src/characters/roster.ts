@@ -19,8 +19,11 @@ export const CharacterSchema = z.object({
     /** The body texture atlas; its face block is redrawn per expression. */
     atlas: z.string(),
     face: z.object({
-      /** `emily`: big anime eyes (Emily's own style). `classic`: the simple dot eyes and smile of the default Roblox face. */
-      style: z.enum(['emily', 'classic']),
+      /**
+       * `emily`: big anime eyes (Emily's own style). `classic`: the simple dot eyes and smile of the default Roblox face,
+       * drawn on the head. `none`: the model brings its own face; it is left as it is (no expressions or mouth movement).
+       */
+      style: z.enum(['emily', 'classic', 'none']),
       rect: Rect,
       skin: z.string(),
     }),

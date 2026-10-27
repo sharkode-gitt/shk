@@ -1,0 +1,58 @@
+{
+  "offset": [
+    0,
+    -0.151,
+    -0.017
+  ],
+  "groups": {
+    "Bacon1": {
+      "part": "RightFoot"
+    },
+    "Bacon2": {
+      "part": "RightLowerLeg"
+    },
+    "Bacon3": {
+      "part": "RightUpperLeg"
+    },
+    "Bacon4": {
+      "part": "LeftFoot"
+    },
+    "Bacon5": {
+      "part": "LeftLowerLeg"
+    },
+    "Bacon6": {
+      "part": "LeftUpperLeg"
+    },
+    "Bacon7": {
+      "part": "LeftHand"
+    },
+    "Bacon8": {
+      "part": "LeftLowerArm"
+    },
+    "Bacon9": {
+      "part": "LeftUpperArm"
+    },
+    "Bacon10": {
+      "part": "Head"
+    },
+    "Bacon11": {
+      "part": "RightHand"
+    },
+    "Bacon12": {
+      "part": "RightLowerArm"
+    },
+    "Bacon13": {
+      "part": "RightUpperArm"
+    },
+    "Bacon14": {
+      "part": "LowerTorso"
+    },
+    "Bacon15": {
+      "part": "UpperTorso"
+    },
+    "Handle1": {
+      "accessory": "hair",
+      "attach": "Head"
+    }
+  }
+}

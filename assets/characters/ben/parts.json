@@ -1,0 +1,58 @@
+{
+  "offset": [
+    -75,
+    -0.138,
+    -0.073
+  ],
+  "groups": {
+    "Misfitsbsthree1": {
+      "part": "Head"
+    },
+    "Misfitsbsthree2": {
+      "part": "RightUpperLeg"
+    },
+    "Misfitsbsthree3": {
+      "part": "LowerTorso"
+    },
+    "Misfitsbsthree4": {
+      "part": "RightLowerLeg"
+    },
+    "Misfitsbsthree5": {
+      "part": "RightFoot"
+    },
+    "Misfitsbsthree6": {
+      "part": "LeftUpperLeg"
+    },
+    "Misfitsbsthree7": {
+      "part": "UpperTorso"
+    },
+    "Misfitsbsthree8": {
+      "part": "LeftLowerLeg"
+    },
+    "Misfitsbsthree9": {
+      "part": "LeftFoot"
+    },
+    "Misfitsbsthree10": {
+      "part": "RightUpperArm"
+    },
+    "Misfitsbsthree11": {
+      "part": "LeftUpperArm"
+    },
+    "Misfitsbsthree12": {
+      "part": "RightLowerArm"
+    },
+    "Misfitsbsthree13": {
+      "part": "LeftLowerArm"
+    },
+    "Misfitsbsthree14": {
+      "part": "RightHand"
+    },
+    "Misfitsbsthree15": {
+      "part": "LeftHand"
+    },
+    "Handle1": {
+      "accessory": "hair",
+      "attach": "Head"
+    }
+  }
+}

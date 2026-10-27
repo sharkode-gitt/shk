@@ -1,0 +1,24 @@
+{
+  "id": "fzk",
+  "name": "Fzk",
+  "age": 13,
+  "personality": "friendly and curious (edit this in character.json)",
+  "look": "spiky brown hair, round glasses, green earring, grey wrap top",
+  "color": "#80ed99",
+  "model": {
+    "obj": "fzk.obj",
+    "mtl": "fzk.mtl",
+    "atlas": "Fzkfelipe11_diff.png",
+    "face": {
+      "style": "none",
+      "rect": {
+        "x": 12,
+        "y": 2,
+        "w": 241,
+        "h": 249
+      },
+      "skin": "#e9ba96"
+    },
+    "unflipped": []
+  }
+}

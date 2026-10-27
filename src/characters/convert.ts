@@ -108,3 +108,30 @@ export function headFrontRect(objText: string, headGroup: string, atlasW: number
     w: Math.round((u1 - u0) * atlasW), h: Math.round((v1 - v0) * atlasH),
   };
 }
+
+/** Linear 0..1 diffuse colour (`Kd`) of the material a group uses. */
+export function kdOfGroup(objText: string, mtlText: string, group: string): V3 | undefined {
+  let current = '';
+  let material: string | undefined;
+  for (const line of objText.split('\n')) {
+    if (line.startsWith('g ')) current = line.slice(2).trim();
+    else if (current === group && line.startsWith('usemtl ')) material = line.slice(7).trim();
+  }
+  if (!material) return undefined;
+  let inBlock = false;
+  for (const line of mtlText.split('\n')) {
+    const t = line.trim();
+    if (t.startsWith('newmtl ')) inBlock = t.slice(7).trim() === material;
+    else if (inBlock && /^kd\s/i.test(t)) return t.split(/\s+/).slice(1, 4).map(Number) as V3;
+  }
+  return undefined;
+}
+
+/** Roblox exports colours in linear light; the textures have the same colours baked in as sRGB. */
+export function linearToHex([r, g, b]: V3): string {
+  const enc = (c: number) => {
+    const x = Math.min(1, Math.max(0, c));
+    return Math.round((x <= 0.0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055) * 255).toString(16).padStart(2, '0');
+  };
+  return `#${enc(r)}${enc(g)}${enc(b)}`;
+}

@@ -1,0 +1,78 @@
+{
+  "offset": [
+    -70,
+    -0.151,
+    -0.017
+  ],
+  "groups": {
+    "Spydersammy1": {
+      "part": "RightFoot"
+    },
+    "Spydersammy2": {
+      "part": "RightLowerLeg"
+    },
+    "Spydersammy3": {
+      "part": "RightUpperLeg"
+    },
+    "Spydersammy4": {
+      "part": "LeftFoot"
+    },
+    "Spydersammy5": {
+      "part": "LeftLowerLeg"
+    },
+    "Spydersammy6": {
+      "part": "LeftUpperLeg"
+    },
+    "Spydersammy7": {
+      "part": "LeftHand"
+    },
+    "Spydersammy8": {
+      "part": "LeftLowerArm"
+    },
+    "Spydersammy9": {
+      "part": "LeftUpperArm"
+    },
+    "Spydersammy10": {
+      "part": "Head"
+    },
+    "Spydersammy11": {
+      "part": "RightHand"
+    },
+    "Spydersammy12": {
+      "part": "RightLowerArm"
+    },
+    "Spydersammy13": {
+      "part": "RightUpperArm"
+    },
+    "Spydersammy14": {
+      "part": "LowerTorso"
+    },
+    "Spydersammy15": {
+      "part": "UpperTorso"
+    },
+    "Handle1": {
+      "accessory": "bag",
+      "attach": "UpperTorso"
+    },
+    "Handle2": {
+      "accessory": "hair",
+      "attach": "Head"
+    },
+    "Handle3": {
+      "accessory": "hair",
+      "attach": "Head"
+    },
+    "Handle4": {
+      "accessory": "hair",
+      "attach": "Head"
+    },
+    "Handle5": {
+      "accessory": "hat",
+      "attach": "Head"
+    },
+    "Handle6": {
+      "accessory": "hair",
+      "attach": "Head"
+    }
+  }
+}

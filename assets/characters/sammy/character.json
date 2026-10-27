@@ -1,0 +1,24 @@
+{
+  "id": "sammy",
+  "name": "Sammy",
+  "age": 13,
+  "personality": "friendly and curious (edit this in character.json)",
+  "look": "yellow classic face, red top hat, red outfit, silver spider necklace",
+  "color": "#ff9f1c",
+  "model": {
+    "obj": "sammy.obj",
+    "mtl": "sammy.mtl",
+    "atlas": "Spydersammy1_diff.png",
+    "face": {
+      "style": "classic",
+      "rect": {
+        "x": 133,
+        "y": 277,
+        "w": 248,
+        "h": 290
+      },
+      "skin": "#f5ce2c"
+    },
+    "unflipped": []
+  }
+}

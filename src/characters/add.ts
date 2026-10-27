@@ -2,7 +2,7 @@ import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFi
 import { join } from 'node:path';
 import { PNG } from 'pngjs';
 import { CharacterSchema, charactersDir, type CharacterInfo } from './roster.ts';
-import { convertModel, headFrontRect, textureOfGroup, type Rect } from './convert.ts';
+import { convertModel, headFrontRect, kdOfGroup, linearToHex, textureOfGroup, type Rect } from './convert.ts';
 import type { HeroRig } from './geometry.ts';
 
 export type AddOpts = {
@@ -15,8 +15,11 @@ export type AddOpts = {
   personality: string;
   look: string;
   color?: string;
-  /** Face drawing: `classic` (default) for ordinary Roblox faces, `emily` for the big anime eyes. */
-  faceStyle?: 'classic' | 'emily';
+  /**
+   * Face drawing: `classic` for ordinary Roblox faces and `emily` for the big anime eyes (both draw on the head's atlas);
+   * `none` leaves a face that comes with the model. Default: `classic` when the head shares the body's atlas, else `none`.
+   */
+  faceStyle?: 'classic' | 'emily' | 'none';
   force?: boolean;
   rig: HeroRig;
 };
@@ -65,9 +68,14 @@ export function addCharacter(o: AddOpts): AddResult {
   const rect = headFrontRect(objText, headGroup, png.width, png.height);
   if (rect.w < 40 || rect.h < 40) warnings.push(`the face box found on the texture is small (${rect.w}x${rect.h} px); check the character in a render`);
 
+  // A head with a texture of its own (a face that comes with the model) is kept as it is; a head on the body's atlas gets a drawn face.
+  const bodyTextures = new Set(Object.entries(parts.groups).flatMap(([g, v]) => ('part' in v ? [textureOfGroup(objText, mtlText, g)] : [])));
+  const sharesAtlas = bodyTextures.size === 1;
+  if (!sharesAtlas && !o.faceStyle) warnings.push(`the head has its own texture (${atlas}); its face is kept as it is, without expressions`);
+  const kd = kdOfGroup(objText, mtlText, headGroup);
   const info = CharacterSchema.parse({
     id: o.id, name: o.name, age: o.age, personality: o.personality, look: o.look, color: o.color,
-    model: { obj: objs[0], mtl: mtls[0], atlas, face: { style: o.faceStyle ?? 'classic', rect, skin: skinAround(png, rect) }, unflipped: [] },
+    model: { obj: objs[0], mtl: mtls[0], atlas, face: { style: o.faceStyle ?? (sharesAtlas ? 'classic' : 'none'), rect, skin: kd ? linearToHex(kd) : skinAround(png, rect) }, unflipped: [] },
   });
 
   mkdirSync(dir, { recursive: true });

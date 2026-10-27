@@ -27,7 +27,7 @@ export async function loadCharacter(baseUrl: string, info: CharacterInfo): Promi
   ]);
   const face = new FaceTexture(atlas, m.face.rect, m.face.skin, m.face.style);
   face.set('neutral', 0);
-  // The MTL is only read for texture names: its Kd tints textures skin-coloured, and MTLLoader's own
+  // The MTL is only read for texture names (the skin colour is already baked into the textures), and MTLLoader's own
   // textures load in the background with no way to await them.
   const textures = new THREE.TextureLoader().setPath(baseUrl);
   const unflipped = new Set(m.unflipped);
@@ -40,12 +40,16 @@ export async function loadCharacter(baseUrl: string, info: CharacterInfo): Promi
     return t;
   };
 
+  // Body parts on the head's atlas share the face texture; a part with a texture of its own (a head or body that is not on
+  // the atlas) loads that one.
+  const fileOf = (mesh: THREE.Mesh) => mtl.materialsInfo[(mesh.material as THREE.Material).name]?.map_kd;
   const parts = {} as Record<PartName, THREE.Object3D>;
   const accessories: { object: THREE.Object3D; attach: PartName }[] = [];
   await Promise.all((obj.children as THREE.Mesh[]).map(async (mesh) => {
     const g = map.groups[mesh.name];
     if (!g) return;
-    const tex = 'part' in g ? face.texture : await textureOf(mesh, g.accessory);
+    const file = fileOf(mesh);
+    const tex = 'part' in g ? (!file || file === m.atlas ? face.texture : await textureOf(mesh, 'body')) : await textureOf(mesh, g.accessory);
     mesh.material = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.7, metalness: 0, side: THREE.DoubleSide });
     mesh.castShadow = mesh.receiveShadow = true;
     mesh.position.add(new THREE.Vector3(...map.offset));

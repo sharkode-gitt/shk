@@ -1,0 +1,74 @@
+{
+  "offset": [
+    -10,
+    -0.133,
+    -0.073
+  ],
+  "groups": {
+    "Fzkfelipe11": {
+      "part": "Head"
+    },
+    "Fzkfelipe12": {
+      "part": "RightUpperLeg"
+    },
+    "Fzkfelipe13": {
+      "part": "LowerTorso"
+    },
+    "Fzkfelipe14": {
+      "part": "RightLowerLeg"
+    },
+    "Fzkfelipe15": {
+      "part": "RightFoot"
+    },
+    "Fzkfelipe16": {
+      "part": "LeftUpperLeg"
+    },
+    "Fzkfelipe17": {
+      "part": "UpperTorso"
+    },
+    "Fzkfelipe18": {
+      "part": "LeftLowerLeg"
+    },
+    "Fzkfelipe19": {
+      "part": "LeftFoot"
+    },
+    "Fzkfelipe110": {
+      "part": "RightUpperArm"
+    },
+    "Fzkfelipe111": {
+      "part": "LeftUpperArm"
+    },
+    "Fzkfelipe112": {
+      "part": "RightLowerArm"
+    },
+    "Fzkfelipe113": {
+      "part": "LeftLowerArm"
+    },
+    "Fzkfelipe114": {
+      "part": "RightHand"
+    },
+    "Fzkfelipe115": {
+      "part": "LeftHand"
+    },
+    "Handle1": {
+      "accessory": "hair",
+      "attach": "Head"
+    },
+    "Handle2": {
+      "accessory": "hat",
+      "attach": "Head"
+    },
+    "Handle3": {
+      "accessory": "bag",
+      "attach": "UpperTorso"
+    },
+    "Handle4": {
+      "accessory": "hair",
+      "attach": "Head"
+    },
+    "Handle5": {
+      "accessory": "hair",
+      "attach": "Head"
+    }
+  }
+}

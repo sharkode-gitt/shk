@@ -1,0 +1,58 @@
+{
+  "offset": [
+    -5,
+    0.115,
+    -0.001
+  ],
+  "groups": {
+    "Lexibloxshorts1": {
+      "part": "RightFoot"
+    },
+    "Lexibloxshorts2": {
+      "part": "RightLowerLeg"
+    },
+    "Lexibloxshorts3": {
+      "part": "RightUpperLeg"
+    },
+    "Lexibloxshorts4": {
+      "part": "LeftFoot"
+    },
+    "Lexibloxshorts5": {
+      "part": "LeftLowerLeg"
+    },
+    "Lexibloxshorts6": {
+      "part": "LeftUpperLeg"
+    },
+    "Lexibloxshorts7": {
+      "part": "LeftHand"
+    },
+    "Lexibloxshorts8": {
+      "part": "LeftLowerArm"
+    },
+    "Lexibloxshorts9": {
+      "part": "LeftUpperArm"
+    },
+    "Lexibloxshorts10": {
+      "part": "Head"
+    },
+    "Lexibloxshorts11": {
+      "part": "RightHand"
+    },
+    "Lexibloxshorts12": {
+      "part": "RightLowerArm"
+    },
+    "Lexibloxshorts13": {
+      "part": "RightUpperArm"
+    },
+    "Lexibloxshorts14": {
+      "part": "LowerTorso"
+    },
+    "Lexibloxshorts15": {
+      "part": "UpperTorso"
+    },
+    "Handle1": {
+      "accessory": "hair",
+      "attach": "Head"
+    }
+  }
+}

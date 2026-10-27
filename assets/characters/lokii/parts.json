@@ -1,0 +1,70 @@
+{
+  "offset": [
+    -80,
+    -0.145,
+    -0.017
+  ],
+  "groups": {
+    "Secretlokii1": {
+      "part": "RightFoot"
+    },
+    "Secretlokii2": {
+      "part": "RightLowerLeg"
+    },
+    "Secretlokii3": {
+      "part": "RightUpperLeg"
+    },
+    "Secretlokii4": {
+      "part": "LeftFoot"
+    },
+    "Secretlokii5": {
+      "part": "LeftLowerLeg"
+    },
+    "Secretlokii6": {
+      "part": "LeftUpperLeg"
+    },
+    "Secretlokii7": {
+      "part": "LeftHand"
+    },
+    "Secretlokii8": {
+      "part": "LeftLowerArm"
+    },
+    "Secretlokii9": {
+      "part": "LeftUpperArm"
+    },
+    "Secretlokii10": {
+      "part": "Head"
+    },
+    "Secretlokii11": {
+      "part": "RightHand"
+    },
+    "Secretlokii12": {
+      "part": "RightLowerArm"
+    },
+    "Secretlokii13": {
+      "part": "RightUpperArm"
+    },
+    "Secretlokii14": {
+      "part": "LowerTorso"
+    },
+    "Secretlokii15": {
+      "part": "UpperTorso"
+    },
+    "Handle1": {
+      "accessory": "hair",
+      "attach": "Head"
+    },
+    "Handle2": {
+      "accessory": "hair",
+      "attach": "Head"
+    },
+    "Handle3": {
+      "accessory": "hat",
+      "attach": "Head"
+    },
+    "Handle4": {
+      "accessory": "hair",
+      "attach": "Head"
+    }
+  }
+}
