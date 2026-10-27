@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { loadConfig, requireEnv } from '../src/config.ts';
 
-const valid = { writer: { model: 'claude-opus-5-5', effort: 'high' }, voice: { model: 'eleven_v3', format: 'mp3_44100_128' }, paths: { jobs: 'jobs', cache: 'cache', assets: 'assets' } };
+const valid = { writer: { provider: 'api', model: 'claude-opus-5-5', effort: 'high' }, voice: { model: 'eleven_v3', format: 'mp3_44100_128' }, paths: { jobs: 'jobs', cache: 'cache', assets: 'assets' } };
 const write = (t: test.TestContext, cfg: unknown) => {
   const dir = mkdtempSync(join(tmpdir(), 'cfg-'));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
@@ -14,7 +14,12 @@ const write = (t: test.TestContext, cfg: unknown) => {
   return p;
 };
 
-test('the shipped config.json loads', () => assert.equal(loadConfig().writer.model, 'claude-opus-5-5'));
+test('the shipped config.json loads and writes on the Claude plan', () => assert.equal(loadConfig().writer.provider, 'claude-code'));
+
+test('a config without a provider keeps using the API', (t) => {
+  const { provider: _p, ...writer } = valid.writer;
+  assert.equal(loadConfig(write(t, { ...valid, writer })).writer.provider, 'api');
+});
 
 test('a valid config loads', (t) => assert.deepEqual(loadConfig(write(t, valid)), valid));
 

@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 const ConfigSchema = z.object({
   writer: z.object({
+    /** `claude-code` writes with the Claude Code CLI on the logged-in plan; `api` calls the API with ANTHROPIC_API_KEY. */
+    provider: z.enum(['claude-code', 'api']).default('api'),
     model: z.string().min(1),
     effort: z.enum(['low', 'medium', 'high', 'xhigh', 'max']),
   }),
