@@ -83,3 +83,42 @@ for (const act of ACTS.filter((a) => a !== 'idle')) {
     assert.ok(diff > 0.2, `max joint diff ${diff}`);
   });
 }
+
+const near = (a: number, b: number, eps = 0.01) => Math.abs(a - b) < eps;
+
+test('posture: after sit ends, idle stays seated', () => {
+  const beats = [beat([{ who: 'emily', act: 'sit', start: 0, end: 2 }], 0, 4)];
+  const end = poseAt('emily', 1.99, beats, marks, home, 1);
+  const p = poseAt('emily', 3, beats, marks, home, 1);
+  assert.ok(near(joint(p, 'LeftHip')[0], joint(end, 'LeftHip')[0]), `hip ${joint(p, 'LeftHip')}`);
+  assert.ok(near(joint(p, 'RightKnee')[0], -1.57), `knee ${joint(p, 'RightKnee')}`);
+  assert.ok(near(p.root.pos[1], end.root.pos[1]) && p.root.pos[1] < -0.4, `y ${p.root.pos[1]}`);
+});
+
+test('posture: talk after sit stays seated with the arm gesture', () => {
+  const beats = [beat([{ who: 'emily', act: 'sit', start: 0, end: 2 }, { who: 'emily', act: 'talk', start: 2, end: 4 }])];
+  const p = poseAt('emily', 3, beats, marks, home, 1);
+  assert.ok(near(joint(p, 'LeftHip')[0], 1.57), `hip ${joint(p, 'LeftHip')}`);
+  assert.ok(near(p.root.pos[1], -0.5), `y ${p.root.pos[1]}`);
+  assert.ok(near(joint(p, 'RightElbow')[0], 0.9), `talk elbow ${joint(p, 'RightElbow')}`);
+});
+
+test('posture: after fall ends, idle stays lying', () => {
+  const beats = [beat([{ who: 'emily', act: 'fall', start: 0, end: 2 }], 0, 4)];
+  const p = poseAt('emily', 3, beats, marks, home, 1);
+  assert.ok(near(joint(p, 'Root')[0], 1.57) && near(p.root.pos[1], -1.35), `root ${joint(p, 'Root')} y ${p.root.pos[1]}`);
+});
+
+test('posture: stand_up after fall rises from the lying pose to standing', () => {
+  const ctx: ActionCtx = { from: home, fromYaw: 0, seed: 1, posture: 'lie' };
+  const start = ACTIONS.stand_up(0, 2, ctx), lie = ACTIONS.fall(1, 2, ctx);
+  assert.ok(near(start.root.pos[1], lie.root.pos[1]));
+  for (const j of Object.keys(lie.joints) as JointName[]) {
+    for (let k = 0; k < 3; k++) assert.ok(near(joint(start, j)[k], joint(lie, j)[k]), `${j}[${k}]`);
+  }
+  const beats = [beat([{ who: 'emily', act: 'fall', start: 0, end: 2 }, { who: 'emily', act: 'stand_up', start: 2, end: 4 }])];
+  assert.ok(joint(poseAt('emily', 2.1, beats, marks, home, 1), 'Root')[0] > 1.4, 'starts from lying, not seated');
+  const up = poseAt('emily', 4, beats, marks, home, 1);
+  assert.ok(near(up.root.pos[1], 0) && near(joint(up, 'Root')[0], 0), `standing: y ${up.root.pos[1]} root ${joint(up, 'Root')}`);
+  assert.ok(Math.max(...Object.values(up.joints).flatMap((v) => v!.map(Math.abs))) < 0.05, 'standing joints near neutral');
+});

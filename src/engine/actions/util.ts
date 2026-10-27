@@ -5,7 +5,9 @@ import type { JointName, Pose, Vec3 } from '../../types.ts';
  * -X on Knee bends it backward; +X on Neck/Waist/Root tips back, -X leans forward.
  * RightShoulder +Z raises the arm sideways, -Z swings it across the body; LeftShoulder mirrored.
  */
-export type ActionCtx = { from: Vec3; fromYaw: number; to?: Vec3; lookAt?: Vec3; seed: number };
+export type Posture = 'stand' | 'sit' | 'lie';
+/** `posture` is the held posture the action starts from (absent = standing). */
+export type ActionCtx = { from: Vec3; fromYaw: number; to?: Vec3; lookAt?: Vec3; seed: number; posture?: Posture };
 export type ActionPose = Omit<Pose, 'face' | 'mouth'>;
 /** `u` is 0..1 within the action, `tAbs` absolute seconds. */
 export type ActionFn = (u: number, tAbs: number, ctx: ActionCtx) => ActionPose;

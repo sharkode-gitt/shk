@@ -2,21 +2,21 @@ import { seedFromId } from '../../build/seed.ts';
 import type { Act, JointName, TimedAction, TimedBeat, Vec3 } from '../../types.ts';
 import { cry } from './cry.ts';
 import { facepalm } from './facepalm.ts';
-import { fall } from './fall.ts';
+import { fall, lying } from './fall.ts';
 import { hug } from './hug.ts';
 import { idle } from './idle.ts';
 import { jump } from './jump.ts';
 import { laugh } from './laugh.ts';
 import { point } from './point.ts';
 import { shocked } from './shocked.ts';
-import { sit } from './sit.ts';
+import { seated, sit } from './sit.ts';
 import { standUp } from './stand_up.ts';
 import { talk } from './talk.ts';
 import { wave } from './wave.ts';
 import { run, walk } from './walk.ts';
-import { clamp01, type ActionCtx, type ActionFn, type ActionPose } from './util.ts';
+import { clamp01, type ActionCtx, type ActionFn, type ActionPose, type Posture } from './util.ts';
 
-export type { ActionCtx, ActionFn, ActionPose } from './util.ts';
+export type { ActionCtx, ActionFn, ActionPose, Posture } from './util.ts';
 
 export const ACTIONS: Record<Act, ActionFn> = {
   idle, walk_to: walk, run_to: run, sit, stand_up: standUp, talk, point, wave,
@@ -27,6 +27,22 @@ export const ACTIONS: Record<Act, ActionFn> = {
 export const BLEND = 0.2;
 /** walk_to/run_to toward a character stops this far from them. */
 const STOP_SHORT = 1.5;
+
+/** Actions layered (upper body only) over a held seated/lying pose instead of standing. */
+const LAYERED = new Set<Act>(['idle', 'talk', 'point', 'wave', 'hug', 'cry', 'laugh', 'facepalm', 'shocked']);
+const UPPER: JointName[] = ['Waist', 'Neck', 'LeftShoulder', 'RightShoulder', 'LeftElbow', 'RightElbow', 'LeftWrist', 'RightWrist'];
+/** Posture each action leaves the character in; unlisted actions keep the current one. */
+const LEAVES: Partial<Record<Act, Posture>> = { sit: 'sit', fall: 'lie', stand_up: 'stand', walk_to: 'stand', run_to: 'stand', jump: 'stand' };
+
+/** Base seated/lying pose (root, legs) with the action's upper-body joints on top. Lying keeps its yaw. */
+const held = (fn: ActionFn, posture: Posture): ActionFn => (u, t, ctx) => {
+  const base = posture === 'sit' ? seated(ctx, 1) : lying(ctx, 1);
+  const top = fn(u, t, ctx);
+  for (const j of UPPER) if (top.joints[j]) base.joints[j] = top.joints[j];
+  if (posture === 'sit') base.root.yaw = top.root.yaw;
+  return base;
+};
+const fnFor = (act: Act, posture: Posture) => (posture !== 'stand' && LAYERED.has(act) ? held(ACTIONS[act], posture) : ACTIONS[act]);
 
 type Seg = { fn: ActionFn; start: number; end: number; ctx: ActionCtx };
 
@@ -72,7 +88,8 @@ function ctxFor(
  * Pose of `who` at absolute time `t`, given only the beats of the current scene and the character's `home`
  * for that scene. Each action starts where the previous one of the same character ended; before the first
  * action the character idles at `home` facing -Z (yaw 0). Outside any action it idles where it last stopped.
- * Consecutive segments cross-fade over BLEND seconds.
+ * Consecutive segments cross-fade over BLEND seconds. After sit/fall the character holds that posture
+ * (idle and gestures layer on the upper body) until stand_up, walk_to, run_to or jump.
  * `others(id, t)` resolves another cast member's position when `at` names a character instead of a mark.
  */
 export function poseAt(
@@ -81,8 +98,8 @@ export function poseAt(
 ): ActionPose {
   const s = (seed ^ seedFromId(who)) >>> 0;
   const acts = beats.flatMap((b) => b.actions).filter((a) => a.who === who).sort((x, y) => x.start - y.start);
-  let pos: Vec3 = home, yaw = 0;
-  const idleFrom = (start: number): Seg => ({ fn: idle, start, end: Infinity, ctx: { from: pos, fromYaw: yaw, seed: s } });
+  let pos: Vec3 = home, yaw = 0, posture: Posture = 'stand';
+  const idleFrom = (start: number): Seg => ({ fn: fnFor('idle', posture), start, end: Infinity, ctx: { from: pos, fromYaw: yaw, seed: s, posture } });
   const segs: Seg[] = [idleFrom(-Infinity)];
   const push = (seg: Seg) => {
     // A segment replaces any starting at the same instant or later (no zero-length idle between actions,
@@ -92,12 +109,15 @@ export function poseAt(
   };
   for (const a of acts) {
     if (a.start > t) break;
-    const seg: Seg = { fn: ACTIONS[a.act], start: a.start, end: a.end, ctx: ctxFor(a, who, pos, yaw, s, marks, others) };
+    const ctx = { ...ctxFor(a, who, pos, yaw, s, marks, others), posture };
+    const seg: Seg = { fn: fnFor(a.act, posture), start: a.start, end: a.end, ctx };
     push(seg);
     const end = seg.fn(1, a.end, seg.ctx).root;
-    // ponytail: only the ground position carries over; seated/lying postures end with the action.
+    // Ground position, yaw and posture carry over; the held pose is rebuilt from the posture.
+    // walk_to/run_to/jump from sit/lie stand up implicitly inside the BLEND cross-fade.
     pos = [end.pos[0], home[1], end.pos[2]];
     yaw = end.yaw;
+    posture = LEAVES[a.act] ?? posture;
     if (a.end <= t) push(idleFrom(a.end));
   }
   const cur = segs.at(-1)!, prev = segs.at(-2);
