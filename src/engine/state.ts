@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { CharacterInfo } from '../characters/roster.ts';
-import type { Face, Pose, Story, TimedBeat, Timeline, Vec3 } from '../types.ts';
+import type { Face, Pose, Prop, Story, TimedBeat, Timeline, Vec3 } from '../types.ts';
 import { poseAt } from './actions/index.ts';
 import { cameraAt, type Cam } from './camera.ts';
 import { buildBlockCharacter } from './characters/block.ts';
@@ -9,7 +9,7 @@ import type { BuiltSet } from './sets/index.ts';
 
 export type ScenePayload = { story: Story; timeline: Timeline; seed: number; roster: Record<string, CharacterInfo> };
 export type SetLayout = Record<number, BuiltSet>;
-export type SceneState = { sceneIndex: number; poses: Record<string, Pose>; camera: Cam };
+export type SceneState = { sceneIndex: number; poses: Record<string, Pose>; camera: Cam; items: Record<string, Prop | null> };
 
 const FPS = 30;
 /** Mouth flips between half and fully open this often inside a word, seconds. */
@@ -49,6 +49,15 @@ function faceOf(who: string, t: number, beats: TimedBeat[]): Face {
   return face;
 }
 
+/** Prop `who` holds at `t`: the latest action started by `t` that sets an item (any scene); `none` empties the hand. */
+export function itemOf(who: string, t: number, beats: TimedBeat[]): Prop | null {
+  let item: Prop | null = null, start = -Infinity;
+  for (const b of beats) for (const a of b.actions) {
+    if (a.who === who && a.item !== undefined && a.start <= t && a.start >= start) ({ start } = a), (item = a.item === 'none' ? null : a.item);
+  }
+  return item;
+}
+
 /** Only `say` beats move the speaker's mouth; narration is voice-over. */
 function mouthOf(who: string, t: number, beat: TimedBeat): 0 | 1 | 2 {
   if (beat.kind !== 'say' || who !== beat.speaker) return 0;
@@ -75,11 +84,13 @@ export function sceneState(time: number, payload: ScenePayload, layout: SetLayou
     homes[id] ? poseAt(id, tt, beats, set.marks, homes[id], seed).root.pos : set.marks.center ?? [0, 0, 0];
 
   const poses: Record<string, Pose> = {};
+  const items: Record<string, Prop | null> = {};
   const heads: Record<string, Vec3> = {};
   const yaws: Record<string, number> = {};
   for (const id of ids) {
     const p = poseAt(id, t, beats, set.marks, homes[id], seed, others);
     poses[id] = { ...p, face: faceOf(id, t, timeline.beats), mouth: mouthOf(id, t, beat) };
+    items[id] = itemOf(id, t, timeline.beats);
     heads[id] = headOf(poses[id]);
     yaws[id] = p.root.yaw;
   }
@@ -88,5 +99,5 @@ export function sceneState(time: number, payload: ScenePayload, layout: SetLayou
   const tIn = t - beat.start;
   const u = Math.min(1, Math.max(0, dur > 0 ? tIn / dur : 1));
   const camera = cameraAt(beat.shot, u, dur, tIn, heads, set, seed, beat.speaker, yaws);
-  return { sceneIndex: scene.index, poses, camera };
+  return { sceneIndex: scene.index, poses, camera, items };
 }

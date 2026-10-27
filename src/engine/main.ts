@@ -4,7 +4,9 @@ import { buildBlockCharacter } from './characters/block.ts';
 import { loadCharacter } from './characters/model.ts';
 import { rosterIdOf } from '../story/cast.ts';
 import { FaceTexture } from './faces/texture.ts';
-import { applyPose, type Rig } from './rig.ts';
+import { applyPose, JOINTS, PARTS, type Rig } from './rig.ts';
+import { buildProp } from './sets/props.ts';
+import type { Prop } from '../types.ts';
 import { buildSet } from './sets/index.ts';
 import { sceneState, type ScenePayload, type SetLayout } from './state.ts';
 
@@ -69,6 +71,25 @@ async function build(): Promise<(t: number) => void> {
     scene.add(cast[c.id].rig.root);
   }
 
+  // Held props hang from the right wrist: built once per (character, prop), shown only while held.
+  const HELD_SCALE: Partial<Record<Prop, number>> = { backpack: 0.8, gift: 0.7, phone: 1, cake: 0.6 };
+  const held: Record<string, Partial<Record<Prop, THREE.Object3D>>> = {};
+  const hold = (id: string, item: Prop): THREE.Object3D => {
+    const mine = (held[id] ??= {});
+    if (!mine[item]) {
+      const o = buildProp(item);
+      const hand = PARTS.RightHand, wrist = JOINTS.RightWrist.pivot;
+      const sc = HELD_SCALE[item] ?? 0.7;
+      o.scale.setScalar(sc);
+      // hand centre relative to the wrist pivot; the prop sits just under it, as if gripped by the handle
+      o.position.set(hand.center[0] - wrist[0], hand.center[1] - wrist[1] - hand.size[1] / 2 - 0.5 * sc, hand.center[2] - wrist[2]);
+      o.traverse((m) => { m.castShadow = true; });
+      cast[id].rig.joints.RightWrist.add(o);
+      mine[item] = o;
+    }
+    return mine[item]!;
+  };
+
   return (t: number) => {
     const s = sceneState(t, payload, layout);
     for (const [i, set] of Object.entries(layout)) set.group.visible = Number(i) === s.sceneIndex;
@@ -76,6 +97,10 @@ async function build(): Promise<(t: number) => void> {
     for (const [id, pose] of Object.entries(s.poses)) {
       applyPose(cast[id].rig, pose);
       cast[id].face.set(pose.face, pose.mouth);
+    }
+    for (const [id, item] of Object.entries(s.items)) {
+      for (const o of Object.values(held[id] ?? {})) o!.visible = false;
+      if (item) hold(id, item).visible = true;
     }
     camera.position.set(...s.camera.pos);
     camera.fov = s.camera.fov;
