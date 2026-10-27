@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { EXIT, main, type CliDeps } from '../src/cli.ts';
@@ -25,7 +25,7 @@ const setup = (t: test.TestContext, over: Partial<CliDeps> = {}) => {
       build: async () => {},
       render: async () => ({ checks: { ok: true, failures: [] }, renderSeconds: 1 }),
     }),
-    gallery: async () => true, ...over,
+    gallery: async () => true, accountVoices: async () => [], ...over,
   };
   return { deps, out, err, root: config.paths.jobs };
 };
@@ -136,4 +136,30 @@ test('gallery, unknown commands and no arguments', async (t) => {
   assert.equal(await main([], deps), EXIT.error);
   assert.match(out.at(-1)!, /story <command>/);
   assert.equal(await main(['--help'], deps), EXIT.ok);
+});
+
+test('voices lists the account voices; --fill writes suggestions into empty slots and says what is still missing', async (t) => {
+  const { deps, out, err } = setup(t, {
+    accountVoices: async () => [
+      { id: 'f1', name: 'Mara', gender: 'female', age: 'middle_aged', category: 'premade', description: '' },
+      { id: 'm1', name: 'Tom', gender: 'male', age: 'middle_aged', category: 'premade', description: '' },
+    ],
+  });
+  const assets = join(deps.config.paths.jobs, '..', 'assets');
+  mkdirSync(assets, { recursive: true });
+  writeFileSync(join(assets, 'voices.json'), JSON.stringify({ emily: 'E', mom: '', dad: '', teen_girl: '', little_brother: '', boy: '', teacher: '', old_lady: '' }));
+  const d = { ...deps, config: { ...deps.config, paths: { ...deps.config.paths, assets } } };
+  assert.equal(await main(['voices'], d), EXIT.ok);
+  assert.match(out[0], /^f1\tMara\tfemale\tmiddle_aged\tpremade$/);
+  assert.equal(JSON.parse(readFileSync(join(assets, 'voices.json'), 'utf8')).mom, '');
+  assert.equal(await main(['voices', '--fill'], d), EXIT.ok);
+  const saved = JSON.parse(readFileSync(join(assets, 'voices.json'), 'utf8'));
+  assert.deepEqual([saved.emily, saved.mom, saved.dad], ['E', 'f1', 'm1']);
+  assert.match(err.at(-1)!, /no suitable voice found for:.*teen_girl/);
+});
+
+test('voices without the key fails naming it', async (t) => {
+  const { deps, err } = setup(t, { requireEnv: (n) => requireEnv(n, {}) });
+  assert.equal(await main(['voices'], deps), EXIT.error);
+  assert.match(err[0], /ELEVENLABS_API_KEY/);
 });

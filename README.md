@@ -28,6 +28,8 @@ copy .env.example .env      # then fill in ELEVENLABS_API_KEY (and ANTHROPIC_API
 
 Voices: `assets/voices.json` maps each speaker to an ElevenLabs **voice id** (Voice Library -> the voice -> "Copy voice ID").
 Fill in `emily` (narration and Emily's lines), then `mom`, `dad`, `teen_girl`, `little_brother`, `boy`, `teacher`, `old_lady`.
+To let the program suggest them: `npm run story -- voices` lists the voices of your ElevenLabs account, and `npm run story -- voices --fill`
+puts a suggested voice into every empty slot (it never overwrites one you filled in). Listen to them in ElevenLabs and swap any you dislike.
 `make` stops with a clear message naming the voice if one it needs is empty.
 
 ## Everyday use
