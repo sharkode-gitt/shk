@@ -48,17 +48,19 @@ function faceOf(who: string, t: number, beats: TimedBeat[]): Face {
   return face;
 }
 
+/** Only `say` beats move the speaker's mouth; narration is voice-over. */
 function mouthOf(who: string, t: number, beat: TimedBeat): 0 | 1 | 2 {
-  if (who !== beat.speaker) return 0;
+  if (beat.kind !== 'say' || who !== beat.speaker) return 0;
   const w = beat.words.find((w) => w.start <= t && t < w.end);
   if (!w) return 0;
   return Math.floor((t - w.start) / MOUTH_STEP) % 2 === 0 ? 1 : 2;
 }
 
 /** Everything the renderer needs at time `t`; pure apart from the cached reference rig. */
-export function sceneState(t: number, payload: ScenePayload, layout: SetLayout): SceneState {
+export function sceneState(time: number, payload: ScenePayload, layout: SetLayout): SceneState {
   const { story, timeline, seed } = payload;
-  const frame = Math.round(t * FPS);
+  const frame = Math.round(time * FPS);
+  const t = frame / FPS; // snapped, so the active beat never starts after t
   const scene = lastStarted(timeline.scenes, frame);
   const set = layout[scene.index];
   const beats = timeline.beats.filter((b) => b.scene === scene.index);
@@ -73,15 +75,17 @@ export function sceneState(t: number, payload: ScenePayload, layout: SetLayout):
 
   const poses: Record<string, Pose> = {};
   const heads: Record<string, Vec3> = {};
+  const yaws: Record<string, number> = {};
   for (const id of ids) {
     const p = poseAt(id, t, beats, set.marks, homes[id], seed, others);
     poses[id] = { ...p, face: faceOf(id, t, timeline.beats), mouth: mouthOf(id, t, beat) };
     heads[id] = headOf(poses[id]);
+    yaws[id] = p.root.yaw;
   }
 
   const dur = beat.end - beat.start;
   const tIn = t - beat.start;
   const u = Math.min(1, Math.max(0, dur > 0 ? tIn / dur : 1));
-  const camera = cameraAt(beat.shot, u, dur, tIn, heads, set, seed, beat.speaker);
+  const camera = cameraAt(beat.shot, u, dur, tIn, heads, set, seed, beat.speaker, yaws);
   return { sceneIndex: scene.index, poses, camera };
 }

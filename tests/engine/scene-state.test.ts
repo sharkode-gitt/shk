@@ -61,3 +61,27 @@ test('every cast member gets a pose and the state is deterministic', () => {
   const [e, m] = [at(0.1).poses.emily.root.pos, at(0.1).poses.mia.root.pos];
   assert.ok(Math.hypot(e[0] - m[0], e[2] - m[2]) > 0.5);
 });
+
+test('narration is voice-over: the narrator mouth stays closed mid-word', () => {
+  assert.equal(beat('0.0').kind, 'narrate');
+  assert.equal(at(midWord('0.0', 1)).poses.emily.mouth, 0);
+  assert.equal(beat('1.1').kind, 'say');
+  assert.ok(at(midWord('1.1', 1)).poses.emily.mouth > 0);
+});
+
+test('t is snapped to its frame, so off-grid times give the frame state', () => {
+  const b = beat('0.2');
+  const f = Math.ceil(b.start * 30);
+  assert.deepEqual(at(f / 30 - 0.012), at(f / 30));
+  assert.deepEqual(at(1.01), at(1));
+});
+
+test('closeup follows the target when it turns toward someone', () => {
+  // Beat 0.1: mia points at emily, so she turns; the closeup camera must be on her facing side.
+  const s = at(midWord('0.1', 3));
+  const p = s.poses.mia;
+  const head = s.camera.target;
+  const facing = [-Math.sin(p.root.yaw), -Math.cos(p.root.yaw)];
+  assert.ok(Math.abs(p.root.yaw) > 0.3, `mia turned (${p.root.yaw})`);
+  assert.ok((s.camera.pos[0] - head[0]) * facing[0] + (s.camera.pos[2] - head[2]) * facing[1] > 2);
+});

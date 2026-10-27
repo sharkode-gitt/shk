@@ -17,7 +17,7 @@ test('closeup target is the head, and follows it when the head moves', () => {
   near(moved.target[0], 2, 0.05);
   near(moved.target[1], 4, 0.05);
   near(moved.target[2], -3, 0.05);
-  near(moved.pos[0], 2, 0.2);
+  near(Math.hypot(moved.pos[0] - 2, moved.pos[2] + 3), 6.5, 0.1);
   assert.equal(a.fov, 30);
 });
 
@@ -25,7 +25,7 @@ test('push_in is closer at u=1 than u=0', () => {
   const s: Shot = { kind: 'push_in', targets: ['mia'] };
   const d0 = dist(cam(s, 0).pos, heads.mia);
   const d1 = dist(cam(s, 1).pos, heads.mia);
-  assert.ok(d1 < d0 - 3, `${d1} < ${d0}`);
+  assert.ok(d1 < d0 - 2, `${d1} < ${d0}`);
 });
 
 test('orbit sweeps ~40 degrees between u=0 and u=1', () => {
@@ -94,4 +94,32 @@ test('two_shot targets the midpoint and backs off for wide spreads', () => {
   near(narrow.target[0], 1.5, 0.1);
   const far = cam({ kind: 'two_shot', targets: ['mia', 'leo'] }, 0, 1, { mia: [-8, 4.5, 0], leo: [8, 4.5, 0] });
   assert.ok(far.pos[2] < narrow.pos[2] - 5);
+});
+
+test('closeup and push_in shoot from the side the target faces (yaw 0 faces -Z)', () => {
+  const yaw = Math.PI / 2;
+  const facing = [-Math.sin(yaw), -Math.cos(yaw)]; // yaw toward: atan2(-dx, -dz)
+  for (const kind of ['closeup', 'push_in'] as const) {
+    for (const u of [0, 1]) {
+      const c = cameraAt({ kind, targets: ['mia'] }, u, 4, 1, heads, set, 7, 'mia', { mia: yaw });
+      const v = [c.pos[0] - heads.mia[0], c.pos[2] - heads.mia[2]];
+      assert.ok(v[0] * facing[0] + v[1] * facing[1] > 2, `${kind} u=${u}: ${c.pos}`);
+    }
+  }
+});
+
+test('closeup and the end of push_in fit the whole head width at 9:16', () => {
+  const halfW = (c: { pos: number[]; target: number[]; fov: number }) =>
+    Math.hypot(c.pos[0] - c.target[0], c.pos[1] - c.target[1], c.pos[2] - c.target[2]) * Math.tan((c.fov / 2) * Math.PI / 180) * (9 / 16);
+  assert.ok(halfW(cam({ kind: 'closeup', targets: ['mia'] })) > 0.59 + 0.15);
+  assert.ok(halfW(cam({ kind: 'push_in', targets: ['mia'] }, 1)) > 0.59 + 0.15);
+});
+
+test('closeup picks the three-quarter side that keeps another head out of the line of sight', () => {
+  // mia faces leo, who stands 3 studs straight in front of her: the camera must not look through leo.
+  const h: Record<string, Vec3> = { mia: [0, 4.5, 0], leo: [0, 4.5, -3] };
+  const c = cameraAt({ kind: 'closeup', targets: ['mia'] }, 0, 4, 1, h, set, 7, 'mia', { mia: 0, leo: Math.PI });
+  const [ux, uz] = [c.pos[0], c.pos[2]];
+  const k = Math.max(0, Math.min(1, (-3 * uz) / (ux * ux + uz * uz)));
+  assert.ok(Math.hypot(ux * k, -3 - uz * k) > 1.2, `leo clearance from ${c.pos}`);
 });

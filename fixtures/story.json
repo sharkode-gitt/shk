@@ -30,7 +30,7 @@
           "shot": "orbit",
           "do": [
             { "who": "mom", "act": "walk_to", "at": "table", "face": "neutral" },
-            { "who": "emily", "act": "sit", "at": "chair" }
+            { "who": "emily", "act": "sit", "at": "sofa" }
           ] },
         { "say": { "who": "emily", "line": "[shouting] It is not fair!" },
           "shot": "shake",

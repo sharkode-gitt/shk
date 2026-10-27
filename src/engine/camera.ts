@@ -14,6 +14,21 @@ const frame = (c: Vec3, d: number, dy: number, ty: number, fov: number, minZ = c
   pos: [c[0], c[1] + dy, minZ - d], target: [c[0], c[1] + ty, c[2]], fov,
 });
 
+/** Camera `d` studs in front of a head along its facing (yaw 0 faces -Z), at `c.y + dy`, aiming at `c.y + ty`. */
+const facing = (c: Vec3, yaw: number, d: number, dy: number, ty: number, fov: number): Cam => ({
+  pos: [c[0] - d * Math.sin(yaw), c[1] + dy, c[2] - d * Math.cos(yaw)], target: [c[0], c[1] + ty, c[2]], fov,
+});
+
+/** Horizontal distance from p to the segment a-b. */
+function segDist(p: Vec3, a: Vec3, b: Vec3): number {
+  const [ux, uz] = [b[0] - a[0], b[2] - a[2]];
+  const k = Math.max(0, Math.min(1, ((p[0] - a[0]) * ux + (p[2] - a[2]) * uz) / (ux * ux + uz * uz || 1)));
+  return Math.hypot(p[0] - a[0] - k * ux, p[2] - a[2] - k * uz);
+}
+
+/** Three-quarter angle off the target's facing, so whoever it faces does not block the lens. */
+const THREE_QUARTER = 0.6;
+
 /** Smooth hand-held offset: three sines (periods ~2.7, 1.7, 1.1 s), seed-derived phases, |n| <= 0.03. */
 function handheld(t: number, seed: number): Vec3 {
   const rnd = mulberry32(seed);
@@ -27,11 +42,20 @@ function handheld(t: number, seed: number): Vec3 {
 export function cameraAt(
   shot: Shot, u: number, _beatDur: number, tInBeat: number,
   heads: Record<string, Vec3>, _set: BuiltSet, seed: number, speaker: string,
+  yaws: Record<string, number> = {},
 ): Cam {
   const all = Object.values(heads);
   const fallback: Vec3 = all[0] ?? [0, 4.5, 0];
   const head = (id: string | undefined): Vec3 => (id ? heads[id] : undefined) ?? fallback;
   const medium = (c: Vec3): Cam => frame(c, 7, -0.3, -1.2, VFOV);
+  /** Face-on shot of `id` from 0.6 rad left or right of its facing, whichever keeps other heads further off the line. */
+  const faceOn = (id: string | undefined, d: number, dy: number, ty: number, fov: number): Cam => {
+    const c = head(id), yaw = (id ? yaws[id] : undefined) ?? 0;
+    const others = Object.entries(heads).filter(([k]) => k !== id).map(([, p]) => p);
+    const clear = (cam: Cam) => Math.min(Infinity, ...others.map((p) => segDist(p, cam.pos, c)));
+    const [a, b] = [yaw + THREE_QUARTER, yaw - THREE_QUARTER].map((y) => facing(c, y, d, dy, ty, fov));
+    return clear(b) > clear(a) ? b : a;
+  };
   /** Distance so every point stays within +-halfSpan (plus 1 stud margin) horizontally, min `base`. */
   const fit = (halfSpan: number, base: number) => Math.max(base, (halfSpan + 1) / TAN_H);
 
@@ -51,8 +75,9 @@ export function cameraAt(
       }
       break;
     }
-    case 'closeup': cam = frame(head(shot.targets[0]), 3.2, 0, 0, 30); break;
-    case 'push_in': cam = frame(head(shot.targets[0]), 7 - 3.5 * easeInOut(u), -0.2, -0.3, 35); break;
+    // Face-on shots follow the target's facing; distances keep the head (about 1.65 wide seen at three-quarters) inside 9:16.
+    case 'closeup': cam = faceOn(shot.targets[0], 6.5, 0, 0, 30); break;
+    case 'push_in': cam = faceOn(shot.targets[0], 7.5 - 2.5 * easeInOut(u), -0.2, -0.3, 35); break;
     case 'two_shot': {
       const [a, b] = [head(shot.targets[0]), head(shot.targets[1])];
       const c = mid([a, b]);
