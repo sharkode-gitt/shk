@@ -25,6 +25,5 @@ test('every character has all its model files, 15 body parts, and a voice id', (
 test('faces: Emily keeps her own style; models that bring their own head texture are left as they are', () => {
   assert.equal(roster.emily.model.face.style, 'emily');
   for (const id of ['fzk', 'lexi', 'lokii']) assert.equal(roster[id].model.face.style, 'none', id);
-  for (const id of ['bacon', 'sammy']) assert.equal(roster[id].model.face.style, 'emily', id); // their painted face is cleared
-  assert.equal(roster.ben.model.face.style, 'classic');
+  for (const id of ['bacon', 'ben', 'sammy']) assert.equal(roster[id].model.face.style, 'cute', id);
 });

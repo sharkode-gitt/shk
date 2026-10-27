@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import type { Face } from '../../types.ts';
 import { drawClassicFace } from './classic.ts';
+import { drawCuteFace } from './cute.ts';
 import { drawFace, type Rect } from './draw.ts';
 
-export type FaceStyle = 'emily' | 'classic' | 'none';
+export type FaceStyle = 'emily' | 'classic' | 'cute' | 'none';
 
 /**
  * Head-front UV box of the Head mesh (Hero10) in assets/emily/Hero1_diff.png (916×568).
@@ -47,7 +48,7 @@ export class FaceTexture {
     const key = `${face}/${mouth}`;
     if (key === this.current) return;
     this.current = key;
-    const draw = this.style === 'classic' ? drawClassicFace : drawFace;
+    const draw = this.style === 'classic' ? drawClassicFace : this.style === 'cute' ? drawCuteFace : drawFace;
     if (this.flipX) { // mirror around the middle of the face box
       const mid = this.rect.x + this.rect.w / 2;
       this.ctx.save();

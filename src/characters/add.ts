@@ -19,7 +19,7 @@ export type AddOpts = {
    * Face drawing: `classic` for ordinary Roblox faces and `emily` for the big anime eyes (both draw on the head's atlas);
    * `none` leaves a face that comes with the model. Default: `classic` when the head shares the body's atlas, else `none`.
    */
-  faceStyle?: 'classic' | 'emily' | 'none';
+  faceStyle?: 'classic' | 'emily' | 'cute' | 'none';
   force?: boolean;
   rig: HeroRig;
 };
@@ -77,7 +77,7 @@ export function addCharacter(o: AddOpts): AddResult {
   const kd = kdOfGroup(objText, mtlText, headGroup);
   const info = CharacterSchema.parse({
     id: o.id, name: o.name, age: o.age, personality: o.personality, look: o.look, color: o.color,
-    model: { obj: objs[0], mtl: mtls[0], atlas, face: { style: o.faceStyle ?? (sharesAtlas ? 'classic' : 'none'), rect, skin: kd ? linearToHex(kd) : skinAround(png, rect), flipX: mapped?.flipX ?? false }, unflipped: [] },
+    model: { obj: objs[0], mtl: mtls[0], atlas, face: { style: o.faceStyle ?? (sharesAtlas ? 'cute' : 'none'), rect, skin: kd ? linearToHex(kd) : skinAround(png, rect), flipX: mapped?.flipX ?? false }, unflipped: [] },
   });
 
   mkdirSync(dir, { recursive: true });

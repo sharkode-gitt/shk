@@ -41,7 +41,7 @@ const USAGE = `story <command>
   voices [--fill]            list the ElevenLabs voices; --fill puts a suggested voice into every empty slot of assets/voices.json
   series import <folder>     turn the ep<N>.json files of a series folder into approved jobs (<series>-ep<N>)
   character list             the characters stories can be about
-  character add <folder> --id <id> --name <Name> [--age N] [--personality "..."] [--look "..."] [--color #rrggbb] [--style classic|emily|none] [--force]
+  character add <folder> --id <id> --name <Name> [--age N] [--personality "..."] [--look "..."] [--color #rrggbb] [--style cute|classic|emily|none] [--force]
                              register a Roblox Studio export (.obj, .mtl and textures) as a character
   new ... --character <id>   write the story about that character (otherwise Claude picks the best fit)`;
 
@@ -127,14 +127,14 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
         }
         if (sub !== 'add') throw new Error('usage: character list | character add <folder> --id <id> --name <Name> ...');
         if (!folder || !values.id || !values.name) throw new Error('usage: character add <folder> --id <id> --name <Name> [--age N] [--personality "..."] [--look "..."]');
-        if (values.style && !['classic', 'emily', 'none'].includes(values.style)) throw new Error('--style must be classic, emily or none');
+        if (values.style && !['classic', 'emily', 'cute', 'none'].includes(values.style)) throw new Error('--style must be classic, emily, cute or none');
         const age = values.age === undefined ? 12 : Number(values.age);
         if (!Number.isInteger(age) || age < 1) throw new Error('--age must be a whole number');
         const rig = JSON.parse(readFileSync(new URL('../reference/hero-rig.json', import.meta.url), 'utf8')) as HeroRig;
         const r = addCharacter({
           srcDir: folder, assetsDir: config.paths.assets, id: values.id, name: values.name, age, rig, force: values.force,
           personality: values.personality ?? 'cheerful and curious', look: values.look ?? 'classic Roblox look',
-          color: values.color, faceStyle: values.style as 'classic' | 'emily' | 'none' | undefined,
+          color: values.color, faceStyle: values.style as 'classic' | 'emily' | 'cute' | 'none' | undefined,
         });
         out(`${r.info.id}: ${r.bodyGroups} body parts, ${r.accessories.length} accessories (${r.accessories.map((a) => `${a.accessory} on ${a.attach}`).join(', ') || 'none'}), face box ${r.info.model.face.rect.w}x${r.info.model.face.rect.h}, skin ${r.info.model.face.skin}`);
         out(`saved in ${r.dir}`);

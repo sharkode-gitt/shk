@@ -23,7 +23,7 @@ export const CharacterSchema = z.object({
        * `emily`: big anime eyes (Emily's own style). `classic`: the simple dot eyes and smile of the default Roblox face,
        * drawn on the head. `none`: the model brings its own face; it is left as it is (no expressions or mouth movement).
        */
-      style: z.enum(['emily', 'classic', 'none']),
+      style: z.enum(['emily', 'classic', 'cute', 'none']),
       rect: Rect,
       skin: z.string(),
       /** Draw the face mirrored (the head's UV map runs the other way). */
