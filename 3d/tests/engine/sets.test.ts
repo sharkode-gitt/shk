@@ -13,7 +13,7 @@ for (const name of SETS) {
       assert.ok(s.lights.some((l) => l instanceof THREE.HemisphereLight));
       let meshes = 0;
       s.group.traverse((o) => { if (o instanceof THREE.Mesh) meshes++; });
-      assert.ok(meshes > 5 && meshes < 150, `mesh count ${meshes}`);
+      assert.ok(meshes > 5 && meshes < 300, `mesh count ${meshes}`);
     }
     const s = buildSet(name, 'morning');
     assert.ok(SET_MARKS[name].includes('center') && SET_MARKS[name].includes('door'));

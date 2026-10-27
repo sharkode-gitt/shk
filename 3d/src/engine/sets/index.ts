@@ -59,6 +59,12 @@ export function buildSet(name: SetName, time: TimeOfDay): BuiltSet {
     const lamp = new THREE.PointLight(0xffd9a0, L.lamp, 30, 2); // warm interior light
     lamp.position.set(0, 9, 2);
     lights.push(lamp);
+    // Soft fill from the camera side, so dark clothes and faces keep some shape (no shadows).
+    const fill = new THREE.DirectionalLight(0xdfe8ff, 0.9);
+    fill.position.set(2, 9, -30);
+    fill.target.position.set(0, 3, 0);
+    lights.push(fill);
+    group.add(fill.target);
   }
   group.add(...lights, sun.target);
   // room(): side walls' inner faces at x = +-12, back wall at z = 9; keep a margin so the near plane never clips a wall.

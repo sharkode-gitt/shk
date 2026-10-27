@@ -62,8 +62,8 @@ export function cameraAt(
   };
   /** Head to thighs, face-on to the speaker (follows its facing); the head sits mid-frame, below the captions. */
   const medium = (id: string | undefined): Cam => faceOn(id, 9, -0.3, 0, VFOV);
-  /** Distance so every point stays within +-halfSpan (plus 1 stud margin) horizontally, min `base`. */
-  const fit = (halfSpan: number, base: number) => Math.max(base, (halfSpan + 1) / TAN_H);
+  /** Distance so every point stays within +-halfSpan (plus 2.2 stud margin) horizontally, min `base`. */
+  const fit = (halfSpan: number, base: number) => Math.max(base, (halfSpan + 2.2) / TAN_H);
 
   let cam: Cam;
   switch (shot.kind) {
@@ -119,8 +119,8 @@ export function cameraAt(
     }
   }
   // Shots that would otherwise stand still drift 6% closer over the beat, so no frame is ever frozen.
-  if (shot.kind === 'wide' || shot.kind === 'medium' || shot.kind === 'two_shot' || shot.kind === 'over_shoulder') {
-    const k = 1 - 0.06 * easeInOut(Math.min(1, Math.max(0, u)));
+  if (shot.kind === 'wide' || shot.kind === 'medium' || shot.kind === 'two_shot' || shot.kind === 'over_shoulder' || shot.kind === 'closeup') {
+    const k = 1 - 0.07 * easeInOut(Math.min(1, Math.max(0, u)));
     cam.pos = [0, 1, 2].map((i) => cam.target[i] + (cam.pos[i] - cam.target[i]) * k) as Vec3;
   }
   if (bounds) { // last resort: never stand behind a wall of the room

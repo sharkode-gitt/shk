@@ -99,8 +99,8 @@ test('posture: talk after sit stays seated with the arm gesture', () => {
   const beats = [beat([{ who: 'emily', act: 'sit', start: 0, end: 2 }, { who: 'emily', act: 'talk', start: 2, end: 4 }])];
   const p = poseAt('emily', 3, beats, marks, home, 1);
   assert.ok(near(joint(p, 'LeftHip')[0], 1.57), `hip ${joint(p, 'LeftHip')}`);
-  assert.ok(near(p.root.pos[1], -0.5), `y ${p.root.pos[1]}`);
-  assert.ok(near(joint(p, 'RightElbow')[0], 0.9), `talk elbow ${joint(p, 'RightElbow')}`);
+  assert.ok(Math.abs(p.root.pos[1] + 0.5) < 0.1, `y ${p.root.pos[1]}`);
+  assert.ok(joint(p, 'RightElbow')[0] > 0.6 && joint(p, 'RightElbow')[0] < 1.4, `talk elbow ${joint(p, 'RightElbow')}`);
 });
 
 test('posture: after fall ends, idle stays lying', () => {

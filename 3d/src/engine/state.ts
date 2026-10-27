@@ -159,6 +159,10 @@ export function sceneState(time: number, payload: ScenePayload, layout: SetLayou
     const a = poseAt(id, t - 1 / FPS, beats, set.marks, homes[id], seed, others).root.pos, b = poseAt(id, t + 1 / FPS, beats, set.marks, homes[id], seed, others).root.pos;
     return Math.hypot(b[0] - a[0], b[2] - a[2]) > 1e-4;
   };
+  // A character holding something keeps that arm down while standing (a gesture would swing the prop into their face).
+  for (const id of ids) {
+    if (items[id] && !moving(id)) poses[id].joints = { ...poses[id].joints, RightShoulder: [0.08, 0, 0.1], RightElbow: [0.22, 0, 0] };
+  }
   const hugging = beat.actions.some((a) => a.act === 'hug');
   separate(ids, poses, moving, !hugging);
   if (!hugging) faceEachOther(ids, poses, beats, t, moving, others);

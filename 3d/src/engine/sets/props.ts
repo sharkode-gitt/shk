@@ -51,10 +51,10 @@ function gridTexture(): THREE.DataTexture {
 }
 
 /** Floor mesh named "floor" (marks are validated against its bounding box). Tile = 4 studs. */
-export function floor(parent: THREE.Object3D, w: number, d: number, color: number): THREE.Mesh {
-  const tex = gridTexture();
+export function floor(parent: THREE.Object3D, w: number, d: number, color: number, texture?: THREE.Texture, roughness = 0.95): THREE.Mesh {
+  const tex = texture ?? gridTexture();
   tex.repeat.set(w / 4, d / 4);
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshStandardMaterial({ color, map: tex, roughness: 0.95 }));
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshStandardMaterial({ color, map: tex, roughness }));
   m.rotation.x = -Math.PI / 2;
   m.name = 'floor';
   m.receiveShadow = true;
@@ -66,8 +66,8 @@ export function floor(parent: THREE.Object3D, w: number, d: number, color: numbe
  * Three-walled room: back wall at z=9, side walls at x=±12, no front/ceiling. The floor runs on to
  * z=-60 and the walls are 30 high (side walls run along it) so wide/orbit cameras never see past the set.
  */
-export function room(g: THREE.Group, wallColor: number, floorColor: number): void {
-  floor(g, 24, 69, floorColor).position.z = -25.5; // z[-60,9]
+export function room(g: THREE.Group, wallColor: number, floorColor: number, floorTexture?: THREE.Texture, floorRoughness?: number): void {
+  floor(g, 24, 69, floorColor, floorTexture, floorRoughness).position.z = -25.5; // z[-60,9]
   box(g, 25, 30, 0.5, wallColor, 0, 0, 9.25);
   box(g, 0.5, 30, 69, wallColor, -12.25, 0, -25.5);
   box(g, 0.5, 30, 69, wallColor, 12.25, 0, -25.5);

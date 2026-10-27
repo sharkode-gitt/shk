@@ -12,7 +12,8 @@ export const idle: ActionFn = (_u, t, ctx) => {
   const sway = 0.02 * osc(t, 3.2, p4);
   return inPlace(ctx, {
     Waist: [0.03 * osc(t, 3.2, p1), 0, 0],
-    Neck: [0.04 * osc(t, 4.3, p2), 0.06 * osc(t, 6.1, p3), 0],
+    Root: [0, 0, 0.012 * osc(t, 5.4, p3)],
+    Neck: [0.04 * osc(t, 4.3, p2), 0.1 * osc(t, 6.1, p3), 0.03 * osc(t, 7.3, p1)],
     RightShoulder: [0, 0, 0.07 + sway], LeftShoulder: [0, 0, -0.07 - sway],
   });
 };

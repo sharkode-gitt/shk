@@ -153,7 +153,8 @@ export async function writeComposition(opts: CompositionOptions): Promise<string
 html, body { margin: 0; background: #000; }
 #story { position: relative; width: ${W}px; height: ${H}px; overflow: hidden; }
 #stage { position: absolute; inset: 0; }
-#stage canvas { width: 100%; height: 100%; display: block; }
+#stage canvas { width: 100%; height: 100%; display: block; filter: contrast(1.07) saturate(1.12); }
+#vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 46%, rgba(0,0,0,0) 52%, rgba(10,8,20,.34) 100%); }
 #captions { position: absolute; inset: 0; pointer-events: none; }
 /* The band is centred on 30% of the height without a CSS transform, so GSAP owns every transform of the inner block. */
 .cap { position: absolute; top: 21%; height: 18%; left: 6%; right: 12%; display: flex; align-items: center; justify-content: center; text-align: center; }
@@ -179,6 +180,7 @@ html, body { margin: 0; background: #000; }
 <body>
 <div id="story" data-composition-id="story" data-start="0" data-width="${W}" data-height="${H}" data-duration="${duration}">
 <div id="stage"></div>
+<div id="vignette"></div>
 <div id="captions" data-track-kind="captions">
 ${capHtml.join('\n')}
 </div>
