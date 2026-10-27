@@ -1,22 +1,41 @@
 import type { Vec3 } from '../../types.ts';
-import { clamp01, lerpAngle, osc, yawToward, type ActionFn } from './util.ts';
+import { clamp01, lerpAngle, yawToward, type ActionFn } from './util.ts';
 
-/** Linear move from ctx.from to ctx.to (facing travel, turning to the camera at the end) with a step cycle: thighs +-0.6, knees 0..0.8, arms opposed +-0.5. */
-const mover = (period: number): ActionFn => (u, t, ctx) => {
+/** 0..1 travel progress with soft starts and stops (half linear, half smoothstep, so it never crawls). */
+const travel = (u: number) => 0.5 * u + 0.5 * u * u * (3 - 2 * u);
+/** Its speed relative to the average, 0.5 at both ends and 1.25 mid-way. */
+const speed = (u: number) => 0.5 + 0.5 * 6 * u * (1 - u);
+
+/**
+ * Move from ctx.from to ctx.to (facing travel, turning to the camera over the last fifth). The step cycle is driven by
+ * the distance covered (one full cycle per `stride` studs), so the feet never slide; the swing shrinks while speeding
+ * up or slowing down. Thighs swing `leg`, knees bend on the back swing, arms oppose the legs with a bent elbow, the
+ * body bounces twice per cycle and leans `lean` rad into the motion.
+ */
+const mover = (stride: number, leg: number, arm: number, bounce: number, lean: number): ActionFn => (u, _t, ctx) => {
   const to = ctx.to ?? ctx.from;
-  const pos = ctx.from.map((v, i) => v + (to[i] - v) * u) as Vec3;
-  const s = osc(t, period);
+  const e = travel(u);
+  const dist = Math.hypot(to[0] - ctx.from[0], to[2] - ctx.from[2]);
+  const phase = (2 * Math.PI * dist * e) / stride;
+  const s = Math.sin(phase);
+  const amp = Math.min(1, speed(u)) * Math.min(1, dist / 1.5);
+  const pos = ctx.from.map((v, i) => v + (to[i] - v) * e) as Vec3;
+  pos[1] += bounce * amp * Math.abs(Math.cos(phase));
   return {
     // Face the direction of travel, then turn to the camera (yaw 0) over the last fifth so the arrival reads on screen.
     root: { pos, yaw: lerpAngle(yawToward(ctx.from, to, ctx.fromYaw), 0, (k => k * k * (3 - 2 * k))(clamp01((u - 0.8) / 0.2))) },
     joints: {
-      LeftHip: [0.6 * s, 0, 0], RightHip: [-0.6 * s, 0, 0],
+      LeftHip: [leg * amp * s, 0, 0], RightHip: [-leg * amp * s, 0, 0],
       // The leg swinging back bends its knee.
-      LeftKnee: [-0.8 * Math.max(0, -s), 0, 0], RightKnee: [-0.8 * Math.max(0, s), 0, 0],
-      LeftShoulder: [-0.5 * s, 0, 0], RightShoulder: [0.5 * s, 0, 0],
+      LeftKnee: [-1.0 * amp * Math.max(0, -s), 0, 0], RightKnee: [-1.0 * amp * Math.max(0, s), 0, 0],
+      LeftAnkle: [0.25 * amp * Math.max(0, s), 0, 0], RightAnkle: [0.25 * amp * Math.max(0, -s), 0, 0],
+      LeftShoulder: [-arm * amp * s, 0, 0], RightShoulder: [arm * amp * s, 0, 0],
+      LeftElbow: [0.25 * amp + 0.35 * amp * Math.max(0, s), 0, 0], RightElbow: [0.25 * amp + 0.35 * amp * Math.max(0, -s), 0, 0],
+      Waist: [-lean * amp, 0, 0],
+      Neck: [lean * 0.6 * amp, 0, 0],
     },
   };
 };
 
-export const walk = mover(0.5);
-export const run = mover(0.32);
+export const walk = mover(3.4, 0.6, 0.5, 0.1, 0.05);
+export const run = mover(5.2, 0.9, 0.9, 0.25, 0.22);
