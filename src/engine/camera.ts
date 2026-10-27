@@ -1,0 +1,90 @@
+import type { Shot, Vec3 } from '../types.ts';
+import { mulberry32 } from '../build/seed.ts';
+import type { BuiltSet } from './sets/index.ts';
+
+export type Cam = { pos: Vec3; target: Vec3; fov: number };
+
+const VFOV = 40; // vertical degrees; the video is 9:16
+const TAN_H = Math.tan((VFOV / 2) * Math.PI / 180) * (9 / 16); // horizontal half-angle tangent
+const easeInOut = (x: number) => (x < 0.5 ? 2 * x * x : 1 - 2 * (1 - x) * (1 - x));
+const mid = (ps: Vec3[]): Vec3 => [0, 1, 2].map((i) => ps.reduce((s, p) => s + p[i], 0) / ps.length) as Vec3;
+
+/** Camera on the -Z side of `c`, `d` studs back, at `c.y + dy`, aiming at `c.y + ty`. */
+const frame = (c: Vec3, d: number, dy: number, ty: number, fov: number, minZ = c[2]): Cam => ({
+  pos: [c[0], c[1] + dy, minZ - d], target: [c[0], c[1] + ty, c[2]], fov,
+});
+
+/** Smooth hand-held offset: three sines (periods ~2.7, 1.7, 1.1 s), seed-derived phases, |n| <= 0.03. */
+function handheld(t: number, seed: number): Vec3 {
+  const rnd = mulberry32(seed);
+  return [0, 1, 2].map(() => {
+    const [p1, p2, p3] = [rnd(), rnd(), rnd()].map((r) => r * 2 * Math.PI);
+    const w = 2 * Math.PI * t;
+    return 0.03 * (0.6 * Math.sin(w / 2.7 + p1) + 0.25 * Math.sin(w / 1.7 + p2) + 0.15 * Math.sin(w / 1.1 + p3));
+  }) as Vec3;
+}
+
+export function cameraAt(
+  shot: Shot, u: number, _beatDur: number, tInBeat: number,
+  heads: Record<string, Vec3>, _set: BuiltSet, seed: number, speaker: string,
+): Cam {
+  const all = Object.values(heads);
+  const fallback: Vec3 = all[0] ?? [0, 4.5, 0];
+  const head = (id: string | undefined): Vec3 => (id ? heads[id] : undefined) ?? fallback;
+  const medium = (c: Vec3): Cam => frame(c, 7, -0.3, -1.2, VFOV);
+  /** Distance so every point stays within +-halfSpan (plus 1 stud margin) horizontally, min `base`. */
+  const fit = (halfSpan: number, base: number) => Math.max(base, (halfSpan + 1) / TAN_H);
+
+  let cam: Cam;
+  switch (shot.kind) {
+    case 'wide': {
+      const c = mid(all.length ? all : [fallback]);
+      const span = Math.max(...all.map((p) => Math.abs(p[0] - c[0])), 0);
+      cam = frame(c, fit(span, 14), 1.5, -1.5, VFOV, Math.min(...all.map((p) => p[2]), c[2]));
+      break;
+    }
+    case 'medium': case 'shake': {
+      cam = medium(head(speaker));
+      if (shot.kind === 'shake' && tInBeat < 0.4) {
+        const k = 0.15 * (1 - tInBeat / 0.4);
+        cam.pos = [cam.pos[0] + k * Math.sin(tInBeat * 90), cam.pos[1] + k * Math.cos(tInBeat * 70), cam.pos[2]];
+      }
+      break;
+    }
+    case 'closeup': cam = frame(head(shot.targets[0]), 3.2, 0, 0, 30); break;
+    case 'push_in': cam = frame(head(shot.targets[0]), 7 - 3.5 * easeInOut(u), -0.2, -0.3, 35); break;
+    case 'two_shot': {
+      const [a, b] = [head(shot.targets[0]), head(shot.targets[1])];
+      const c = mid([a, b]);
+      cam = frame(c, fit(Math.abs(a[0] - b[0]) / 2, 7), -0.3, -1, VFOV, Math.min(a[2], b[2]));
+      break;
+    }
+    case 'over_shoulder': {
+      const x = head(shot.targets[0]);
+      const other = Object.entries(heads)
+        .filter(([id]) => id !== shot.targets[0])
+        .map(([, p]) => p)
+        .sort((p, q) => Math.hypot(p[0] - x[0], p[2] - x[2]) - Math.hypot(q[0] - x[0], q[2] - x[2]))[0];
+      const dx = other ? x[0] - other[0] : 0;
+      const dz = other ? x[2] - other[2] : 0;
+      const l = Math.hypot(dx, dz);
+      if (!other || l < 0.5) { cam = medium(x); break; }
+      const [nx, nz] = [dx / l, dz / l];
+      // 1.8 studs behind the other's head, 0.7 to the side, a little above eye line.
+      cam = {
+        pos: [other[0] - nx * 1.8 - nz * 0.7, other[1] + 0.3, other[2] - nz * 1.8 + nx * 0.7],
+        target: [x[0], x[1] - 0.2, x[2]], fov: 35,
+      };
+      break;
+    }
+    case 'orbit': {
+      const c = mid(all.length ? all : [fallback]);
+      const r = fit(Math.max(...all.map((p) => Math.hypot(p[0] - c[0], p[2] - c[2])), 0), 14);
+      const a = (-20 + 40 * u) * Math.PI / 180; // sweeps 40 deg centred on the -Z side
+      cam = { pos: [c[0] + r * Math.sin(a), c[1] + 1.5, c[2] - r * Math.cos(a)], target: [c[0], c[1] - 1.5, c[2]], fov: VFOV };
+      break;
+    }
+  }
+  const n = handheld(tInBeat, seed);
+  return { ...cam, pos: [cam.pos[0] + n[0], cam.pos[1] + n[1], cam.pos[2] + n[2]] };
+}
