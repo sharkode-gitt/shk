@@ -5,7 +5,7 @@ export function street(g: THREE.Group): Layout {
   floor(g, 60, 60, C.floorGrass);
   box(g, 60, 0.05, 15, C.road, 0, 0, -3.5); // road z -11..4
   for (let x = -27; x < 28; x += 6) box(g, 3, 0.07, 0.4, C.white, x, 0, -3.5);
-  box(g, 60, 0.12, 8, C.sidewalk, 0, 0, 8); // sidewalk z 4..12
+  box(g, 60, 0.04, 8, C.sidewalk, 0, 0, 8); // sidewalk z 4..12
   house(g, 8, 17, C.wall, C.red);
   house(g, -8, 17, C.wall2, C.blue);
   house(g, 22, 17, C.wall3, C.purple);
