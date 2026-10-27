@@ -8,7 +8,8 @@
     "typecheck": "tsc --noEmit",
     "fixture": "tsx scripts/render-fixture.ts",
     "test:visual": "tsx --test tests/visual/visual.spec.ts",
-    "gallery": "tsx scripts/gallery.ts"
+    "gallery": "tsx scripts/gallery.ts",
+    "story": "tsx src/cli.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",
@@ -27,5 +28,8 @@
     "pngjs": "^7.0.0",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3"
+  },
+  "bin": {
+    "story": "src/cli.ts"
   }
 }
