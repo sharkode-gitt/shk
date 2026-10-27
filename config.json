@@ -1,0 +1,5 @@
+{
+  "writer": { "model": "claude-opus-5-5", "effort": "high" },
+  "voice": { "model": "eleven_v3", "format": "mp3_44100_128" },
+  "paths": { "jobs": "jobs", "cache": "cache", "assets": "assets" }
+}
