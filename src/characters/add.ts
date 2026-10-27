@@ -2,7 +2,7 @@ import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFi
 import { join } from 'node:path';
 import { PNG } from 'pngjs';
 import { CharacterSchema, charactersDir, type CharacterInfo } from './roster.ts';
-import { convertModel, headFrontRect, kdOfGroup, linearToHex, textureOfGroup, type Rect } from './convert.ts';
+import { convertModel, headFaceMapping, headFrontRect, kdOfGroup, linearToHex, textureOfGroup, type Rect } from './convert.ts';
 import type { HeroRig } from './geometry.ts';
 
 export type AddOpts = {
@@ -65,7 +65,9 @@ export function addCharacter(o: AddOpts): AddResult {
   if (!atlas) throw new Error(`could not find the body texture: the head group "${headGroup}" has no material with a map_Kd in ${mtls[0]}`);
   if (!files.includes(atlas)) throw new Error(`the body texture "${atlas}" named in the .mtl is not in ${o.srcDir}`);
   const png = PNG.sync.read(readFileSync(join(o.srcDir, atlas)));
-  const rect = headFrontRect(objText, headGroup, png.width, png.height);
+  const mapped = headFaceMapping(objText, headGroup, png.width, png.height);
+  if (!mapped) warnings.push('could not map the front of the head to the texture; using an approximate face box');
+  const rect = mapped?.rect ?? headFrontRect(objText, headGroup, png.width, png.height);
   if (rect.w < 40 || rect.h < 40) warnings.push(`the face box found on the texture is small (${rect.w}x${rect.h} px); check the character in a render`);
 
   // A head with a texture of its own (a face that comes with the model) is kept as it is; a head on the body's atlas gets a drawn face.
@@ -75,7 +77,7 @@ export function addCharacter(o: AddOpts): AddResult {
   const kd = kdOfGroup(objText, mtlText, headGroup);
   const info = CharacterSchema.parse({
     id: o.id, name: o.name, age: o.age, personality: o.personality, look: o.look, color: o.color,
-    model: { obj: objs[0], mtl: mtls[0], atlas, face: { style: o.faceStyle ?? (sharesAtlas ? 'classic' : 'none'), rect, skin: kd ? linearToHex(kd) : skinAround(png, rect) }, unflipped: [] },
+    model: { obj: objs[0], mtl: mtls[0], atlas, face: { style: o.faceStyle ?? (sharesAtlas ? 'classic' : 'none'), rect, skin: kd ? linearToHex(kd) : skinAround(png, rect), flipX: mapped?.flipX ?? false }, unflipped: [] },
   });
 
   mkdirSync(dir, { recursive: true });

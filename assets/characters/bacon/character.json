@@ -12,12 +12,13 @@
     "face": {
       "style": "classic",
       "rect": {
-        "x": 133,
-        "y": 277,
-        "w": 248,
-        "h": 290
+        "x": 126,
+        "y": 418,
+        "w": 140,
+        "h": 147
       },
-      "skin": "#f8f8f8"
+      "skin": "#f8f8f8",
+      "flipX": false
     },
     "unflipped": []
   }

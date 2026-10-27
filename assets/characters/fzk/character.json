@@ -17,7 +17,8 @@
         "w": 241,
         "h": 249
       },
-      "skin": "#e9ba96"
+      "skin": "#e9ba96",
+      "flipX": false
     },
     "unflipped": []
   }

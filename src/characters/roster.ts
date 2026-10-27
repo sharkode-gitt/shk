@@ -26,6 +26,8 @@ export const CharacterSchema = z.object({
       style: z.enum(['emily', 'classic', 'none']),
       rect: Rect,
       skin: z.string(),
+      /** Draw the face mirrored (the head's UV map runs the other way). */
+      flipX: z.boolean().default(false),
     }),
     /** Accessory labels (see parts.json) whose UVs use the top-left origin. */
     unflipped: z.array(z.string()).default([]),

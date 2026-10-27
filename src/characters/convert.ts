@@ -135,3 +135,59 @@ export function linearToHex([r, g, b]: V3): string {
   };
   return `#${enc(r)}${enc(g)}${enc(b)}`;
 }
+
+/**
+ * Where the front of the head sits on the texture, found by probing the mesh: four points on the head's front
+ * (the corners of its middle 60%) are followed through the triangles to their UV, and the head's full front is
+ * extrapolated from them. This is exact for any head whose front is a flat, axis-aligned patch of the UV map, and
+ * it also says whether the map is mirrored (Emily's and Bacon's are; Ben's is not).
+ * Returns `undefined` when the probes miss the mesh.
+ */
+export function headFaceMapping(objText: string, headGroup: string, atlasW: number, atlasH: number): { rect: Rect; flipX: boolean } | undefined {
+  const v: number[][] = [], vt: number[][] = [];
+  const tris: { p: number[][]; t: number[][] }[] = [];
+  let current = '';
+  for (const line of objText.split('\n')) {
+    const q = line.trim().split(/\s+/);
+    if (q[0] === 'v') v.push(q.slice(1).map(Number));
+    else if (q[0] === 'vt') vt.push(q.slice(1).map(Number));
+    else if (q[0] === 'g') current = line.slice(2).trim();
+    else if (q[0] === 'f' && current === headGroup) {
+      const f = q.slice(1).map((t) => t.split('/').map(Number));
+      if (f.some((i) => i[1] === undefined)) return undefined;
+      for (let k = 1; k + 1 < f.length; k++) {
+        const ids = [f[0]!, f[k]!, f[k + 1]!];
+        tris.push({ p: ids.map((i) => v[i[0]! - 1]!), t: ids.map((i) => vt[i[1]! - 1]!) });
+      }
+    }
+  }
+  if (!tris.length) return undefined;
+  const xs = tris.flatMap((t) => t.p.map((p) => p[0]!)), ys = tris.flatMap((t) => t.p.map((p) => p[1]!));
+  const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  const at = (fx: number, fy: number): [number, number] | undefined => {
+    const x = x0 + fx * (x1 - x0), y = y1 - fy * (y1 - y0);
+    let best: { z: number; uv: [number, number] } | undefined;
+    for (const { p: [a, b, c], t } of tris) {
+      const d = (b![1]! - c![1]!) * (a![0]! - c![0]!) + (c![0]! - b![0]!) * (a![1]! - c![1]!);
+      if (Math.abs(d) < 1e-9) continue;
+      const l1 = ((b![1]! - c![1]!) * (x - c![0]!) + (c![0]! - b![0]!) * (y - c![1]!)) / d;
+      const l2 = ((c![1]! - a![1]!) * (x - c![0]!) + (a![0]! - c![0]!) * (y - c![1]!)) / d;
+      const l3 = 1 - l1 - l2;
+      if (l1 < -1e-6 || l2 < -1e-6 || l3 < -1e-6) continue;
+      const z = l1 * a![2]! + l2 * b![2]! + l3 * c![2]!;
+      if (best && z >= best.z) continue; // the front-most surface (characters face -Z)
+      best = { z, uv: [l1 * t[0]![0]! + l2 * t[1]![0]! + l3 * t[2]![0]!, l1 * t[0]![1]! + l2 * t[1]![1]! + l3 * t[2]![1]!] };
+    }
+    return best && [best.uv[0] * atlasW, (1 - best.uv[1]) * atlasH];
+  };
+  const [tl, tr, bl] = [at(0.2, 0.2), at(0.8, 0.2), at(0.2, 0.8)];
+  if (!tl || !tr || !bl) return undefined;
+  const w = Math.abs(tr[0] - tl[0]) / 0.6, h = Math.abs(bl[1] - tl[1]) / 0.6;
+  const cx = (tl[0] + tr[0]) / 2, cy = (tl[1] + bl[1]) / 2;
+  if (!(w > 8 && h > 8)) return undefined;
+  return {
+    rect: { x: Math.round(cx - w / 2), y: Math.round(cy - h / 2), w: Math.round(w), h: Math.round(h) },
+    // Emily's drawing is calibrated on a map where +x runs toward lower atlas x; the others are mirrored to match.
+    flipX: !(tl[0] > tr[0]),
+  };
+}

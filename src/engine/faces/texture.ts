@@ -20,7 +20,9 @@ export class FaceTexture {
   private readonly style: FaceStyle;
   private current = '';
 
-  constructor(atlas: HTMLImageElement | HTMLCanvasElement, rect: Rect, skin: string, style: FaceStyle = 'emily') {
+  private readonly flipX: boolean;
+
+  constructor(atlas: HTMLImageElement | HTMLCanvasElement, rect: Rect, skin: string, style: FaceStyle = 'emily', flipX = false) {
     const canvas = document.createElement('canvas');
     canvas.width = atlas.width;
     canvas.height = atlas.height;
@@ -34,6 +36,7 @@ export class FaceTexture {
     this.rect = rect;
     this.skin = skin;
     this.style = style;
+    this.flipX = flipX;
     this.texture = new THREE.CanvasTexture(canvas);
     this.texture.colorSpace = THREE.SRGBColorSpace;
   }
@@ -43,7 +46,16 @@ export class FaceTexture {
     const key = `${face}/${mouth}`;
     if (key === this.current) return;
     this.current = key;
-    (this.style === 'classic' ? drawClassicFace : drawFace)(this.ctx, face, mouth, this.rect, this.skin);
+    const draw = this.style === 'classic' ? drawClassicFace : drawFace;
+    if (this.flipX) { // mirror around the middle of the face box
+      const mid = this.rect.x + this.rect.w / 2;
+      this.ctx.save();
+      this.ctx.translate(mid, 0);
+      this.ctx.scale(-1, 1);
+      this.ctx.translate(-mid, 0);
+      draw(this.ctx, face, mouth, this.rect, this.skin);
+      this.ctx.restore();
+    } else draw(this.ctx, face, mouth, this.rect, this.skin);
     this.texture.needsUpdate = true;
   }
 }
