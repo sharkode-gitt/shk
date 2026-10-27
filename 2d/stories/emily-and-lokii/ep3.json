@@ -1,0 +1,100 @@
+{
+ "story": "emily-and-lokii",
+ "ep": 3,
+ "title": "Bacon Is Angry",
+ "nextTitle": "The [party]",
+ "scenes": [
+  {
+   "bg": "escola",
+   "cam": "shake",
+   "trans": "whip",
+   "title": "BACON IS [ANGRY]",
+   "cast": [
+    {
+     "id": "bacon",
+     "pos": "center",
+     "mood": "angry",
+     "tag": "BACON"
+    }
+   ],
+   "beats": [
+    {
+     "who": "narr",
+     "t": "We found Bacon at his locker."
+    },
+    {
+     "who": "bacon",
+     "t": "Who took my [backpack]?!",
+     "anim": "shake",
+     "sfx": "boom"
+    }
+   ]
+  },
+  {
+   "bg": "escola",
+   "cam": "drift",
+   "cast": [
+    {
+     "id": "emily",
+     "pos": "left",
+     "mood": "neutral"
+    },
+    {
+     "id": "bacon",
+     "pos": "right",
+     "mood": "scared"
+    }
+   ],
+   "beats": [
+    {
+     "who": "emily",
+     "t": "Nobody took it. Lokii [found] it."
+    },
+    {
+     "who": "bacon",
+     "t": "The skeleton? Please don't [scare] me.",
+     "anim": "wave"
+    }
+   ]
+  },
+  {
+   "bg": "escola",
+   "cam": "zoom_in",
+   "cast": [
+    {
+     "id": "lokii",
+     "pos": "left",
+     "mood": "neutral"
+    },
+    {
+     "id": "bacon",
+     "pos": "right",
+     "mood": "happy"
+    }
+   ],
+   "beats": [
+    {
+     "who": "lokii",
+     "t": "Here is your [backpack]."
+    },
+    {
+     "who": "narr",
+     "t": "Bacon blinked. Then he [smiled]."
+    },
+    {
+     "who": "bacon",
+     "t": "Thanks, spooky guy! My [birthday] party is tomorrow. You can come."
+    },
+    {
+     "who": "bacon",
+     "t": "But only if you take off the [mask].",
+     "anim": "pop"
+    },
+    {
+     "who": "lokii",
+     "t": "I... [cannot]."
+    }
+   ]
+  }
+ ]
+}

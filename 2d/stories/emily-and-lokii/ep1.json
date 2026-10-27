@@ -1,0 +1,102 @@
+{
+ "story": "emily-and-lokii",
+ "ep": 1,
+ "title": "The Kid in the Skull Mask",
+ "nextTitle": "Whose [Backpack]?",
+ "scenes": [
+  {
+   "bg": "escola",
+   "cam": "zoom_in",
+   "trans": "fade",
+   "title": "THE [SKULL] MASK",
+   "fx": [
+    "dust"
+   ],
+   "cast": [
+    {
+     "id": "lokii",
+     "pos": "center",
+     "mood": "neutral",
+     "tag": "LOKII · NEW KID"
+    },
+    {
+     "id": "bacon",
+     "pos": "right",
+     "mood": "scared",
+     "tag": "BACON"
+    }
+   ],
+   "beats": [
+    {
+     "who": "narr",
+     "t": "A new kid walked into school wearing a [golden skull mask].",
+     "sfx": "stinger"
+    },
+    {
+     "who": "bacon",
+     "t": "A [skeleton]! Run!",
+     "anim": "shake",
+     "sfx": "impact"
+    }
+   ]
+  },
+  {
+   "bg": "escola",
+   "cam": "zoom_in",
+   "cast": [
+    {
+     "id": "emily",
+     "pos": "center",
+     "mood": "scared",
+     "tag": "EMILY"
+    }
+   ],
+   "beats": [
+    {
+     "who": "narr",
+     "t": "Everybody ran. My legs wanted to run too.",
+     "anim": "wave"
+    },
+    {
+     "who": "narr",
+     "t": "But I [stayed].",
+     "anim": "pop"
+    }
+   ]
+  },
+  {
+   "bg": "escola",
+   "cam": "drift",
+   "cast": [
+    {
+     "id": "emily",
+     "pos": "left",
+     "mood": "neutral"
+    },
+    {
+     "id": "lokii",
+     "pos": "right",
+     "mood": "neutral"
+    }
+   ],
+   "beats": [
+    {
+     "who": "lokii",
+     "t": "Hello. I am [Lokii]."
+    },
+    {
+     "who": "emily",
+     "t": "Um... hi. Why are you holding a [backpack]?"
+    },
+    {
+     "who": "lokii",
+     "t": "It is not mine. I must find its [owner]."
+    },
+    {
+     "who": "narr",
+     "t": "He sounded [sad]. And his mask never smiled."
+    }
+   ]
+  }
+ ]
+}

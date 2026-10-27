@@ -1,0 +1,103 @@
+{
+ "story": "emily-and-lokii",
+ "ep": 2,
+ "title": "Whose Backpack?",
+ "nextTitle": "Bacon is [angry]",
+ "scenes": [
+  {
+   "bg": "aula",
+   "cam": "pan_r",
+   "trans": "fade",
+   "title": "WHOSE [BACKPACK]?",
+   "cast": [
+    {
+     "id": "emily",
+     "pos": "left",
+     "mood": "happy",
+     "tag": "EMILY"
+    },
+    {
+     "id": "lokii",
+     "pos": "center",
+     "mood": "neutral"
+    },
+    {
+     "id": "lexi",
+     "pos": "right",
+     "mood": "neutral",
+     "tag": "LEXI"
+    }
+   ],
+   "beats": [
+    {
+     "who": "narr",
+     "t": "Today, Lokii and I had a [mission]: find the backpack's owner."
+    },
+    {
+     "who": "emily",
+     "t": "Let's ask [Lexi]!"
+    },
+    {
+     "who": "lexi",
+     "t": "Aaah! A [skeleton]!",
+     "anim": "shake",
+     "sfx": "impact"
+    }
+   ]
+  },
+  {
+   "bg": "aula",
+   "cam": "zoom_in",
+   "cast": [
+    {
+     "id": "emily",
+     "pos": "left",
+     "mood": "happy"
+    },
+    {
+     "id": "lexi",
+     "pos": "right",
+     "mood": "scared"
+    }
+   ],
+   "beats": [
+    {
+     "who": "emily",
+     "t": "Relax, Lexi. He is nice. I [think]."
+    },
+    {
+     "who": "lexi",
+     "t": "Then why is he so [spooky]?",
+     "anim": "wave"
+    },
+    {
+     "who": "lokii",
+     "t": "I like spooky. But I like [friends] more."
+    }
+   ]
+  },
+  {
+   "bg": "aula",
+   "cam": "zoom_in",
+   "cast": [
+    {
+     "id": "lexi",
+     "pos": "center",
+     "mood": "scared"
+    }
+   ],
+   "beats": [
+    {
+     "who": "narr",
+     "t": "Lexi looked at the backpack. Her eyes got [huge]."
+    },
+    {
+     "who": "lexi",
+     "t": "That's [Bacon]'s backpack!",
+     "anim": "pop",
+     "sfx": "ding"
+    }
+   ]
+  }
+ ]
+}

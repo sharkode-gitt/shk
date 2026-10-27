@@ -1,0 +1,62 @@
+{
+ "title": "Emily and Lokii",
+ "narrator": "en-US-AnaNeural",
+ "narratorId": "exsUS4vynmxd379XN4yO",
+ "characters": {
+  "emily": {
+   "name": "Emily",
+   "skin": "#f6d3c0",
+   "hair": "#17141a",
+   "hairStyle": "long",
+   "top": "#ef6f6c",
+   "pants": "#6b6f78",
+   "outfit": "sweater",
+   "hat": "crown",
+   "bag": true,
+   "lashes": true,
+   "lips": "#d9627a",
+   "voiceId": "exsUS4vynmxd379XN4yO",
+   "voice": "en-US-AnaNeural"
+  },
+  "lokii": {
+   "name": "Lokii",
+   "skin": "#2a2a30",
+   "hair": "#111111",
+   "hairStyle": "bald",
+   "top": "#1d1d22",
+   "top2": "#c9a227",
+   "pants": "#16161a",
+   "outfit": "coat",
+   "hat": "fedora",
+   "mask": "skull",
+   "fur": true,
+   "voiceId": "cPoqAvGWCPfCfyPMwe4z",
+   "voice": "en-US-GuyNeural"
+  },
+  "bacon": {
+   "name": "Bacon",
+   "skin": "#e9e6e2",
+   "hair": "#a8561f",
+   "hairStyle": "short",
+   "top": "#17171c",
+   "top2": "#2f6fb5",
+   "pants": "#17171c",
+   "outfit": "jacket",
+   "voiceId": "IKne3meq5aSn9XLyUdCD",
+   "voice": "en-US-ChristopherNeural"
+  },
+  "lexi": {
+   "name": "Lexi",
+   "skin": "#f6d3c0",
+   "hair": "#ff8fb8",
+   "hairStyle": "bun",
+   "top": "#ff9ec4",
+   "pants": "#8cc8ff",
+   "outfit": "tee",
+   "lashes": true,
+   "lips": "#e0507a",
+   "voiceId": "cgSgspJ2msm6clMCkdW9",
+   "voice": "en-US-JennyNeural"
+  }
+ }
+}

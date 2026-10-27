@@ -1,36 +1,29 @@
 {
-  "name": "emily-stories",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
+  "name": "story-studio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "tsx --test \"tests/**/*.test.ts\"",
-    "typecheck": "tsc --noEmit",
-    "fixture": "tsx scripts/render-fixture.ts",
-    "test:visual": "tsx --test tests/visual/visual.spec.ts",
-    "gallery": "tsx scripts/gallery.ts",
-    "story": "tsx src/cli.ts",
-    "music": "node scripts/make-music.mjs"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ep": "tsx scripts/build.ts",
+    "studio": "remotion studio src/index.ts"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@anthropic-ai/sdk": "^1.3.0",
-    "dotenv": "^18.0.9",
-    "gsap": "^3.15.0",
-    "three": "0.181.2",
-    "zod": "^4.6.7"
+    "@fontsource/rubik": "^5.3.0",
+    "@remotion/bundler": "^4.0.250",
+    "@remotion/cli": "^4.0.250",
+    "@remotion/renderer": "^4.0.250",
+    "@types/react": "^18.3.31",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.250",
+    "tsx": "^4.23.15"
   },
+  "type": "module",
   "devDependencies": {
-    "@types/node": "^26.6.5",
-    "@types/pngjs": "^6.0.5",
-    "@types/three": "^0.181.0",
-    "esbuild": "^0.28.2",
-    "hyperframes": "0.8.206",
-    "pixelmatch": "^8.0.0",
-    "pngjs": "^7.0.0",
-    "tsx": "^4.23.15",
-    "typescript": "^5.9.3"
-  },
-  "bin": {
-    "story": "src/cli.ts"
+    "typescript": "^5.6.3"
   }
 }

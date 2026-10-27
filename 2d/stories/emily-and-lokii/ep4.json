@@ -1,0 +1,83 @@
+{
+ "story": "emily-and-lokii",
+ "ep": 4,
+ "title": "Mask or Friend?",
+ "choice": {
+  "prompt": "Should Emily be Lokii's friend?",
+  "a": "Yes, be his friend",
+  "b": "No, stay away"
+ },
+ "scenes": [
+  {
+   "bg": "parque",
+   "cam": "pan_l",
+   "trans": "fade",
+   "title": "[MASK] OR FRIEND?",
+   "cast": [
+    {
+     "id": "lokii",
+     "pos": "left",
+     "mood": "neutral",
+     "tag": "LOKII"
+    },
+    {
+     "id": "bacon",
+     "pos": "right",
+     "mood": "angry"
+    }
+   ],
+   "beats": [
+    {
+     "who": "narr",
+     "t": "The party was in the park. Lokii came with a [gift]."
+    },
+    {
+     "who": "bacon",
+     "t": "No [masks] at my party!",
+     "anim": "shake",
+     "sfx": "impact"
+    },
+    {
+     "who": "lokii",
+     "t": "Then I will go [home]."
+    }
+   ]
+  },
+  {
+   "bg": "parque",
+   "cam": "zoom_in",
+   "cast": [
+    {
+     "id": "emily",
+     "pos": "left",
+     "mood": "sad",
+     "tag": "EMILY"
+    },
+    {
+     "id": "bacon",
+     "pos": "right",
+     "mood": "angry"
+    }
+   ],
+   "beats": [
+    {
+     "who": "emily",
+     "t": "Wait. Please don't [go].",
+     "anim": "wave"
+    },
+    {
+     "who": "bacon",
+     "t": "Emily, choose: him or my [party]!"
+    },
+    {
+     "who": "narr",
+     "t": "My heart said one thing. My friends said another."
+    },
+    {
+     "who": "narr",
+     "t": "Now I need your [help]."
+    }
+   ]
+  }
+ ]
+}

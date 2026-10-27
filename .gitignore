@@ -1,6 +1,8 @@
 node_modules/
 /*/jobs/
 /*/cache/
+/*/out/
+/2d/public/audio/
 .env
 .superpowers/
 **/tests/visual/approved/*.actual.png
