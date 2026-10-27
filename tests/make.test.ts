@@ -123,5 +123,5 @@ test('musicLibrary lists tracks per mood and tolerates missing folders; sfxMap r
   assert.deepEqual(musicLibrary(dir).happy.map((f) => f.split(/[\\/]/).pop()), ['a.mp3', 'b.mp3']);
   mkdirSync(join(dir, 'sfx'), { recursive: true });
   writeFileSync(join(dir, 'sfx', 'map.json'), JSON.stringify({ cut: 'whoosh.mp3' }));
-  assert.match(sfxMap(dir).cut, /sfx[\\/]whoosh\.mp3$/);
+  assert.match(String(sfxMap(dir).cut), /sfx[\\/]whoosh\.mp3$/);
 });

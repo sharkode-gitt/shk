@@ -10,7 +10,7 @@ export function schoolHallway(g: THREE.Group): Layout {
     box(g, 1.3, 0.1, 0.05, C.dark, x, 5, 7.38);
     box(g, 0.2, 0.9, 0.1, C.white, x + 0.55, 3.2, 7.37);
   }
-  box(g, 8, 0.15, 0.1, C.red, 0, 7.6, 8.7); // banner
+  box(g, 8, 1, 0.1, C.red, 0, 7.4, 8.85); // banner on the back wall, above the lockers
   put(g, door(C.blue), 11.6, 0, -2, -Math.PI / 2);
   box(g, 4, 5, 0.2, C.white, -9, 3, 8.75); // notice board
   return {

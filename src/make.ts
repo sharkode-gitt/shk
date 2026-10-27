@@ -85,11 +85,12 @@ export function musicLibrary(assetsDir: string): Record<Mood, string[]> {
   return lib;
 }
 
-/** Sound effects map from `<assets>/sfx/map.json` (names relative to that folder); no file means no effects. */
-export function sfxMap(assetsDir: string): Record<string, string> {
+/** Sound effects map from `<assets>/sfx/map.json` (names relative to that folder, one or several takes per key); no file means no effects. */
+export function sfxMap(assetsDir: string): Record<string, string | string[]> {
   const file = resolve(assetsDir, 'sfx', 'map.json');
   if (!existsSync(file)) return {};
-  return Object.fromEntries(Object.entries(readJson<Record<string, string>>(file)).map(([k, v]) => [k, resolve(assetsDir, 'sfx', v)]));
+  const at = (name: string) => resolve(assetsDir, 'sfx', name);
+  return Object.fromEntries(Object.entries(readJson<Record<string, string | string[]>>(file)).map(([k, v]) => [k, Array.isArray(v) ? v.map(at) : at(v)]));
 }
 
 export const realBuild = (config: Config): BuildFn => async (root, id) => {

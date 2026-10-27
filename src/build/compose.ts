@@ -19,7 +19,7 @@ export type CompositionOptions = {
   /** Mood -> music files, absolute or relative to `audioDir`. */
   music: Record<Mood, string[]>;
   /** `act:<name>` / `cut` -> sound file, absolute or relative to `audioDir`. */
-  sfxMap: Record<string, string>;
+  sfxMap: Record<string, string | string[]>;
   /** Where `characters/<id>/` live; defaults to the project's assets folder. */
   assetsDir?: string;
 };
@@ -79,13 +79,15 @@ export async function writeComposition(opts: CompositionOptions): Promise<string
       ? `<div class="who" style="color:${captionColor(c.speaker, story, c.kind, roster)}">${esc(speakerName(c.speaker))}</div>`
       : '';
     const words = c.words.map((w, j) => `<span id="${id}-w${j}" class="w">${esc(w.word)}</span>`).join(' ');
-    capHtml.push(`<div id="${id}" class="cap clip" data-start="${num(c.start)}" data-duration="${num(dur)}" data-track-index="2">${name}<div class="line">${words}</div></div>`);
-    tweens.push(`tl.fromTo("#${id}",{opacity:0},{opacity:1,duration:0.08,ease:"power1.out"},${num(c.start)});`);
-    tweens.push(`tl.to("#${id}",{opacity:0,duration:0.08,ease:"power1.in"},${num(Math.max(c.start, c.end - 0.08))});`);
+    capHtml.push(`<div id="${id}" class="cap clip" data-start="${num(c.start)}" data-duration="${num(dur)}" data-track-index="2"><div id="${id}-in" class="cap-in">${name}<div class="line">${words}</div></div></div>`);
+    // In: rise and settle with a small overshoot. Out: lift and fade, finished before the next chunk comes in.
+    const inDur = Math.min(0.24, dur * 0.35), outDur = Math.min(0.14, dur * 0.25);
+    tweens.push(`tl.fromTo("#${id}-in",{opacity:0,y:34,scale:0.88},{opacity:1,y:0,scale:1,duration:${num(inDur)},ease:"back.out(1.8)"},${num(c.start)});`);
+    tweens.push(`tl.to("#${id}-in",{opacity:0,y:-16,scale:0.96,duration:${num(outDur)},ease:"power2.in"},${num(Math.max(c.start + inDur, c.end - outDur))});`);
     c.words.forEach((w, j) => {
-      const ws = Math.max(w.start, c.start), we = Math.min(Math.max(w.end, ws + 0.1), c.end);
-      tweens.push(`tl.fromTo("#${id}-w${j}",{color:"#ffffff",scale:1},{color:"${HIGHLIGHT}",scale:1.12,duration:0.06,ease:"power2.out"},${num(ws)});`);
-      tweens.push(`tl.to("#${id}-w${j}",{color:"#ffffff",scale:1,duration:0.06,ease:"power2.in"},${num(Math.max(we - 0.06, ws + 0.06))});`);
+      const ws = Math.max(w.start, c.start), we = Math.min(Math.max(w.end, ws + 0.12), c.end);
+      tweens.push(`tl.fromTo("#${id}-w${j}",{color:"#ffffff",scale:1},{color:"${HIGHLIGHT}",scale:1.14,duration:0.12,ease:"back.out(2.2)"},${num(ws)});`);
+      tweens.push(`tl.to("#${id}-w${j}",{color:"#ffffff",scale:1,duration:0.14,ease:"power2.out"},${num(Math.max(we - 0.04, ws + 0.12))});`);
     });
   });
 
@@ -122,16 +124,18 @@ export async function writeComposition(opts: CompositionOptions): Promise<string
 <meta charset="utf-8">
 <title>${esc(story.title)}</title>
 <style>
-@font-face { font-family: "Lilita One"; src: url("fonts/LilitaOne-Regular.ttf") format("truetype"); }
+@font-face { font-family: "Rubik"; src: url("fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; }
 html, body { margin: 0; background: #000; }
 #story { position: relative; width: ${W}px; height: ${H}px; overflow: hidden; }
 #stage { position: absolute; inset: 0; }
 #stage canvas { width: 100%; height: 100%; display: block; }
 #captions { position: absolute; inset: 0; pointer-events: none; }
-.cap { position: absolute; top: 30%; left: 6%; right: 12%; transform: translateY(-50%); text-align: center; font-family: "Lilita One", sans-serif; color: #fff; }
-.cap .who { font-size: 40px; line-height: 1.1; margin-bottom: 8px; -webkit-text-stroke: 6px #000; paint-order: stroke fill; text-shadow: 0 4px 10px rgba(0,0,0,.55); }
-.cap .line { font-size: 92px; line-height: 1.1; -webkit-text-stroke: 10px #000; paint-order: stroke fill; text-shadow: 0 6px 14px rgba(0,0,0,.6); }
-.cap .w { display: inline-block; color: #fff; }
+/* The band is centred on 30% of the height without a CSS transform, so GSAP owns every transform of the inner block. */
+.cap { position: absolute; top: 21%; height: 18%; left: 6%; right: 12%; display: flex; align-items: center; justify-content: center; text-align: center; }
+.cap-in { display: flex; flex-direction: column; align-items: center; font-family: "Rubik", sans-serif; color: #fff; will-change: transform, opacity; }
+.cap .who { font-size: 40px; font-weight: 800; letter-spacing: 0.02em; line-height: 1.1; margin-bottom: 10px; -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 4px 10px rgba(0,0,0,.55); }
+.cap .line { font-size: 84px; font-weight: 900; line-height: 1.08; -webkit-text-stroke: 12px #000; paint-order: stroke fill; text-shadow: 0 7px 16px rgba(0,0,0,.6); }
+.cap .w { display: inline-block; color: #fff; margin: 0 0.06em; }
 </style>
 </head>
 <body>

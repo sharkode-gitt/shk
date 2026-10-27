@@ -113,6 +113,11 @@ export function cameraAt(
       break;
     }
   }
+  // Shots that would otherwise stand still drift 6% closer over the beat, so no frame is ever frozen.
+  if (shot.kind === 'wide' || shot.kind === 'medium' || shot.kind === 'two_shot' || shot.kind === 'over_shoulder') {
+    const k = 1 - 0.06 * easeInOut(Math.min(1, Math.max(0, u)));
+    cam.pos = [0, 1, 2].map((i) => cam.target[i] + (cam.pos[i] - cam.target[i]) * k) as Vec3;
+  }
   const n = handheld(tInBeat, seed);
   return { ...cam, pos: [cam.pos[0] + n[0], cam.pos[1] + n[1], cam.pos[2] + n[2]] };
 }

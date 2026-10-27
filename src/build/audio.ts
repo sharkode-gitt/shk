@@ -74,16 +74,30 @@ export function musicAutomation(clip: MusicClip, beats: TimedBeat[]): MusicAutom
   }
 }
 
-/** `act:<name>` sounds fire at the action start, `cut` at the start of every scene but the first. */
-export function sfxEvents(timeline: Timeline, map: Record<string, string>): SfxEvent[] {
+/**
+ * `act:<name>` sounds fire at the action start, `cut` at the start of every scene but the first. A key may list several
+ * takes; they are used in turn, so a repeated sound does not repeat the same file every time.
+ */
+export function sfxEvents(timeline: Timeline, map: Record<string, string | string[]>): SfxEvent[] {
   const out: SfxEvent[] = [];
+  const used: Record<string, number> = {};
+  const take = (key: string): string | undefined => {
+    const v = map[key];
+    const list = Array.isArray(v) ? v : v ? [v] : [];
+    if (!list.length) return undefined;
+    const n = used[key] ?? 0;
+    used[key] = n + 1;
+    return list[n % list.length];
+  };
   for (const beat of timeline.beats) {
     beat.actions.forEach((a, i) => {
-      const file = map[`act:${a.act}`];
+      const file = take(`act:${a.act}`);
       if (file) out.push({ file, at: a.start, id: `act:${beat.id}:${i}` });
     });
   }
-  const cut = map.cut;
-  if (cut) for (const s of timeline.scenes.slice(1)) out.push({ file: cut, at: s.start, id: `cut:${s.index}` });
+  for (const s of timeline.scenes.slice(1)) {
+    const file = take('cut');
+    if (file) out.push({ file, at: s.start, id: `cut:${s.index}` });
+  }
   return out.sort((x, y) => x.at - y.at || (x.id < y.id ? -1 : 1));
 }

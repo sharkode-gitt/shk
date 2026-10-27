@@ -96,3 +96,9 @@ test('sfx: acts without a map entry are skipped; no cut sound without a cut entr
   const t = tl([scene(0, 'happy', 0, 4), scene(1, 'happy', 4, 8)], [beat('0.0', 0, 0.5, 1, [act('idle', 0.5)])]);
   assert.deepEqual(sfxEvents(t, {}), []);
 });
+
+test('sfx: a key with several takes uses them in turn', () => {
+  const t = tl([scene(0, 'happy', 0, 4), scene(1, 'happy', 4, 8), scene(2, 'happy', 8, 12), scene(3, 'happy', 12, 16)], []);
+  const ev = sfxEvents(t, { cut: ['a.wav', 'b.wav'] });
+  assert.deepEqual(ev.map((e) => e.file), ['a.wav', 'b.wav', 'a.wav']);
+});

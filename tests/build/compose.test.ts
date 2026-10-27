@@ -75,7 +75,7 @@ test('no "[" in the visible text', () => {
 
 test('no http URL anywhere in the HTML; the files it needs are local', () => {
   assert.ok(!/https?:\/\//i.test(html));
-  for (const f of ['engine.js', 'gsap.min.js', 'fonts/LilitaOne-Regular.ttf', 'characters/emily/emily.obj', 'characters/emily/parts.json', 'characters/emily/character.json']) {
+  for (const f of ['engine.js', 'gsap.min.js', 'fonts/Rubik-Variable.ttf', 'characters/emily/emily.obj', 'characters/emily/parts.json', 'characters/emily/character.json']) {
     assert.ok(existsSync(join(compDir, f)), f);
   }
 });
