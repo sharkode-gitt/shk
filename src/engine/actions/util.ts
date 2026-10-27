@@ -27,6 +27,12 @@ export const yawToward = (from: Vec3, to: Vec3, fallback: number) => {
   return Math.hypot(dx, dz) < 1e-6 ? fallback : Math.atan2(-dx, -dz);
 };
 
+/** Shortest-arc blend between two yaws. */
+export const lerpAngle = (a: number, b: number, w: number) => {
+  const d = Math.atan2(Math.sin(b - a), Math.cos(b - a));
+  return a + d * w;
+};
+
 /** Pose in place at ctx.from, facing ctx.lookAt when `face` and a target exists. */
 export const inPlace = (ctx: ActionCtx, joints: Joints, dy = 0, face = false): ActionPose => ({
   root: { pos: [ctx.from[0], ctx.from[1] + dy, ctx.from[2]], yaw: face && ctx.lookAt ? yawToward(ctx.from, ctx.lookAt, ctx.fromYaw) : ctx.fromYaw },

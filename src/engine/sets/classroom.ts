@@ -15,6 +15,6 @@ export function classroom(g: THREE.Group): Layout {
   put(g, door(), 11.6, 0, -4, -Math.PI / 2);
   return {
     marks: { center: [0, 0, 0], door: [9, 0, -4], desk: [-6, 0, 0.6], board: [0, 0, 7] },
-    homes: [[-4.5, 0, -2], [-1.5, 0, -2], [1.5, 0, -2], [4.5, 0, -2]],
+    homes: [[-6, 0, -2], [-2, 0, -2], [2, 0, -2], [6, 0, -2]],
   };
 }

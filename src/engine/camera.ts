@@ -47,7 +47,6 @@ export function cameraAt(
   const all = Object.values(heads);
   const fallback: Vec3 = all[0] ?? [0, 4.5, 0];
   const head = (id: string | undefined): Vec3 => (id ? heads[id] : undefined) ?? fallback;
-  const medium = (c: Vec3): Cam => frame(c, 7, -0.3, -1.2, VFOV);
   /** Face-on shot of `id` from 0.6 rad left or right of its facing, whichever keeps other heads further off the line. */
   const faceOn = (id: string | undefined, d: number, dy: number, ty: number, fov: number): Cam => {
     const c = head(id), yaw = (id ? yaws[id] : undefined) ?? 0;
@@ -56,6 +55,8 @@ export function cameraAt(
     const [a, b] = [yaw + THREE_QUARTER, yaw - THREE_QUARTER].map((y) => facing(c, y, d, dy, ty, fov));
     return clear(b) > clear(a) ? b : a;
   };
+  /** Head to thighs, face-on to the speaker (follows its facing); the head sits mid-frame, below the captions. */
+  const medium = (id: string | undefined): Cam => faceOn(id, 9, -0.3, 0, VFOV);
   /** Distance so every point stays within +-halfSpan (plus 1 stud margin) horizontally, min `base`. */
   const fit = (halfSpan: number, base: number) => Math.max(base, (halfSpan + 1) / TAN_H);
 
@@ -68,20 +69,21 @@ export function cameraAt(
       break;
     }
     case 'medium': case 'shake': {
-      cam = medium(head(speaker));
+      cam = medium(speaker);
       if (shot.kind === 'shake' && tInBeat < 0.4) {
         const k = 0.15 * (1 - tInBeat / 0.4);
         cam.pos = [cam.pos[0] + k * Math.sin(tInBeat * 90), cam.pos[1] + k * Math.cos(tInBeat * 70), cam.pos[2]];
       }
       break;
     }
-    // Face-on shots follow the target's facing; distances keep the head (about 1.65 wide seen at three-quarters) inside 9:16.
-    case 'closeup': cam = faceOn(shot.targets[0], 6.5, 0, 0, 30); break;
-    case 'push_in': cam = faceOn(shot.targets[0], 7.5 - 2.5 * easeInOut(u), -0.2, -0.3, 35); break;
+    // Face-on shots follow the target's facing; distances keep the head (about 1.65 wide seen at three-quarters) at 65-70% of the width,
+    // and the aim point sits above it so the head lands in the lower half, clear of the captions.
+    case 'closeup': cam = faceOn(shot.targets[0], 8.5, 0, 0.5, 30); break;
+    case 'push_in': cam = faceOn(shot.targets[0], 10 - 3 * easeInOut(u), -0.2, 0.2, 35); break;
     case 'two_shot': {
       const [a, b] = [head(shot.targets[0]), head(shot.targets[1])];
       const c = mid([a, b]);
-      cam = frame(c, fit(Math.abs(a[0] - b[0]) / 2, 7), -0.3, -1, VFOV, Math.min(a[2], b[2]));
+      cam = frame(c, fit(Math.abs(a[0] - b[0]) / 2, 9.5), -0.3, -0.2, VFOV, Math.min(a[2], b[2]));
       break;
     }
     case 'over_shoulder': {
@@ -93,12 +95,13 @@ export function cameraAt(
       const dx = other ? x[0] - other[0] : 0;
       const dz = other ? x[2] - other[2] : 0;
       const l = Math.hypot(dx, dz);
-      if (!other || l < 0.5) { cam = medium(x); break; }
+      if (!other || l < 0.5) { cam = medium(shot.targets[0]); break; }
       const [nx, nz] = [dx / l, dz / l];
-      // 1.8 studs behind the other's head, 0.7 to the side, a little above eye line.
+      // 5.5 studs behind the other's head and 1.7 to the side (about 17 degrees off the line): in 9:16 that head
+      // is a sliver at the frame's edge instead of filling the lens, and the target stays in view.
       cam = {
-        pos: [other[0] - nx * 1.8 - nz * 0.7, other[1] + 0.3, other[2] - nz * 1.8 + nx * 0.7],
-        target: [x[0], x[1] - 0.2, x[2]], fov: 35,
+        pos: [other[0] - nx * 5.5 - nz * 1.7, other[1] + 0.6, other[2] - nz * 5.5 + nx * 1.7],
+        target: [x[0], x[1] - 0.2, x[2]], fov: 40,
       };
       break;
     }

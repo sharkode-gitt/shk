@@ -15,6 +15,6 @@ export function schoolHallway(g: THREE.Group): Layout {
   box(g, 4, 5, 0.2, C.white, -9, 3, 8.75); // notice board
   return {
     marks: { center: [0, 0, 0], door: [9, 0, -2], lockers: [0, 0, 6.2] },
-    homes: [[-4.5, 0, -1], [-1.5, 0, -1], [1.5, 0, -1], [4.5, 0, -1]],
+    homes: [[-6, 0, -1], [-2, 0, -1], [2, 0, -1], [6, 0, -1]],
   };
 }

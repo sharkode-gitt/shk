@@ -10,14 +10,17 @@ const cam = (shot: Shot, u = 0, t = 1, h = heads, speaker = 'mia') => cameraAt(s
 const near = (a: number, b: number, eps: number) => assert.ok(Math.abs(a - b) <= eps, `${a} vs ${b}`);
 const dist = (a: Vec3, b: Vec3) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 
-test('closeup target is the head, and follows it when the head moves', () => {
+// The aim point sits 0.5 above the head so the head lands low in the frame, clear of the captions.
+test('closeup aims just above the head, and follows it when the head moves', () => {
   const a = cam({ kind: 'closeup', targets: ['mia'] });
-  for (let i = 0; i < 3; i++) near(a.target[i], heads.mia[i], 0.05);
+  near(a.target[0], heads.mia[0], 0.05);
+  near(a.target[1], heads.mia[1] + 0.5, 0.05);
+  near(a.target[2], heads.mia[2], 0.05);
   const moved = cam({ kind: 'closeup', targets: ['mia'] }, 0, 1, { ...heads, mia: [2, 4, -3] });
   near(moved.target[0], 2, 0.05);
-  near(moved.target[1], 4, 0.05);
+  near(moved.target[1], 4.5, 0.05);
   near(moved.target[2], -3, 0.05);
-  near(Math.hypot(moved.pos[0] - 2, moved.pos[2] + 3), 6.5, 0.1);
+  near(Math.hypot(moved.pos[0] - 2, moved.pos[2] + 3), 8.5, 0.1);
   assert.equal(a.fov, 30);
 });
 
@@ -49,7 +52,7 @@ test('shake after 0.4 s equals medium; before it differs', () => {
 test('medium frames the speaker, not the first head', () => {
   const c = cam({ kind: 'medium', targets: [] }, 0, 1, heads, 'leo');
   near(c.target[0], 3, 0.1);
-  near(dist([c.pos[0], 0, c.pos[2]], [3, 0, 1]), 7, 0.2);
+  near(dist([c.pos[0], 0, c.pos[2]], [3, 0, 1]), 9, 0.2);
 });
 
 test('hand-held noise is small', () => {
@@ -78,7 +81,8 @@ test('over_shoulder looks at X from behind the nearest other', () => {
   const c = cam({ kind: 'over_shoulder', targets: ['mia'] });
   near(c.target[0], 0, 0.05);
   assert.ok(c.pos[0] > heads.leo[0], 'camera is on leo\'s far side');
-  assert.ok(dist(c.pos, heads.leo) < 3);
+  assert.ok(dist(c.pos, heads.leo) < 7, 'close enough to read as over the shoulder');
+  assert.ok(dist(c.pos, heads.leo) > 4, 'far enough that the shoulder does not fill the lens');
 });
 
 test('over_shoulder with a single head falls back to medium', () => {

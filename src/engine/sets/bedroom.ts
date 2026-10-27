@@ -12,6 +12,6 @@ export function bedroom(g: THREE.Group): Layout {
   put(g, door(), 11.6, 0, -3, -Math.PI / 2);
   return {
     marks: { center: [0, 0, 0], door: [9, 0, -3], bed: [-7, 0, 0], window: [4, 0, 6] },
-    homes: [[-3, 0, -2], [0, 0, -2], [3, 0, -2]],
+    homes: [[-4, 0, -2], [0, 0, -2], [4, 0, -2]],
   };
 }

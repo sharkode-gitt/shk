@@ -17,6 +17,6 @@ export function livingRoom(g: THREE.Group): Layout {
   put(g, door(), -11.6, 0, -4, Math.PI / 2);
   return {
     marks: { center: [0, 0, 0], door: [-9, 0, -4], sofa: [-4, 0, 4.7], tv: [5, 0, 5] },
-    homes: [[-4.5, 0, -2], [-1.5, 0, -2], [1.5, 0, -2], [4.5, 0, -2]],
+    homes: [[-6, 0, -2], [-2, 0, -2], [2, 0, -2], [6, 0, -2]],
   };
 }

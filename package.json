@@ -6,7 +6,8 @@
   "scripts": {
     "test": "tsx --test \"tests/**/*.test.ts\"",
     "typecheck": "tsc --noEmit",
-    "fixture": "tsx scripts/render-fixture.ts"
+    "fixture": "tsx scripts/render-fixture.ts",
+    "test:visual": "tsx --test tests/visual/visual.spec.ts"
   },
   "dependencies": {
     "gsap": "^3.15.0",
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
+    "@types/pngjs": "^6.0.5",
     "@types/three": "^0.181.0",
     "esbuild": "^0.28.2",
     "hyperframes": "0.8.206",

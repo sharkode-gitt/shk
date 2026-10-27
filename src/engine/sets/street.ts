@@ -17,6 +17,6 @@ export function street(g: THREE.Group): Layout {
   sphere(g, 0.7, C.yellow, -3, 7.3, 5);
   return {
     marks: { center: [0, 0, 7], door: [-8, 0, 12], car: [-12, 0, 2.6], house: [8, 0, 12] },
-    homes: [[-4.5, 0, 7], [-1.5, 0, 7], [1.5, 0, 7], [4.5, 0, 7]],
+    homes: [[-6, 0, 7], [-2, 0, 7], [2, 0, 7], [6, 0, 7]],
   };
 }

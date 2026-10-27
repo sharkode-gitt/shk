@@ -22,6 +22,6 @@ export function park(g: THREE.Group): Layout {
   box(g, 0.6, 0.7, 7, C.red, 17, 5, 4);
   return {
     marks: { center: [0, 0, 3], door: [15, 0, 4], bench: [-9, 0, 5.5], tree: [8, 0, 7.5] },
-    homes: [[-4.5, 0, 3], [-1.5, 0, 3], [1.5, 0, 3], [4.5, 0, 3]],
+    homes: [[-6, 0, 3], [-2, 0, 3], [2, 0, 3], [6, 0, 3]],
   };
 }
