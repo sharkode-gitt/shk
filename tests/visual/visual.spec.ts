@@ -7,12 +7,14 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import { buildFixtureComp } from '../../scripts/fixture-lib.ts';
+import { HYPERFRAMES } from '../../src/render/render.ts';
 
 const MAX_DIFF = 0.005; // fraction of pixels allowed to differ
-const approvedDir = new URL('./approved/', import.meta.url).pathname;
+const approvedDir = fileURLToPath(new URL('./approved/', import.meta.url));
 
 test('fixture frames match the approved stills', { timeout: 600_000 }, async (t) => {
   const tmp = mkdtempSync(join(tmpdir(), 'visual-'));
@@ -24,7 +26,7 @@ test('fixture frames match the approved stills', { timeout: 600_000 }, async (t)
   const times = [...timeline.scenes.map((s) => (s.start + s.end) / 2), cut - 0.05, cut + 0.05].map((x) => Math.round(x * 100) / 100);
   const out = join(tmp, 'snap');
   mkdirSync(out);
-  execFileSync('npx', ['--no-install', 'hyperframes', 'snapshot', compDir, '--at', times.join(','), '--no-end', '-o', out], { stdio: 'ignore' });
+  execFileSync(process.execPath, [HYPERFRAMES, 'snapshot', compDir, '--at', times.join(','), '--no-end', '-o', out], { stdio: 'ignore' });
   const shots = readdirSync(out).filter((f) => /^frame-\d+-at-.*\.png$/.test(f)).sort();
   assert.equal(shots.length, times.length, `expected ${times.length} snapshots, got ${shots.join(', ')}`);
 

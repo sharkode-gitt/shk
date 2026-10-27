@@ -1,13 +1,17 @@
 import { mkdir, rename, rm } from 'node:fs/promises';
-import { dirname } from 'node:path';
+import { createRequire } from 'node:module';
+import { dirname, join } from 'node:path';
 import { measureLoudness, parseLoudness, run, TARGET, type LoudnessStats } from './checks.ts';
+
+/** The hyperframes CLI, run with this node: `npx` is a .cmd on Windows, which execFile cannot start. */
+export const HYPERFRAMES = join(dirname(createRequire(import.meta.url).resolve('hyperframes/package.json')), 'bin', 'hyperframes.mjs');
 
 /** `npx hyperframes render` of a composition folder to an MP4 (1080x1920 comes from the composition itself). */
 export async function renderComp(compDir: string, outFile: string, opts: { workers?: number | 'auto' } = {}): Promise<{ seconds: number; log: string }> {
   await mkdir(dirname(outFile), { recursive: true });
   const tmp = `${outFile}.partial.mp4`;
   const started = Date.now();
-  const r = await run('npx', ['--no-install', 'hyperframes', 'render', compDir, '--quality', 'delivery', '--fps', '30', '--output', tmp,
+  const r = await run(process.execPath, [HYPERFRAMES, 'render', compDir, '--quality', 'delivery', '--fps', '30', '--output', tmp,
     ...(opts.workers ? ['--workers', String(opts.workers)] : [])]);
   const log = `${r.stdout}\n${r.stderr}`.replace(/\x1b\[[0-9;]*m/g, '').trim();
   if (r.code !== 0) {

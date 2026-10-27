@@ -1,6 +1,6 @@
 node_modules/
-jobs/
-cache/
+/jobs/
+/cache/
 .env
 .superpowers/
 tests/visual/approved/*.actual.png

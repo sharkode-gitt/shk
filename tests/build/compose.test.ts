@@ -5,6 +5,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { writeComposition } from '../../src/build/compose.ts';
+import { HYPERFRAMES } from '../../src/render/render.ts';
 import { captionChunks } from '../../src/build/captions.ts';
 import { compileTimeline } from '../../src/build/timeline.ts';
 import type { Mood, Story, Timeline, Timing } from '../../src/types.ts';
@@ -83,7 +84,7 @@ test('no http URL anywhere in the HTML; the files it needs are local', () => {
 test('hyperframes lint reports 0 errors', () => {
   let out = '';
   try {
-    out = execFileSync('npx', ['--no-install', 'hyperframes', 'lint', compDir, '--json'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    out = execFileSync(process.execPath, [HYPERFRAMES, 'lint', compDir, '--json'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
   } catch (e) {
     out = (e as { stdout?: string }).stdout ?? '';
     assert.fail(`lint failed: ${out || String(e)}`);
