@@ -1,14 +1,17 @@
 ---
 name: emily-stories
-description: Continue the Emily Stories project - automated 3D Roblox-style short story videos (HyperFrames + Three.js, ElevenLabs voices, rendered to MP4 by code). Use when the user mentions Emily, Lokii, Bacon, the "Emily and Lokii" series, episodes, the A/B choice ending, rendering/making videos, voices, music, characters from Roblox Studio, or continuing this project on their own PC.
+description: Continue the 3D (Roblox-style) Emily Stories project in the 3d/ folder - automated 3D Roblox-style short story videos (HyperFrames + Three.js, ElevenLabs voices, rendered to MP4 by code). Use when the user mentions Emily, Lokii, Bacon, the "Emily and Lokii" series, episodes, the A/B choice ending, rendering/making videos, voices, music, characters from Roblox Studio, or continuing this project on their own PC.
 ---
 
-# Emily Stories - project handoff
+# Emily Stories - 3D project handoff
+
+This skill is only for the **`3d/` folder** (Roblox R15 characters). The 2D cartoon version is a separate project in `2d/` with its own
+skill, `emily-stories-2d`; never mix their assets, series or jobs. **Run every command from inside `3d/`.**
 
 The user is Brazilian: **answer in Portuguese**; all video dialogue, captions and voices are **English**.
 They want a fully automated, all-code pipeline (no video editor) that turns a Claude-written script into a 1080x1920,
 30 fps MP4 short (20-60 s) with a 3D Roblox-style scene, ElevenLabs voices, Rubik captions with smooth in/out,
-background music and sfx. Read `README.md` for the commands and `docs/RODAR-NO-PC.md` for the Windows run guide.
+background music and sfx. Read `3d/README.md` for the commands and `3d/docs/RODAR-NO-PC.md` for the Windows run guide.
 
 ## Pipeline
 
@@ -50,6 +53,15 @@ The user disliked the old `classic` face as "scary" and rejected the Emily face 
 Roster-based rendering, held props (`do[].item`: backpack, gift... in the right hand), end cards from `story.cta`,
 distance-driven walk/run cycle, bigger rooms/ground (no void in wide shots), camera bounds, Rubik captions with per-speaker
 colors, music ducking, sfx map, series import, ElevenLabs voice cache and quota handling.
+
+## Done since the first handoff (all committed)
+
+First real run on the user's PC: music generated (tense, sad, happy), ep1 voiced and rendered (about 35 s). Fixed for Windows:
+`src/jobs/store.ts` was never in git (the `jobs/` ignore rule matched `src/jobs/`; rules are now `/*/jobs/`), and the hyperframes CLI is
+run through `node` (`HYPERFRAMES` in `src/render/render.ts`) because `npx` cannot be spawned. Ep1 polish: one-line captions, name tags under
+characters in wide shots, hanging schoolbag prop, 2.4-stud personal space (the walker steers around), speaker and addressee turn to face
+each other (eased), Lokii `lift` light. `tools/spacing.ts <job>` prints the closest approach of any two characters.
+To re-render a finished job, set its `status.json` state back to `approved` (voices come from the cache, no credits spent).
 
 ## Known issues / next steps
 

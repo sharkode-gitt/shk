@@ -1,0 +1,159 @@
+{
+  "title": "Mask or Friend?",
+  "music": "sad",
+  "protagonist": "emily",
+  "cast": [
+    {
+      "id": "emily",
+      "ref": "emily"
+    },
+    {
+      "id": "lokii",
+      "ref": "lokii"
+    },
+    {
+      "id": "bacon",
+      "ref": "bacon"
+    }
+  ],
+  "scenes": [
+    {
+      "set": "park",
+      "time": "afternoon",
+      "music": "sad",
+      "beats": [
+        {
+          "narrate": "The party was in the park. Lokii came with a gift.",
+          "shot": "wide",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "walk_to",
+              "face": "neutral",
+              "at": "bench",
+              "item": "gift"
+            },
+            {
+              "who": "emily",
+              "act": "idle",
+              "face": "happy"
+            },
+            {
+              "who": "bacon",
+              "act": "idle",
+              "face": "happy"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "bacon",
+            "line": "[shouting] No masks at my party!"
+          },
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "point",
+              "face": "angry",
+              "at": "lokii"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "lokii",
+            "line": "[sad] Then I will go home."
+          },
+          "shot": "closeup:lokii",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "walk_to",
+              "face": "neutral",
+              "at": "door"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "emily",
+            "line": "[whispers] Wait. Please don't go."
+          },
+          "shot": "two_shot:emily,lokii",
+          "do": [
+            {
+              "who": "emily",
+              "act": "talk",
+              "face": "sad"
+            },
+            {
+              "who": "lokii",
+              "act": "idle",
+              "face": "neutral"
+            }
+          ]
+        },
+        {
+          "say": {
+            "who": "bacon",
+            "line": "Emily, choose: him or my party!"
+          },
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "talk",
+              "face": "angry"
+            }
+          ]
+        },
+        {
+          "narrate": "My heart said one thing. My friends said another.",
+          "shot": "push_in:emily",
+          "do": [
+            {
+              "who": "emily",
+              "act": "idle",
+              "face": "sad"
+            }
+          ]
+        },
+        {
+          "narrate": "Now I need your help.",
+          "shot": "closeup:emily",
+          "do": [
+            {
+              "who": "emily",
+              "act": "talk",
+              "face": "sad"
+            }
+          ]
+        },
+        {
+          "narrate": "[excited] Should I be Lokii's friend? Comment A for yes, or B for no!",
+          "shot": "wide",
+          "do": [
+            {
+              "who": "emily",
+              "act": "idle",
+              "face": "neutral"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "episode": {
+    "series": "emily-and-lokii",
+    "number": 4,
+    "of": 4
+  },
+  "cta": {
+    "kind": "choice",
+    "question": "Should Emily be Lokii's friend?",
+    "a": "Yes, be his friend",
+    "b": "No, stay away"
+  },
+  "wants": []
+}

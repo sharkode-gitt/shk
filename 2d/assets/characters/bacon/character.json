@@ -1,0 +1,22 @@
+{
+  "id": "bacon",
+  "name": "Bacon",
+  "age": 13,
+  "personality": "friendly and curious (edit this in character.json)",
+  "look": "classic pale Roblox guy: messy brown hair, black jacket over a blue t-shirt",
+  "color": "#4cc9f0",
+  "art": {
+    "outline": "#1a1a1f",
+    "build": "slim",
+    "skin": "#e9e6e2",
+    "shirt": "#2f6fb5",
+    "pants": "#17171c",
+    "hair": {
+      "style": "messy",
+      "color": "#a8561f"
+    },
+    "accessories": [
+      "jacket"
+    ]
+  }
+}

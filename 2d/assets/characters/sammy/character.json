@@ -1,0 +1,22 @@
+{
+  "id": "sammy",
+  "name": "Sammy",
+  "age": 13,
+  "personality": "friendly and curious (edit this in character.json)",
+  "look": "yellow classic face, red top hat, red outfit, silver spider necklace",
+  "color": "#ff9f1c",
+  "art": {
+    "outline": "#1a1a1f",
+    "build": "slim",
+    "skin": "#ffd84a",
+    "shirt": "#e23b3b",
+    "pants": "#b02a2a",
+    "hair": {
+      "style": "none",
+      "color": "#111111"
+    },
+    "accessories": [
+      "tophat"
+    ]
+  }
+}

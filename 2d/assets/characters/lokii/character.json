@@ -1,0 +1,24 @@
+{
+  "id": "lokii",
+  "name": "Lokii",
+  "age": 13,
+  "personality": "friendly and curious (edit this in character.json)",
+  "look": "golden skull mask, black fedora, black coat with gold trim and a fur collar",
+  "color": "#ffd60a",
+  "art": {
+    "outline": "#1a1a1f",
+    "build": "slim",
+    "skin": "#2a2a30",
+    "shirt": "#1d1d22",
+    "pants": "#16161a",
+    "hair": {
+      "style": "none",
+      "color": "#111111"
+    },
+    "accessories": [
+      "fedora",
+      "skullmask",
+      "furcollar"
+    ]
+  }
+}
