@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import { loadConfig, requireEnv, type Config, type SecretName } from './config.ts';
+import { importSeries } from './series.ts';
 import { jobPath, listJobs, setStatus } from './jobs/store.ts';
 import { makeApproved, makeJob, realBuild, realRender, type MakeDeps } from './make.ts';
 import { createStoryClient } from './write/claude-code.ts';
@@ -38,6 +39,7 @@ const USAGE = `story <command>
   list                       every job with its state and title
   gallery                    render the QA video that shows every action, face and shot
   voices [--fill]            list the ElevenLabs voices; --fill puts a suggested voice into every empty slot of assets/voices.json
+  series import <folder>     turn the ep<N>.json files of a series folder into approved jobs (<series>-ep<N>)
   character list             the characters stories can be about
   character add <folder> --id <id> --name <Name> [--age N] [--personality "..."] [--look "..."] [--color #rrggbb] [--style classic|emily|none] [--force]
                              register a Roblox Studio export (.obj, .mtl and textures) as a character
@@ -137,6 +139,11 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
         out(`${r.info.id}: ${r.bodyGroups} body parts, ${r.accessories.length} accessories (${r.accessories.map((a) => `${a.accessory} on ${a.attach}`).join(', ') || 'none'}), face box ${r.info.model.face.rect.w}x${r.info.model.face.rect.h}, skin ${r.info.model.face.skin}`);
         out(`saved in ${r.dir}`);
         for (const w of r.warnings) err(`note: ${w}`);
+        return EXIT.ok;
+      }
+      case 'series': {
+        if (rest[0] !== 'import') throw new Error('usage: series import <folder>');
+        for (const id of importSeries(need(rest[1], 'series import <folder>'), root, config.paths.assets)) out(id);
         return EXIT.ok;
       }
       case 'gallery':
