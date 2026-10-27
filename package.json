@@ -16,6 +16,7 @@
     "@types/node": "^26.6.5",
     "@types/three": "^0.181.0",
     "esbuild": "^0.28.2",
+    "hyperframes": "0.8.206",
     "pixelmatch": "^8.0.0",
     "pngjs": "^7.0.0",
     "tsx": "^4.23.15",
