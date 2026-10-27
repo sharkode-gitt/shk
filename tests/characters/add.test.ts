@@ -44,7 +44,7 @@ test('finds the face box and the skin colour on the texture, close to the hand-m
   const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
   rgb(skin).forEach((c, i) => assert.ok(Math.abs(c - rgb(emilyRect.skin)[i]!) <= 12, `skin ${skin} vs ${emilyRect.skin}`));
   assert.equal(info.model.atlas, 'Hero1_diff.png');
-  assert.equal(info.model.face.style, 'classic');
+  assert.equal(info.model.face.style, 'cute');
 });
 
 test('writes a roster entry that loads, copies the model files, and reserves a voice slot', (t) => {
