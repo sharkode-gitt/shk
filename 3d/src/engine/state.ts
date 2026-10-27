@@ -137,8 +137,10 @@ export function sceneState(time: number, payload: ScenePayload, layout: SetLayou
   const set = layout[scene.index];
   const beats = timeline.beats.filter((b) => b.scene === scene.index);
   const beat = lastStarted(beats, frame);
-  const ids = story.cast.map((c) => c.id);
-  const homes = Object.fromEntries(ids.map((id, i) => [id, homeOf(set, i)]));
+  const ids = scene.cast ?? story.cast.map((c) => c.id);
+  // One or two characters stand close together in the middle (the first on the left of the screen, x > 0).
+  const mid = set.homes.length >= 3 ? [(set.homes[1][0] + set.homes[2][0]) / 2, set.homes[1][1], set.homes[1][2]] as Vec3 : set.homes[0];
+  const homes = Object.fromEntries(ids.map((id, i) => [id, ids.length === 2 ? [mid[0] + (i === 0 ? 1.8 : -1.8), mid[1], mid[2]] as Vec3 : ids.length === 1 ? mid : homeOf(set, i)]));
 
   // Position-only lookup of another character (their own `at` targets stay unresolved) so two characters
   // targeting each other cannot recurse forever.

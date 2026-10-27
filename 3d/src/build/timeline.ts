@@ -65,7 +65,7 @@ export function compileTimeline(story: Story, timing: Timing): Timeline {
       });
       t = end;
     });
-    scenes.push({ index: si, set: scene.set, time: scene.time, music: scene.music ?? story.music, start: sceneStart, end: t });
+    scenes.push({ index: si, set: scene.set, time: scene.time, music: scene.music ?? story.music, start: sceneStart, end: t, ...(scene.cast ? { cast: scene.cast } : {}) });
   });
 
   return { duration: t + TAIL, fps: 30, scenes, beats };

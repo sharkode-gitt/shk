@@ -21,29 +21,25 @@
       "set": "school_hallway",
       "time": "morning",
       "music": "funny",
+      "cast": [
+        "bacon",
+        "emily"
+      ],
       "beats": [
         {
-          "narrate": "We found Bacon at his locker.",
-          "shot": "wide",
+          "narrate": "We found Bacon at his locker. He was not happy.",
+          "shot": "two_shot:bacon,emily",
           "do": [
             {
               "who": "bacon",
               "act": "idle",
-              "face": "angry",
-              "at": "lockers"
+              "face": "angry"
             },
             {
               "who": "emily",
               "act": "walk_to",
               "face": "neutral",
               "at": "bacon"
-            },
-            {
-              "who": "lokii",
-              "act": "walk_to",
-              "face": "neutral",
-              "at": "bacon",
-              "item": "backpack"
             }
           ]
         },
@@ -62,11 +58,22 @@
           ]
         },
         {
+          "narrate": "I tried to calm him down.",
+          "shot": "closeup:emily",
+          "do": [
+            {
+              "who": "emily",
+              "act": "idle",
+              "face": "neutral"
+            }
+          ]
+        },
+        {
           "say": {
             "who": "emily",
             "line": "Nobody took it. Lokii found it."
           },
-          "shot": "two_shot:emily,bacon",
+          "shot": "two_shot:bacon,emily",
           "do": [
             {
               "who": "emily",
@@ -79,17 +86,31 @@
               "face": "angry"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "set": "school_hallway",
+      "time": "morning",
+      "music": "funny",
+      "cast": [
+        "lokii",
+        "bacon"
+      ],
+      "beats": [
         {
-          "say": {
-            "who": "bacon",
-            "line": "[whispers] The skeleton? Please don't scare me."
-          },
-          "shot": "closeup:bacon",
+          "narrate": "Lokii stepped forward, holding the backpack.",
+          "shot": "two_shot:lokii,bacon",
           "do": [
             {
+              "who": "lokii",
+              "act": "idle",
+              "face": "neutral",
+              "item": "backpack"
+            },
+            {
               "who": "bacon",
-              "act": "talk",
+              "act": "idle",
               "face": "scared"
             }
           ]
@@ -99,25 +120,23 @@
             "who": "lokii",
             "line": "Here is your backpack."
           },
-          "shot": "medium",
+          "shot": "closeup:lokii",
           "do": [
             {
               "who": "lokii",
               "act": "talk",
-              "face": "neutral",
-              "item": "none"
+              "face": "neutral"
             },
             {
               "who": "bacon",
               "act": "idle",
-              "face": "shocked",
-              "item": "backpack"
+              "face": "shocked"
             }
           ]
         },
         {
           "narrate": "Bacon blinked. Then he smiled.",
-          "shot": "push_in:bacon",
+          "shot": "closeup:bacon",
           "do": [
             {
               "who": "bacon",
@@ -141,6 +160,17 @@
           ]
         },
         {
+          "narrate": "But there was a catch.",
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "idle",
+              "face": "smug"
+            }
+          ]
+        },
+        {
           "say": {
             "who": "bacon",
             "line": "But only if you take off the mask."
@@ -151,6 +181,17 @@
               "who": "bacon",
               "act": "talk",
               "face": "smug"
+            }
+          ]
+        },
+        {
+          "narrate": "Lokii went very quiet.",
+          "shot": "closeup:lokii",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "idle",
+              "face": "sad"
             }
           ]
         },
@@ -170,10 +211,15 @@
         },
         {
           "narrate": "[excited] Want the finale? Like and subscribe!",
-          "shot": "wide",
+          "shot": "two_shot:lokii,bacon",
           "do": [
             {
-              "who": "emily",
+              "who": "lokii",
+              "act": "idle",
+              "face": "neutral"
+            },
+            {
+              "who": "bacon",
               "act": "wave",
               "face": "happy"
             }
@@ -191,6 +237,5 @@
     "kind": "subscribe",
     "next": 4
   },
-  "wants": [],
-  "teaser": "Will Lokii go to the party?"
+  "wants": []
 }

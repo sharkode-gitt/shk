@@ -21,27 +21,36 @@
       "set": "park",
       "time": "afternoon",
       "music": "sad",
+      "cast": [
+        "lokii",
+        "bacon"
+      ],
       "beats": [
         {
           "narrate": "The party was in the park. Lokii came with a gift.",
-          "shot": "wide",
+          "shot": "two_shot:lokii,bacon",
           "do": [
             {
               "who": "lokii",
-              "act": "walk_to",
-              "face": "neutral",
-              "at": "bench",
-              "item": "gift"
-            },
-            {
-              "who": "emily",
               "act": "idle",
-              "face": "happy"
+              "face": "neutral",
+              "item": "gift"
             },
             {
               "who": "bacon",
               "act": "idle",
               "face": "happy"
+            }
+          ]
+        },
+        {
+          "narrate": "Then Bacon saw the mask.",
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "idle",
+              "face": "angry"
             }
           ]
         },
@@ -55,8 +64,18 @@
             {
               "who": "bacon",
               "act": "point",
-              "face": "angry",
-              "at": "lokii"
+              "face": "angry"
+            }
+          ]
+        },
+        {
+          "narrate": "Lokii's shoulders dropped.",
+          "shot": "closeup:lokii",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "idle",
+              "face": "sad"
             }
           ]
         },
@@ -69,9 +88,30 @@
           "do": [
             {
               "who": "lokii",
-              "act": "walk_to",
-              "face": "neutral",
-              "at": "door"
+              "act": "talk",
+              "face": "neutral"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "set": "park",
+      "time": "afternoon",
+      "music": "sad",
+      "cast": [
+        "emily",
+        "bacon"
+      ],
+      "beats": [
+        {
+          "narrate": "I could not let him leave.",
+          "shot": "closeup:emily",
+          "do": [
+            {
+              "who": "emily",
+              "act": "idle",
+              "face": "sad"
             }
           ]
         },
@@ -80,7 +120,7 @@
             "who": "emily",
             "line": "[whispers] Wait. Please don't go."
           },
-          "shot": "two_shot:emily,lokii",
+          "shot": "two_shot:emily,bacon",
           "do": [
             {
               "who": "emily",
@@ -88,9 +128,20 @@
               "face": "sad"
             },
             {
-              "who": "lokii",
+              "who": "bacon",
               "act": "idle",
-              "face": "neutral"
+              "face": "angry"
+            }
+          ]
+        },
+        {
+          "narrate": "Bacon crossed his arms.",
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "idle",
+              "face": "angry"
             }
           ]
         },
@@ -107,13 +158,29 @@
               "face": "angry"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "set": "park",
+      "time": "afternoon",
+      "music": "sad",
+      "cast": [
+        "emily",
+        "lokii"
+      ],
+      "beats": [
         {
           "narrate": "My heart said one thing. My friends said another.",
           "shot": "push_in:emily",
           "do": [
             {
               "who": "emily",
+              "act": "idle",
+              "face": "sad"
+            },
+            {
+              "who": "lokii",
               "act": "idle",
               "face": "sad"
             }
@@ -132,10 +199,15 @@
         },
         {
           "narrate": "[excited] Should I be Lokii's friend? Comment A for yes, or B for no!",
-          "shot": "wide",
+          "shot": "two_shot:emily,lokii",
           "do": [
             {
               "who": "emily",
+              "act": "idle",
+              "face": "neutral"
+            },
+            {
+              "who": "lokii",
               "act": "idle",
               "face": "neutral"
             }

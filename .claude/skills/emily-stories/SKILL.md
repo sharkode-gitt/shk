@@ -63,6 +63,14 @@ characters in wide shots, hanging schoolbag prop, 2.4-stud personal space (the w
 each other (eased), Lokii `lift` light. `tools/spacing.ts <job>` prints the closest approach of any two characters.
 To re-render a finished job, set its `status.json` state back to `approved` (voices come from the cache, no credits spent).
 
+## Series format since the redo (3D)
+
+Each scene lists `cast` (1 or 2 ids; the first stands on the left): only those characters are on screen, so **never more than 2
+characters per scene**. **A narrator (Emily's voice-over) line comes before every character line**, then the character speaks.
+Episodes are 2 or 3 scenes (ep1 hallway: Lokii+Bacon, then Emily+Lokii; ep2 classroom: Emily+Lokii, then Lexi+Lokii; ep3 hallway: Bacon+Emily,
+then Lokii+Bacon; ep4 park: Lokii+Bacon, Emily+Bacon, Emily+Lokii), 27-35 s each, all four rendered. Hallway has the rebuilt painted-wall set;
+the classroom and the park are still plain (next job: bring them to the hallway's level, see `src/engine/sets/textures.ts`).
+
 ## Known issues / next steps
 
 - Final voices, music and renders for the 4 episodes have **not been produced yet** (the cloud server could not use the

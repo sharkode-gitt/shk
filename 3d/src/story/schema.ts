@@ -45,6 +45,8 @@ const Scene = z.object({
   set: z.enum(SETS),
   time: z.enum(TIMES),
   music: z.enum(MUSIC).optional(),
+  /** Who is on screen in this scene (1 or 2 cast ids; the first stands on the left). Default: the whole cast. */
+  cast: z.array(z.string()).min(1).max(2).optional(),
   beats: z.array(Beat).min(1),
 });
 
@@ -103,21 +105,25 @@ export const StorySchema = z
     const isCast = (id: string) => ids.includes(id);
     const castError = (id: string) => `"${id}" is not a cast id (${ids.join(', ')})`;
 
+    story.scenes.forEach((scene, si) => scene.cast?.forEach((id, ci) => isCast(id) || bad(['scenes', si, 'cast', ci], castError(id))));
     if (new Set(story.scenes.map((s) => s.set)).size > 3) bad(['scenes'], 'at most 3 distinct sets are allowed');
 
     story.scenes.forEach((scene, si) =>
       scene.beats.forEach((beat, bi) => {
         const at = ['scenes', si, 'beats', bi];
+        const present = (id: string) => !scene.cast || scene.cast.includes(id);
+        const absent = (id: string) => `"${id}" is not in the cast of scene ${si} (${(scene.cast ?? []).join(', ')})`;
         if ((beat.narrate === undefined) === (beat.say === undefined)) {
           bad(at, 'beat must have exactly one of narrate or say');
         }
         if (beat.say && !isCast(beat.say.who)) bad([...at, 'say', 'who'], castError(beat.say.who));
+        else if (beat.say && !present(beat.say.who)) bad([...at, 'say', 'who'], absent(beat.say.who));
         try {
-          parseShot(beat.shot).targets.forEach((t) => isCast(t) || bad([...at, 'shot'], castError(t)));
+          parseShot(beat.shot).targets.forEach((t) => (isCast(t) ? present(t) || bad([...at, 'shot'], absent(t)) : bad([...at, 'shot'], castError(t))));
         } catch (e) {
           bad([...at, 'shot'], (e as Error).message);
         }
-        beat.do.forEach((d, di) => isCast(d.who) || bad([...at, 'do', di, 'who'], castError(d.who)));
+        beat.do.forEach((d, di) => (isCast(d.who) ? present(d.who) || bad([...at, 'do', di, 'who'], absent(d.who)) : bad([...at, 'do', di, 'who'], castError(d.who))));
       }),
     );
   });

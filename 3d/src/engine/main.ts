@@ -118,6 +118,7 @@ async function build(): Promise<(t: number) => void> {
     const s = sceneState(t, payload, layout);
     for (const [i, set] of Object.entries(layout)) set.group.visible = Number(i) === s.sceneIndex;
     scene.background = new THREE.Color(SKY[timeline.scenes[s.sceneIndex].time]);
+    for (const [id, c] of Object.entries(cast)) c.rig.root.visible = id in s.poses; // only this scene's cast is on screen
     for (const [id, pose] of Object.entries(s.poses)) {
       applyPose(cast[id].rig, pose);
       cast[id].face.set(pose.face, pose.mouth);
@@ -133,6 +134,7 @@ async function build(): Promise<(t: number) => void> {
     camera.updateMatrixWorld(true);
     const unit = 2 * Math.tan((camera.fov * Math.PI) / 360); // world height of the frame at distance 1
     for (const [id, tag] of Object.entries(tags)) {
+      if (!(id in s.poses)) { tag.visible = false; continue; }
       cast[id].rig.root.updateMatrixWorld(true);
       // Meshes keep their pivot at the joint, so the head's own box says where the top of the head is (hat or crown included).
       box.setFromObject(cast[id].rig.root);

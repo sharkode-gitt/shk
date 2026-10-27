@@ -70,7 +70,7 @@ export function cameraAt(
     case 'wide': {
       const c = mid(all.length ? all : [fallback]);
       const span = Math.max(...all.map((p) => Math.abs(p[0] - c[0])), 0);
-      cam = frame(c, fit(span, 14), 1.5, -1.5, VFOV, Math.min(...all.map((p) => p[2]), c[2]));
+      cam = frame(c, fit(span, all.length <= 2 ? 10.5 : 14), 1.5, -1.5, VFOV, Math.min(...all.map((p) => p[2]), c[2]));
       break;
     }
     case 'medium': case 'shake': {

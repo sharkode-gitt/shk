@@ -4,16 +4,16 @@
   "protagonist": "emily",
   "cast": [
     {
-      "id": "bacon",
-      "ref": "bacon"
-    },
-    {
       "id": "emily",
       "ref": "emily"
     },
     {
       "id": "lokii",
       "ref": "lokii"
+    },
+    {
+      "id": "bacon",
+      "ref": "bacon"
     }
   ],
   "scenes": [
@@ -21,6 +21,10 @@
       "set": "school_hallway",
       "time": "morning",
       "music": "tense",
+      "cast": [
+        "lokii",
+        "bacon"
+      ],
       "beats": [
         {
           "narrate": "[whispers] A new kid walked into school wearing a golden skull mask.",
@@ -34,13 +38,19 @@
               "item": "backpack"
             },
             {
-              "who": "emily",
-              "act": "idle",
-              "face": "scared"
-            },
-            {
               "who": "bacon",
               "act": "idle",
+              "face": "scared"
+            }
+          ]
+        },
+        {
+          "narrate": "Bacon saw him, and froze.",
+          "shot": "closeup:bacon",
+          "do": [
+            {
+              "who": "bacon",
+              "act": "shocked",
               "face": "scared"
             }
           ]
@@ -56,27 +66,43 @@
               "who": "bacon",
               "act": "run_to",
               "face": "scared",
-              "at": "lockers"
+              "at": "door"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "set": "school_hallway",
+      "time": "morning",
+      "music": "tense",
+      "cast": [
+        "emily",
+        "lokii"
+      ],
+      "beats": [
         {
-          "narrate": "Everybody ran. My legs wanted to run too.",
-          "shot": "push_in:emily",
+          "narrate": "Everybody ran. My legs wanted to run too. But I stayed.",
+          "shot": "two_shot:emily,lokii",
           "do": [
             {
               "who": "emily",
-              "act": "shocked",
+              "act": "idle",
               "face": "scared"
+            },
+            {
+              "who": "lokii",
+              "act": "idle",
+              "face": "neutral"
             }
           ]
         },
         {
-          "narrate": "But I stayed.",
-          "shot": "medium",
+          "narrate": "Then the new kid spoke.",
+          "shot": "closeup:lokii",
           "do": [
             {
-              "who": "emily",
+              "who": "lokii",
               "act": "idle",
               "face": "neutral"
             }
@@ -93,6 +119,17 @@
               "who": "lokii",
               "act": "talk",
               "face": "neutral"
+            }
+          ]
+        },
+        {
+          "narrate": "I stared at his hand, and asked:",
+          "shot": "closeup:emily",
+          "do": [
+            {
+              "who": "emily",
+              "act": "idle",
+              "face": "scared"
             }
           ]
         },
@@ -116,6 +153,17 @@
           ]
         },
         {
+          "narrate": "He looked at it, and his voice got quiet.",
+          "shot": "closeup:lokii",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "idle",
+              "face": "sad"
+            }
+          ]
+        },
+        {
           "say": {
             "who": "lokii",
             "line": "It is not mine. I must find its owner."
@@ -130,7 +178,7 @@
           ]
         },
         {
-          "narrate": "He sounded sad. And his mask never smiled.",
+          "narrate": "His mask never smiled. But his voice did.",
           "shot": "push_in:emily",
           "do": [
             {
@@ -142,12 +190,17 @@
         },
         {
           "narrate": "[excited] Want part two? Like and subscribe!",
-          "shot": "wide",
+          "shot": "two_shot:emily,lokii",
           "do": [
             {
               "who": "emily",
               "act": "wave",
               "face": "happy"
+            },
+            {
+              "who": "lokii",
+              "act": "idle",
+              "face": "neutral"
             }
           ]
         }
@@ -163,6 +216,5 @@
     "kind": "subscribe",
     "next": 2
   },
-  "wants": [],
-  "teaser": "Whose backpack is it?"
+  "wants": []
 }

@@ -21,10 +21,14 @@
       "set": "classroom",
       "time": "morning",
       "music": "funny",
+      "cast": [
+        "emily",
+        "lokii"
+      ],
       "beats": [
         {
-          "narrate": "Today, Lokii and I had a mission: find the backpack's owner.",
-          "shot": "wide",
+          "narrate": "Next morning, Lokii and I started our mission: find the backpack's owner.",
+          "shot": "two_shot:emily,lokii",
           "do": [
             {
               "who": "emily",
@@ -36,11 +40,17 @@
               "act": "idle",
               "face": "neutral",
               "item": "backpack"
-            },
+            }
+          ]
+        },
+        {
+          "narrate": "I had an idea.",
+          "shot": "closeup:emily",
+          "do": [
             {
-              "who": "lexi",
+              "who": "emily",
               "act": "idle",
-              "face": "neutral"
+              "face": "smug"
             }
           ]
         },
@@ -53,9 +63,35 @@
           "do": [
             {
               "who": "emily",
-              "act": "walk_to",
-              "face": "happy",
-              "at": "lexi"
+              "act": "talk",
+              "face": "happy"
+            },
+            {
+              "who": "lokii",
+              "act": "idle",
+              "face": "neutral"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "set": "classroom",
+      "time": "morning",
+      "music": "funny",
+      "cast": [
+        "lexi",
+        "lokii"
+      ],
+      "beats": [
+        {
+          "narrate": "Lexi was drawing in class. Then she looked up.",
+          "shot": "wide",
+          "do": [
+            {
+              "who": "lexi",
+              "act": "idle",
+              "face": "neutral"
             },
             {
               "who": "lokii",
@@ -76,39 +112,22 @@
               "who": "lexi",
               "act": "jump",
               "face": "scared"
-            }
-          ]
-        },
-        {
-          "say": {
-            "who": "emily",
-            "line": "Relax, Lexi. He is nice. I think."
-          },
-          "shot": "two_shot:emily,lexi",
-          "do": [
-            {
-              "who": "emily",
-              "act": "talk",
-              "face": "smug"
             },
             {
-              "who": "lexi",
+              "who": "lokii",
               "act": "idle",
-              "face": "scared"
+              "face": "neutral"
             }
           ]
         },
         {
-          "say": {
-            "who": "lexi",
-            "line": "[whispers] Then why is he so spooky?"
-          },
-          "shot": "closeup:lexi",
+          "narrate": "Lokii bowed politely.",
+          "shot": "closeup:lokii",
           "do": [
             {
-              "who": "lexi",
-              "act": "talk",
-              "face": "scared"
+              "who": "lokii",
+              "act": "idle",
+              "face": "neutral"
             }
           ]
         },
@@ -123,11 +142,16 @@
               "who": "lokii",
               "act": "talk",
               "face": "neutral"
+            },
+            {
+              "who": "lexi",
+              "act": "idle",
+              "face": "scared"
             }
           ]
         },
         {
-          "narrate": "Lexi looked at the backpack. Her eyes got huge.",
+          "narrate": "Lexi finally saw the backpack. Her eyes got huge.",
           "shot": "push_in:lexi",
           "do": [
             {
@@ -153,12 +177,17 @@
         },
         {
           "narrate": "[excited] Want part three? Like and subscribe!",
-          "shot": "wide",
+          "shot": "two_shot:lexi,lokii",
           "do": [
             {
-              "who": "emily",
+              "who": "lexi",
+              "act": "idle",
+              "face": "shocked"
+            },
+            {
+              "who": "lokii",
               "act": "wave",
-              "face": "happy"
+              "face": "neutral"
             }
           ]
         }
@@ -174,6 +203,5 @@
     "kind": "subscribe",
     "next": 3
   },
-  "wants": [],
-  "teaser": "Bacon is very angry."
+  "wants": []
 }
