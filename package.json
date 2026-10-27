@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "tsx --test \"tests/**/*.test.ts\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "fixture": "tsx scripts/render-fixture.ts"
   },
   "dependencies": {
     "gsap": "^3.15.0",
