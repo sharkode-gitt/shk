@@ -1,0 +1,46 @@
+<!doctype html>
+<!-- Face sheet: 8 expressions x 3 mouths, the original atlas face, and block heads.
+     Render with `node scripts/face-sheet.mjs` (it bundles src/engine/faces/draw.ts into window.Faces). -->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; padding: 12px; background: #fff; font: 14px sans-serif; display: inline-block; }
+  .grid { display: grid; grid-template-columns: repeat(9, auto); gap: 8px; }
+  figure { margin: 0; text-align: center; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<div class="grid" id="grid"></div>
+<script>
+  const SKIN = '#f0cdc4';
+  const FACES = ['neutral', 'happy', 'sad', 'crying', 'angry', 'shocked', 'smug', 'scared'];
+  const RECT = { x: 147, y: 293, w: 226, h: 247 }; // EMILY_FACE_RECT
+  const grid = document.getElementById('grid');
+  const cell = (label, w, h, paint) => {
+    const fig = document.createElement('figure');
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    paint(c.getContext('2d'));
+    const cap = document.createElement('figcaption');
+    cap.textContent = label;
+    fig.append(c, cap);
+    grid.append(fig);
+  };
+  const blank = () => grid.append(document.createElement('div'));
+  const atlas = new Image();
+  atlas.onload = () => {
+    for (const mouth of [0, 1, 2]) {
+      if (mouth === 0) cell('original (atlas)', RECT.w, RECT.h, (ctx) => ctx.drawImage(atlas, RECT.x, RECT.y, RECT.w, RECT.h, 0, 0, RECT.w, RECT.h));
+      else blank();
+      for (const face of FACES) cell(`${face} / ${mouth}`, RECT.w, RECT.h, (ctx) => Faces.drawFace(ctx, face, mouth, { x: 0, y: 0, w: RECT.w, h: RECT.h }, SKIN));
+    }
+    blank();
+    for (const face of FACES) cell(`block ${face}`, 220, 220, (ctx) => Faces.drawFace(ctx, face, 0, { x: 0, y: 0, w: 220, h: 220 }, SKIN));
+    document.body.dataset.ready = '1';
+  };
+  atlas.src = '../assets/emily/Hero1_diff.png';
+</script>
+</body>
+</html>
