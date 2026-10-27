@@ -10,11 +10,11 @@ import type { BuiltSet } from './sets/index.ts';
 
 export type ScenePayload = { story: Story; timeline: Timeline; seed: number; roster: Record<string, CharacterInfo> };
 export type SetLayout = Record<number, BuiltSet>;
-export type SceneState = { sceneIndex: number; poses: Record<string, Pose>; camera: Cam; items: Record<string, Prop | null> };
+export type SceneState = { sceneIndex: number; poses: Record<string, Pose>; camera: Cam; items: Record<string, Prop | null>; heads: Record<string, Vec3>; yaws: Record<string, number>; beatStart: number; beatEnd: number };
 
 const FPS = 30;
 /** Characters never come closer than this (studs, on the floor); the one that is walking steers around the one standing. */
-const PERSONAL_SPACE = 2.4;
+const PERSONAL_SPACE = 3;
 /** Seconds to turn toward (and away from) the person they are talking with. */
 const TURN = 0.35;
 /** Mouth flips between half and fully open this often inside a word, seconds. */
@@ -128,8 +128,18 @@ function faceEachOther(ids: string[], poses: Record<string, Pose>, beats: TimedB
   }
 }
 
-/** Everything the renderer needs at time `t`; pure apart from the cached reference rig. */
+/**
+ * Everything the renderer needs at time `t`; pure apart from the cached reference rig. The camera's side of a face-on shot
+ * is locked to where everybody stood when the beat started, so it never flips while a character moves.
+ */
 export function sceneState(time: number, payload: ScenePayload, layout: SetLayout): SceneState {
+  const first = compute(time, payload, layout);
+  // Who stands where and which way they face once the beat has settled (turns last 0.35 s): the shot is framed from that.
+  const settled = compute(Math.max(first.beatStart, Math.min(first.beatEnd - 1 / FPS, first.beatStart + 0.5)), payload, layout);
+  return compute(time, payload, layout, { heads: settled.heads, yaws: settled.yaws });
+}
+
+function compute(time: number, payload: ScenePayload, layout: SetLayout, lock?: { heads: Record<string, Vec3>; yaws: Record<string, number> }): SceneState {
   const { story, timeline, seed } = payload;
   const frame = Math.round(time * FPS);
   const t = frame / FPS; // snapped, so the active beat never starts after t
@@ -140,7 +150,7 @@ export function sceneState(time: number, payload: ScenePayload, layout: SetLayou
   const ids = scene.cast ?? story.cast.map((c) => c.id);
   // One or two characters stand close together in the middle (the first on the left of the screen, x > 0).
   const mid = set.homes.length >= 3 ? [(set.homes[1][0] + set.homes[2][0]) / 2, set.homes[1][1], set.homes[1][2]] as Vec3 : set.homes[0];
-  const homes = Object.fromEntries(ids.map((id, i) => [id, ids.length === 2 ? [mid[0] + (i === 0 ? 1.8 : -1.8), mid[1], mid[2]] as Vec3 : ids.length === 1 ? mid : homeOf(set, i)]));
+  const homes = Object.fromEntries(ids.map((id, i) => [id, scene.starts?.[id] && set.marks[scene.starts[id]] ? set.marks[scene.starts[id]] : ids.length === 2 ? [mid[0] + (i === 0 ? 2.2 : -2.2), mid[1], mid[2]] as Vec3 : ids.length === 1 ? mid : homeOf(set, i)]));
 
   // Position-only lookup of another character (their own `at` targets stay unresolved) so two characters
   // targeting each other cannot recurse forever.
@@ -173,6 +183,6 @@ export function sceneState(time: number, payload: ScenePayload, layout: SetLayou
   const dur = beat.end - beat.start;
   const tIn = t - beat.start;
   const u = Math.min(1, Math.max(0, dur > 0 ? tIn / dur : 1));
-  const camera = cameraAt(beat.shot, u, dur, tIn, heads, set, seed, beat.speaker, yaws);
-  return { sceneIndex: scene.index, poses, camera, items };
+  const camera = cameraAt(beat.shot, u, dur, tIn, heads, set, seed, beat.speaker, yaws, lock);
+  return { sceneIndex: scene.index, poses, camera, items, heads, yaws, beatStart: startFrame(beat.start) / FPS, beatEnd: beat.end };
 }

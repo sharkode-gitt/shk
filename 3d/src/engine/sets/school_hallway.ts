@@ -26,7 +26,7 @@ export function schoolHallway(g: THREE.Group): Layout {
     g.add(s);
   }
   return {
-    marks: { center: [0, 0, 0], door: [9, 0, -2], lockers: [0, 0, 6.2] },
+    marks: { center: [0, 0, 0], door: [9, 0, -2], lockers: [0, 0, 6.2], entry: [7, 0, -1], exit: [-10.5, 0, -1] },
     homes: [[-6, 0, -1], [-2, 0, -1], [2, 0, -1], [6, 0, -1]],
   };
 }

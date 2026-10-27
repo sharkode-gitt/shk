@@ -47,5 +47,5 @@ export type TimedBeat = {
   words: WordTiming[]; // absolute
   shot: Shot; actions: TimedAction[];
 };
-export type TimedScene = { index: number; set: SetName; time: TimeOfDay; music: Mood; start: number; end: number; /** Cast ids on screen (absent = everyone). */ cast?: string[] };
+export type TimedScene = { index: number; set: SetName; time: TimeOfDay; music: Mood; start: number; end: number; /** Cast ids on screen (absent = everyone). */ cast?: string[]; /** Start marks by cast id. */ starts?: Record<string, string> };
 export type Timeline = { duration: number; fps: 30; scenes: TimedScene[]; beats: TimedBeat[] };

@@ -43,6 +43,8 @@ export function cameraAt(
   shot: Shot, u: number, _beatDur: number, tInBeat: number,
   heads: Record<string, Vec3>, set: BuiltSet, seed: number, speaker: string,
   yaws: Record<string, number> = {},
+  /** Heads and yaws once the beat has settled: face-on shots are framed from them, so the camera neither flips sides nor whips while a character turns. */
+  lock?: { heads: Record<string, Vec3>; yaws: Record<string, number> },
 ): Cam {
   const all = Object.values(heads);
   const fallback: Vec3 = all[0] ?? [0, 4.5, 0];
@@ -52,13 +54,16 @@ export function cameraAt(
   /** Face-on shot of `id` from 0.6 rad left or right of its facing, whichever keeps other heads further off the line. */
   const faceOn = (id: string | undefined, d: number, dy: number, ty: number, fov: number): Cam => {
     const c = head(id), yaw = (id ? yaws[id] : undefined) ?? 0;
-    const others = Object.entries(heads).filter(([k]) => k !== id).map(([, p]) => p);
-    const clear = (cam: Cam) => Math.min(Infinity, ...others.map((p) => segDist(p, cam.pos, c)));
-    const [a, b] = [yaw + THREE_QUARTER, yaw - THREE_QUARTER].map((y) => facing(c, y, d, dy, ty, fov));
+    // Side and framing come from the settled pose of the beat (see sceneState).
+    const dh = lock?.heads ?? heads, dyaws = lock?.yaws ?? yaws;
+    const c0 = (id ? dh[id] : undefined) ?? c, yaw0 = (id ? dyaws[id] : undefined) ?? yaw;
+    const others = Object.entries(dh).filter(([k]) => k !== id).map(([, p]) => p);
+    const clear = (cam: Cam) => Math.min(Infinity, ...others.map((p) => segDist(p, cam.pos, c0)));
+    const a0 = facing(c0, yaw0 + THREE_QUARTER, d, dy, ty, fov), b0 = facing(c0, yaw0 - THREE_QUARTER, d, dy, ty, fov);
     // In a room, a side whose camera would stand behind a wall loses to one that stays inside.
-    const inA = inside(a.pos), inB = inside(b.pos);
-    if (inA !== inB) return inA ? a : b;
-    return clear(b) > clear(a) ? b : a;
+    const inA = inside(a0.pos), inB = inside(b0.pos);
+    const sign = inA !== inB ? (inA ? 1 : -1) : clear(b0) > clear(a0) ? -1 : 1;
+    return facing(c, yaw0 + sign * THREE_QUARTER, d, dy, ty, fov);
   };
   /** Head to thighs, face-on to the speaker (follows its facing); the head sits mid-frame, below the captions. */
   const medium = (id: string | undefined): Cam => faceOn(id, 9, -0.3, 0, VFOV);

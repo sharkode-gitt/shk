@@ -19,9 +19,9 @@ export const SET_MARKS: Record<SetName, string[]> = {
   bedroom: ['center', 'door', 'bed', 'window'],
   living_room: ['center', 'door', 'sofa', 'tv'],
   kitchen: ['center', 'door', 'table', 'fridge'],
-  classroom: ['center', 'door', 'desk', 'board'],
-  school_hallway: ['center', 'door', 'lockers'],
-  park: ['center', 'door', 'bench', 'tree'],
+  classroom: ['center', 'door', 'desk', 'board', 'entry', 'exit'],
+  school_hallway: ['center', 'door', 'lockers', 'entry', 'exit'],
+  park: ['center', 'door', 'bench', 'tree', 'entry', 'exit'],
   street: ['center', 'door', 'car', 'house'],
 };
 

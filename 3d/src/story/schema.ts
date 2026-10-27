@@ -47,6 +47,8 @@ const Scene = z.object({
   music: z.enum(MUSIC).optional(),
   /** Who is on screen in this scene (1 or 2 cast ids; the first stands on the left). Default: the whole cast. */
   cast: z.array(z.string()).min(1).max(2).optional(),
+  /** Where a character starts the scene, as a set mark (e.g. { lokii: "entry" } to walk in from the side). */
+  starts: z.record(z.string(), z.string().regex(IDENT)).optional(),
   beats: z.array(Beat).min(1),
 });
 

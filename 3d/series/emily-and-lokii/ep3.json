@@ -25,10 +25,13 @@
         "bacon",
         "emily"
       ],
+      "starts": {
+        "emily": "entry"
+      },
       "beats": [
         {
           "narrate": "We found Bacon at his locker. He was not happy.",
-          "shot": "two_shot:bacon,emily",
+          "shot": "wide",
           "do": [
             {
               "who": "bacon",
@@ -97,6 +100,9 @@
         "lokii",
         "bacon"
       ],
+      "starts": {
+        "lokii": "entry"
+      },
       "beats": [
         {
           "narrate": "Lokii stepped forward, holding the backpack.",
@@ -104,8 +110,9 @@
           "do": [
             {
               "who": "lokii",
-              "act": "idle",
+              "act": "walk_to",
               "face": "neutral",
+              "at": "bacon",
               "item": "backpack"
             },
             {

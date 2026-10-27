@@ -83,6 +83,9 @@
         "lexi",
         "lokii"
       ],
+      "starts": {
+        "lokii": "entry"
+      },
       "beats": [
         {
           "narrate": "Lexi was drawing in class. Then she looked up.",

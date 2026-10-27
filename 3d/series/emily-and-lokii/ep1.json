@@ -25,6 +25,9 @@
         "lokii",
         "bacon"
       ],
+      "starts": {
+        "lokii": "entry"
+      },
       "beats": [
         {
           "narrate": "[whispers] A new kid walked into school wearing a golden skull mask.",
@@ -34,7 +37,7 @@
               "who": "lokii",
               "act": "walk_to",
               "face": "neutral",
-              "at": "center",
+              "at": "bacon",
               "item": "backpack"
             },
             {
@@ -60,13 +63,18 @@
             "who": "bacon",
             "line": "[shouting] A skeleton! Run!"
           },
-          "shot": "closeup:bacon",
+          "shot": "wide",
           "do": [
             {
               "who": "bacon",
               "act": "run_to",
               "face": "scared",
-              "at": "door"
+              "at": "exit"
+            },
+            {
+              "who": "lokii",
+              "act": "idle",
+              "face": "neutral"
             }
           ]
         }

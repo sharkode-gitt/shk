@@ -25,6 +25,9 @@
         "lokii",
         "bacon"
       ],
+      "starts": {
+        "lokii": "entry"
+      },
       "beats": [
         {
           "narrate": "The party was in the park. Lokii came with a gift.",
@@ -32,8 +35,9 @@
           "do": [
             {
               "who": "lokii",
-              "act": "idle",
+              "act": "walk_to",
               "face": "neutral",
+              "at": "bacon",
               "item": "gift"
             },
             {
@@ -92,6 +96,23 @@
               "face": "neutral"
             }
           ]
+        },
+        {
+          "narrate": "And he walked away, slowly.",
+          "shot": "wide",
+          "do": [
+            {
+              "who": "lokii",
+              "act": "walk_to",
+              "face": "sad",
+              "at": "entry"
+            },
+            {
+              "who": "bacon",
+              "act": "idle",
+              "face": "angry"
+            }
+          ]
         }
       ]
     },
@@ -103,15 +124,24 @@
         "emily",
         "bacon"
       ],
+      "starts": {
+        "emily": "entry"
+      },
       "beats": [
         {
           "narrate": "I could not let him leave.",
-          "shot": "closeup:emily",
+          "shot": "wide",
           "do": [
             {
               "who": "emily",
+              "act": "walk_to",
+              "face": "sad",
+              "at": "bacon"
+            },
+            {
+              "who": "bacon",
               "act": "idle",
-              "face": "sad"
+              "face": "angry"
             }
           ]
         },
