@@ -10,7 +10,7 @@
     "mtl": "sammy.mtl",
     "atlas": "Spydersammy1_diff.png",
     "face": {
-      "style": "classic",
+      "style": "emily",
       "rect": {
         "x": 126,
         "y": 418,
@@ -18,7 +18,33 @@
         "h": 147
       },
       "skin": "#f5ce2c",
-      "flipX": false
+      "flipX": false,
+      "clear": [
+        {
+          "x": 142,
+          "y": 272,
+          "w": 115,
+          "h": 111
+        },
+        {
+          "x": 281,
+          "y": 278,
+          "w": 91,
+          "h": 64
+        },
+        {
+          "x": 267,
+          "y": 393,
+          "w": 18,
+          "h": 17
+        },
+        {
+          "x": 293,
+          "y": 390,
+          "w": 90,
+          "h": 25
+        }
+      ]
     },
     "unflipped": []
   }

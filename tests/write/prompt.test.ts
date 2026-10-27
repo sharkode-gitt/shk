@@ -7,7 +7,7 @@ import { validStory } from './helpers.ts';
 
 const character = (id: string, name: string, personality: string): CharacterInfo => ({
   id, name, age: 12, personality, look: 'a look', color: '#ffd166',
-  model: { obj: 'a.obj', mtl: 'a.mtl', atlas: 'a.png', face: { style: 'classic', rect: { x: 0, y: 0, w: 1, h: 1 }, skin: '#fff', flipX: false }, unflipped: [] },
+  model: { obj: 'a.obj', mtl: 'a.mtl', atlas: 'a.png', face: { style: 'classic', rect: { x: 0, y: 0, w: 1, h: 1 }, skin: '#fff', flipX: false, clear: [] }, unflipped: [] },
 });
 const emily = character('emily', 'Emily', 'kind, a little shy');
 const bacon = character('bacon', 'Bacon', 'cheerful and clumsy');

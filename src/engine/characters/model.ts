@@ -25,7 +25,7 @@ export async function loadCharacter(baseUrl: string, info: CharacterInfo): Promi
     new OBJLoader().setPath(baseUrl).loadAsync(m.obj),
     new THREE.ImageLoader().loadAsync(`${baseUrl}${m.atlas}`),
   ]);
-  const face = new FaceTexture(atlas, m.face.rect, m.face.skin, m.face.style, m.face.flipX);
+  const face = new FaceTexture(atlas, m.face.rect, m.face.skin, m.face.style, m.face.flipX, m.face.clear);
   face.set('neutral', 0);
   // The MTL is only read for texture names (the skin colour is already baked into the textures), and MTLLoader's own
   // textures load in the background with no way to await them.

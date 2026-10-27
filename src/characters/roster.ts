@@ -28,6 +28,8 @@ export const CharacterSchema = z.object({
       skin: z.string(),
       /** Draw the face mirrored (the head's UV map runs the other way). */
       flipX: z.boolean().default(false),
+      /** Atlas areas that hold the model's own painted face (eyes, mouth); they are filled with skin so only the drawn face shows. */
+      clear: z.array(z.object({ x: z.number(), y: z.number(), w: z.number(), h: z.number() })).default([]),
     }),
     /** Accessory labels (see parts.json) whose UVs use the top-left origin. */
     unflipped: z.array(z.string()).default([]),

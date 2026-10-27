@@ -22,7 +22,7 @@ export class FaceTexture {
 
   private readonly flipX: boolean;
 
-  constructor(atlas: HTMLImageElement | HTMLCanvasElement, rect: Rect, skin: string, style: FaceStyle = 'emily', flipX = false) {
+  constructor(atlas: HTMLImageElement | HTMLCanvasElement, rect: Rect, skin: string, style: FaceStyle = 'emily', flipX = false, clear: Rect[] = []) {
     const canvas = document.createElement('canvas');
     canvas.width = atlas.width;
     canvas.height = atlas.height;
@@ -32,6 +32,7 @@ export class FaceTexture {
     ctx.fillStyle = skin;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(atlas, 0, 0);
+    for (const r of clear) ctx.fillRect(r.x, r.y, r.w, r.h);
     this.ctx = ctx;
     this.rect = rect;
     this.skin = skin;
