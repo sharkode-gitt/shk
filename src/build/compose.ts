@@ -32,6 +32,9 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const num = (n: number) => String(Math.round(n * 1000) / 1000);
 const json = (v: unknown) => JSON.stringify(v).replace(/</g, '\\u003c');
 
+const THUMB = '<svg viewBox="0 0 24 24" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"><path d="M2 10h4v11H2zM8 10l4-8c1.7 0 2.8 1.3 2.5 3L14 9h6a2 2 0 0 1 2 2.4l-1.6 8A2 2 0 0 1 18.4 21H8z"/></svg>';
+const BELL = '<svg viewBox="0 0 24 24" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"><path d="M12 2a6 6 0 0 0-6 6v4l-2 4v1h16v-1l-2-4V8a6 6 0 0 0-6-6zM9.5 19a2.5 2.5 0 0 0 5 0z"/></svg>';
+
 /** Copies a sound file into comp/audio/<group>/ and returns its comp-relative path. */
 async function stage(compDir: string, audioDir: string, group: string, file: string, taken: Map<string, string>): Promise<string> {
   const candidates = isAbsolute(file) ? [file] : [resolve(audioDir, file), resolve(audioDir, basename(file)), resolve(ROOT, file)];
@@ -91,6 +94,28 @@ export async function writeComposition(opts: CompositionOptions): Promise<string
     });
   });
 
+  // --- end card: from the last beat to the end, below the captions and above the unsafe bottom band ---
+  const endHtml: string[] = [];
+  const cta = story.cta;
+  const endStart = timeline.beats.at(-1)?.start ?? 0;
+  if (cta) {
+    const endDur = Math.max(timeline.duration - endStart, 0.5);
+    const pop = (sel: string, at: number) => tweens.push(`tl.fromTo("${sel}",{opacity:0,scale:0.4,y:40},{opacity:1,scale:1,y:0,duration:0.4,ease:"back.out(2.2)"},${num(endStart + at)});`);
+    if (cta.kind === 'subscribe') {
+      const label = cta.next ? `PART ${cta.next}` : 'NEXT PART';
+      endHtml.push(`<div id="end-badge" class="end-badge">${esc(label)}</div>
+<div class="end-row"><div id="end-like" class="end-btn like">${THUMB}<span>LIKE</span></div><div id="end-sub" class="end-btn sub">${BELL}<span>SUBSCRIBE</span></div></div>`);
+      pop('#end-badge', 0.1); pop('#end-like', 0.35); pop('#end-sub', 0.6);
+      tweens.push(`tl.to("#end-sub",{scale:1.08,duration:0.35,yoyo:true,repeat:3,ease:"sine.inOut"},${num(endStart + 1.1)});`);
+    } else {
+      endHtml.push(`<div id="end-q" class="end-q">${esc(cta.question ?? 'Comment A or B')}</div>
+<div class="end-row"><div id="end-a" class="end-card a"><b>A</b><span>${esc(cta.a ?? '')}</span></div><div id="end-b" class="end-card b"><b>B</b><span>${esc(cta.b ?? '')}</span></div></div>
+<div id="end-hint" class="end-hint">COMMENT A OR B</div>`);
+      pop('#end-q', 0.1); pop('#end-a', 0.4); pop('#end-b', 0.7); pop('#end-hint', 1.0);
+    }
+    void endDur;
+  }
+
   // --- audio ---
   const audioHtml: string[] = [];
   for (const b of timeline.beats) {
@@ -135,6 +160,19 @@ html, body { margin: 0; background: #000; }
 .cap-in { display: flex; flex-direction: column; align-items: center; font-family: "Rubik", sans-serif; color: #fff; will-change: transform, opacity; }
 .cap .who { font-size: 40px; font-weight: 800; letter-spacing: 0.02em; line-height: 1.1; margin-bottom: 10px; -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 4px 10px rgba(0,0,0,.55); }
 .cap .line { font-size: 84px; font-weight: 900; line-height: 1.08; -webkit-text-stroke: 12px #000; paint-order: stroke fill; text-shadow: 0 7px 16px rgba(0,0,0,.6); }
+#end { position: absolute; left: 5%; right: 5%; top: 56%; display: flex; flex-direction: column; align-items: center; gap: 28px; font-family: "Rubik", sans-serif; color: #fff; pointer-events: none; }
+#end > :not(.end-row), .end-row > * { will-change: transform, opacity; opacity: 0; }
+.end-badge { font-size: 110px; font-weight: 900; background: #ffd166; color: #1a1a1a; padding: 6px 44px; border-radius: 28px; border: 8px solid #000; box-shadow: 0 10px 0 #000; }
+.end-row { display: flex; gap: 28px; width: 100%; justify-content: center; }
+.end-btn { display: flex; align-items: center; gap: 18px; font-size: 56px; font-weight: 900; padding: 20px 36px; border-radius: 26px; border: 7px solid #000; box-shadow: 0 8px 0 #000; }
+.end-btn svg { width: 64px; height: 64px; }
+.end-btn.like { background: #3b82f6; } .end-btn.sub { background: #ef2d3c; }
+.end-q { font-size: 64px; font-weight: 900; text-align: center; line-height: 1.1; -webkit-text-stroke: 10px #000; paint-order: stroke fill; text-shadow: 0 6px 14px rgba(0,0,0,.6); }
+.end-card { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px 16px; border-radius: 28px; border: 8px solid #000; box-shadow: 0 10px 0 #000; text-align: center; }
+.end-card b { font-size: 120px; line-height: 1; }
+.end-card span { font-size: 40px; font-weight: 800; line-height: 1.1; }
+.end-card.a { background: #22c55e; } .end-card.b { background: #ef2d3c; }
+.end-hint { font-size: 48px; font-weight: 900; -webkit-text-stroke: 8px #000; paint-order: stroke fill; }
 .cap .w { display: inline-block; color: #fff; margin: 0 0.06em; }
 </style>
 </head>
@@ -144,6 +182,7 @@ html, body { margin: 0; background: #000; }
 <div id="captions" data-track-kind="captions">
 ${capHtml.join('\n')}
 </div>
+<div id="end">${endHtml.join('\n')}</div>
 ${audioHtml.join('\n')}
 </div>
 <script type="application/json" id="scene">${json({ story, timeline, seed, roster })}</script>

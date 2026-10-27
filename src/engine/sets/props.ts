@@ -63,14 +63,14 @@ export function floor(parent: THREE.Object3D, w: number, d: number, color: numbe
 }
 
 /**
- * Three-walled room: back wall at z=9, side walls at x=±12 (z[-9,9]), no front/ceiling. The floor runs on to
- * z=-30 and the walls are 16 high so wide/orbit cameras (z down to about -21) never see past the set.
+ * Three-walled room: back wall at z=9, side walls at x=±12, no front/ceiling. The floor runs on to
+ * z=-60 and the walls are 30 high (side walls run along it) so wide/orbit cameras never see past the set.
  */
 export function room(g: THREE.Group, wallColor: number, floorColor: number): void {
-  floor(g, 24, 39, floorColor).position.z = -10.5; // z[-30,9]
-  box(g, 25, 16, 0.5, wallColor, 0, 0, 9.25);
-  box(g, 0.5, 16, 18.5, wallColor, -12.25, 0, 0);
-  box(g, 0.5, 16, 18.5, wallColor, 12.25, 0, 0);
+  floor(g, 24, 69, floorColor).position.z = -25.5; // z[-60,9]
+  box(g, 25, 30, 0.5, wallColor, 0, 0, 9.25);
+  box(g, 0.5, 30, 69, wallColor, -12.25, 0, -25.5);
+  box(g, 0.5, 30, 69, wallColor, 12.25, 0, -25.5);
   box(g, 24, 0.6, 0.3, C.white, 0, 0, 8.85); // skirting
 }
 

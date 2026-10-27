@@ -132,7 +132,7 @@
         },
         {
           "narrate": "[excited] Should I be Lokii's friend? Comment A for yes, or B for no!",
-          "shot": "closeup:emily",
+          "shot": "wide",
           "do": [
             {
               "who": "emily",

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { C, box, cyl, floor, put, sphere, tree, type Layout } from './props.ts';
 
 export function park(g: THREE.Group): Layout {
-  floor(g, 60, 60, C.floorGrass);
+  floor(g, 240, 240, C.floorGrass);
   box(g, 6, 0.08, 40, C.sidewalk, 0, 0, 5); // path
   const bench = new THREE.Group();
   box(bench, 6, 0.4, 2, C.wood, 0, 1.6, 0);
