@@ -51,6 +51,7 @@ export function buildSet(name: SetName, time: TimeOfDay): BuiltSet {
   const r = indoor ? 18 : 35;
   Object.assign(sun.shadow.camera, { left: -r, right: r, top: r, bottom: -r, near: 1, far: 120 });
   sun.shadow.bias = -0.0005;
+  sun.shadow.normalBias = 0.04; // removes acne stripes on characters in close-ups
   const lights: THREE.Light[] = [hemi, sun];
   if (indoor) {
     const lamp = new THREE.PointLight(0xffd9a0, L.lamp, 30, 2); // warm interior light
