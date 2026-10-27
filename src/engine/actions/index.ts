@@ -65,11 +65,16 @@ function mix(a: ActionPose, b: ActionPose, w: number): ActionPose {
   return { root: { pos, yaw: lerpYaw(a.root.yaw, b.root.yaw, w) }, joints };
 }
 
+/** Sideways spacing between characters sent to the same mark at the same moment (0, +1.9, -1.9, +3.8 ...). */
+const SPREAD = 1.9;
+const slotOffset = (k: number) => (k <= 0 ? 0 : Math.ceil(k / 2) * SPREAD * (k % 2 ? 1 : -1));
+
 function ctxFor(
   a: TimedAction, who: string, from: Vec3, fromYaw: number, seed: number,
-  marks: Record<string, Vec3>, others?: (who: string, t: number) => Vec3,
+  marks: Record<string, Vec3>, others?: (who: string, t: number) => Vec3, slot = 0,
 ): ActionCtx {
-  const mark = a.at === undefined ? undefined : marks[a.at];
+  const base = a.at === undefined ? undefined : marks[a.at];
+  const mark: Vec3 | undefined = base && slot ? [base[0] + slotOffset(slot), base[1], base[2]] : base;
   const cast = mark || a.at === undefined || a.at === who ? undefined : others?.(a.at, a.start);
   const lookAt = mark ?? cast;
   let to: Vec3 | undefined;
@@ -107,9 +112,13 @@ export function poseAt(
     while (segs.length > 1 && segs.at(-1)!.start >= seg.start) segs.pop();
     segs.push(seg);
   };
+  const all = beats.flatMap((b) => b.actions);
   for (const a of acts) {
     if (a.start > t) break;
-    const ctx = { ...ctxFor(a, who, pos, yaw, s, marks, others), posture };
+    // Characters sent to the same mark at the same moment each get their own spot next to it.
+    const moving = (x: TimedAction) => x.act === 'walk_to' || x.act === 'run_to';
+    const slot = moving(a) && a.at && marks[a.at] ? all.filter((x) => moving(x) && x.at === a.at && x.start === a.start).findIndex((x) => x.who === who) : 0;
+    const ctx = { ...ctxFor(a, who, pos, yaw, s, marks, others, Math.max(0, slot)), posture };
     const seg: Seg = { fn: fnFor(a.act, posture), start: a.start, end: a.end, ctx };
     push(seg);
     const end = seg.fn(1, a.end, seg.ctx).root;

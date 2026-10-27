@@ -127,3 +127,23 @@ test('closeup picks the three-quarter side that keeps another head out of the li
   const k = Math.max(0, Math.min(1, (-3 * uz) / (ux * ux + uz * uz)));
   assert.ok(Math.hypot(ux * k, -3 - uz * k) > 1.2, `leo clearance from ${c.pos}`);
 });
+
+test('in a room, no shot puts the camera behind a side wall or the back wall', () => {
+  const room = { ...set, bounds: { minX: -11.2, maxX: 11.2, maxZ: 8.2 } } as BuiltSet;
+  const byWall: Record<string, Vec3> = { mia: [10.5, 4.5, -2], leo: [9, 4.5, 6] };
+  for (const kind of ['wide', 'medium', 'closeup', 'push_in', 'two_shot', 'over_shoulder', 'orbit', 'shake'] as const) {
+    const targets = kind === 'two_shot' ? ['mia', 'leo'] : ['closeup', 'push_in', 'over_shoulder'].includes(kind) ? ['mia'] : [];
+    for (const yaw of [0, Math.PI / 2, -Math.PI / 2, Math.PI]) {
+      for (const u of [0, 0.5, 1]) {
+        const c = cameraAt({ kind, targets }, u, 4, 1, byWall, room, 7, 'mia', { mia: yaw, leo: yaw });
+        assert.ok(c.pos[0] <= 11.25 && c.pos[0] >= -11.25 && c.pos[2] <= 8.25, `${kind} yaw ${yaw.toFixed(2)} u ${u}: ${c.pos.map((v) => v.toFixed(2))}`);
+      }
+    }
+  }
+});
+
+test('a face-on shot near a wall picks the side that stays inside the room', () => {
+  const room = { ...set, bounds: { minX: -11.2, maxX: 11.2, maxZ: 8.2 } } as BuiltSet;
+  const c = cameraAt({ kind: 'medium', targets: [] }, 0, 4, 1, { mia: [9, 4.5, -2] }, room, 7, 'mia', { mia: 0 });
+  assert.ok(c.pos[0] < 9, `camera should be on the room side of the speaker, got x=${c.pos[0].toFixed(2)}`);
+});

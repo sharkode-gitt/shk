@@ -41,11 +41,13 @@ function handheld(t: number, seed: number): Vec3 {
 
 export function cameraAt(
   shot: Shot, u: number, _beatDur: number, tInBeat: number,
-  heads: Record<string, Vec3>, _set: BuiltSet, seed: number, speaker: string,
+  heads: Record<string, Vec3>, set: BuiltSet, seed: number, speaker: string,
   yaws: Record<string, number> = {},
 ): Cam {
   const all = Object.values(heads);
   const fallback: Vec3 = all[0] ?? [0, 4.5, 0];
+  const bounds = set?.bounds;
+  const inside = (p: Vec3) => !bounds || (p[0] >= bounds.minX && p[0] <= bounds.maxX && p[2] <= bounds.maxZ);
   const head = (id: string | undefined): Vec3 => (id ? heads[id] : undefined) ?? fallback;
   /** Face-on shot of `id` from 0.6 rad left or right of its facing, whichever keeps other heads further off the line. */
   const faceOn = (id: string | undefined, d: number, dy: number, ty: number, fov: number): Cam => {
@@ -53,6 +55,9 @@ export function cameraAt(
     const others = Object.entries(heads).filter(([k]) => k !== id).map(([, p]) => p);
     const clear = (cam: Cam) => Math.min(Infinity, ...others.map((p) => segDist(p, cam.pos, c)));
     const [a, b] = [yaw + THREE_QUARTER, yaw - THREE_QUARTER].map((y) => facing(c, y, d, dy, ty, fov));
+    // In a room, a side whose camera would stand behind a wall loses to one that stays inside.
+    const inA = inside(a.pos), inB = inside(b.pos);
+    if (inA !== inB) return inA ? a : b;
     return clear(b) > clear(a) ? b : a;
   };
   /** Head to thighs, face-on to the speaker (follows its facing); the head sits mid-frame, below the captions. */
@@ -117,6 +122,9 @@ export function cameraAt(
   if (shot.kind === 'wide' || shot.kind === 'medium' || shot.kind === 'two_shot' || shot.kind === 'over_shoulder') {
     const k = 1 - 0.06 * easeInOut(Math.min(1, Math.max(0, u)));
     cam.pos = [0, 1, 2].map((i) => cam.target[i] + (cam.pos[i] - cam.target[i]) * k) as Vec3;
+  }
+  if (bounds) { // last resort: never stand behind a wall of the room
+    cam.pos = [Math.min(bounds.maxX, Math.max(bounds.minX, cam.pos[0])), cam.pos[1], Math.min(bounds.maxZ, cam.pos[2])];
   }
   const n = handheld(tInBeat, seed);
   return { ...cam, pos: [cam.pos[0] + n[0], cam.pos[1] + n[1], cam.pos[2] + n[2]] };

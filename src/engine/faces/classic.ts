@@ -20,27 +20,29 @@ export function drawClassicFace(ctx: CanvasRenderingContext2D, face: Face, mouth
   ctx.translate(rect.x, rect.y);
   ctx.scale(rect.w, rect.h);
 
-  const ex = 0.3, ey = 0.46;
+  // Sized for the head-front box Studio exports, which is larger than the visible face: features are bold.
+  const ex = 0.31, ey = 0.44;
   const big = face === 'shocked' || face === 'scared' ? 1.35 : 1;
   const eye = (side: number, squint = 1) => {
     ctx.fillStyle = INK;
     ctx.beginPath();
-    ctx.ellipse(0.5 + side * (0.5 - ex), ey, 0.05 * big, 0.075 * big * squint, 0, 0, Math.PI * 2);
+    ctx.ellipse(0.5 + side * (0.5 - ex), ey, 0.08 * big, 0.12 * big * squint, 0, 0, Math.PI * 2);
     ctx.fill();
   };
   const brow = (side: number, outerY: number, innerY: number) => {
     ctx.strokeStyle = INK;
-    ctx.lineWidth = 0.028;
+    ctx.lineWidth = 0.045;
     ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.moveTo(0.5 + side * 0.28, outerY);
-    ctx.lineTo(0.5 + side * 0.09, innerY);
+    ctx.moveTo(0.5 + side * 0.3, outerY - 0.03);
+    ctx.lineTo(0.5 + side * 0.08, innerY - 0.03);
     ctx.stroke();
   };
   const smile = (w: number, curve: number, open: number, dy = 0, tilt = 0) => {
-    const y = 0.74 + dy;
+    const y = 0.7 + dy;
+    w *= 1.5; curve *= 1.5; open *= 1.5;
     ctx.strokeStyle = INK;
-    ctx.lineWidth = 0.03;
+    ctx.lineWidth = 0.045;
     ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(0.5 - w, y - tilt);
@@ -64,11 +66,11 @@ export function drawClassicFace(ctx: CanvasRenderingContext2D, face: Face, mouth
     case 'crying':
       eye(-1); eye(1); brow(-1, 0.3, 0.37); brow(1, 0.3, 0.37); smile(0.13, -0.09, Math.max(talk, 0.05), 0.04);
       ctx.fillStyle = TEAR;
-      for (const side of [-1, 1]) { ctx.beginPath(); ctx.ellipse(0.5 + side * (0.5 - ex), ey + 0.17, 0.028, 0.07, 0, 0, Math.PI * 2); ctx.fill(); }
+      for (const side of [-1, 1]) { ctx.beginPath(); ctx.ellipse(0.5 + side * (0.5 - ex), ey + 0.22, 0.04, 0.1, 0, 0, Math.PI * 2); ctx.fill(); }
       break;
     case 'angry': eye(-1, 0.75); eye(1, 0.75); brow(-1, 0.28, 0.36); brow(1, 0.28, 0.36); smile(0.13, -0.03, talk, 0.03); break;
     case 'shocked': eye(-1); eye(1); brow(-1, 0.25, 0.22); brow(1, 0.25, 0.22);
-      ctx.fillStyle = MOUTH_IN; ctx.beginPath(); ctx.ellipse(0.5, 0.76, 0.07, 0.1, 0, 0, Math.PI * 2); ctx.fill(); break;
+      ctx.fillStyle = MOUTH_IN; ctx.beginPath(); ctx.ellipse(0.5, 0.74, 0.1, 0.14, 0, 0, Math.PI * 2); ctx.fill(); break;
     case 'smug': eye(-1, 0.7); eye(1, 0.7); brow(-1, 0.3, 0.33); brow(1, 0.24, 0.3); smile(0.13, 0.05, talk, 0, -0.03); break;
     case 'scared': eye(-1); eye(1); brow(-1, 0.28, 0.22); brow(1, 0.28, 0.22); smile(0.13, 0.0, Math.max(talk, 0.05)); break;
   }

@@ -122,3 +122,16 @@ test('posture: stand_up after fall rises from the lying pose to standing', () =>
   assert.ok(near(up.root.pos[1], 0) && near(joint(up, 'Root')[0], 0), `standing: y ${up.root.pos[1]} root ${joint(up, 'Root')}`);
   assert.ok(Math.max(...Object.values(up.joints).flatMap((v) => v!.map(Math.abs))) < 0.05, 'standing joints near neutral');
 });
+
+test('characters sent to the same mark at the same moment end up side by side, not inside each other', () => {
+  const beats = [beat([
+    { who: 'bacon', act: 'run_to', at: 'door', start: 0, end: 1 },
+    { who: 'lexi', act: 'run_to', at: 'door', start: 0, end: 1 },
+    { who: 'mia', act: 'run_to', at: 'door', start: 0, end: 1 },
+  ])];
+  const ends = ['bacon', 'lexi', 'mia'].map((w) => poseAt(w, 5, beats, marks, home, 1).root.pos);
+  assert.deepEqual(ends.map((p) => Math.round(p[0] * 10) / 10), [5, 6.9, 3.1]);
+  for (let i = 0; i < 3; i++) for (let j = i + 1; j < 3; j++) assert.ok(Math.hypot(ends[i][0] - ends[j][0], ends[i][2] - ends[j][2]) >= 1.8);
+  // one character alone still goes exactly to the mark
+  assert.equal(poseAt('bacon', 5, [beat([{ who: 'bacon', act: 'run_to', at: 'door', start: 0, end: 1 }])], marks, home, 1).root.pos[0], 5);
+});

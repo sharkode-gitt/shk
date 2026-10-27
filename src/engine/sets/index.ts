@@ -11,7 +11,9 @@ import { street } from './street.ts';
 
 export { buildProp } from './props.ts';
 
-export type BuiltSet = { group: THREE.Group; marks: Record<string, Vec3>; homes: Vec3[]; lights: THREE.Light[] };
+/** `bounds`: for rooms, where a camera may stand (inside the side walls, in front of the back wall). */
+export type Bounds = { minX: number; maxX: number; maxZ: number };
+export type BuiltSet = { group: THREE.Group; marks: Record<string, Vec3>; homes: Vec3[]; lights: THREE.Light[]; bounds?: Bounds };
 
 export const SET_MARKS: Record<SetName, string[]> = {
   bedroom: ['center', 'door', 'bed', 'window'],
@@ -59,5 +61,6 @@ export function buildSet(name: SetName, time: TimeOfDay): BuiltSet {
     lights.push(lamp);
   }
   group.add(...lights, sun.target);
-  return { group, marks, homes, lights };
+  // room(): side walls' inner faces at x = +-12, back wall at z = 9; keep a margin so the near plane never clips a wall.
+  return { group, marks, homes, lights, ...(indoor ? { bounds: { minX: -11.2, maxX: 11.2, maxZ: 8.2 } } : {}) };
 }
