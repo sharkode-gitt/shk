@@ -8,6 +8,7 @@ import { applyPose, JOINTS, PARTS, type Rig } from './rig.ts';
 import { buildProp } from './sets/props.ts';
 import type { Prop } from '../types.ts';
 import { buildSet } from './sets/index.ts';
+import { captionColor } from '../build/captions.ts';
 import { sceneState, type ScenePayload, type SetLayout } from './state.ts';
 
 declare global {
@@ -71,8 +72,31 @@ async function build(): Promise<(t: number) => void> {
     scene.add(cast[c.id].rig.root);
   }
 
+  // Name tags: a sprite under each character's feet that always faces the camera and keeps the same size on screen.
+  await document.fonts.load('900 64px Rubik').catch(() => []);
+  const tags: Record<string, THREE.Sprite> = {};
+  const box = new THREE.Box3();
+  const ndc = new THREE.Vector3();
+  for (const c of story.cast) {
+    const rosterId = rosterIdOf(c);
+    const name = rosterId ? payload.roster[rosterId].name : c.name ?? c.id;
+    const cv = document.createElement('canvas');
+    cv.width = 512; cv.height = 128;
+    const g = cv.getContext('2d')!;
+    g.font = '900 78px Rubik, sans-serif';
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.lineJoin = 'round';
+    g.lineWidth = 18; g.strokeStyle = '#000'; g.strokeText(name, 256, 68);
+    g.fillStyle = captionColor(c.id, story, 'say', payload.roster); g.fillText(name, 256, 68);
+    const tex = new THREE.CanvasTexture(cv);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false, transparent: true, toneMapped: false }));
+    sprite.renderOrder = 10;
+    scene.add(sprite);
+    tags[c.id] = sprite;
+  }
+
   // Held props hang from the right wrist: built once per (character, prop), shown only while held.
-  const HELD_SCALE: Partial<Record<Prop, number>> = { backpack: 0.8, gift: 0.7, phone: 1, cake: 0.6 };
+  const HELD_SCALE: Partial<Record<Prop, number>> = { backpack: 0.9, gift: 0.7, phone: 1, cake: 0.6 };
   const held: Record<string, Partial<Record<Prop, THREE.Object3D>>> = {};
   const hold = (id: string, item: Prop): THREE.Object3D => {
     const mine = (held[id] ??= {});
@@ -82,7 +106,7 @@ async function build(): Promise<(t: number) => void> {
       const sc = HELD_SCALE[item] ?? 0.7;
       o.scale.setScalar(sc);
       // hand centre relative to the wrist pivot; the prop sits just under it, as if gripped by the handle
-      o.position.set(hand.center[0] - wrist[0], hand.center[1] - wrist[1] - hand.size[1] / 2 - 0.5 * sc, hand.center[2] - wrist[2]);
+      o.position.set(hand.center[0] - wrist[0], hand.center[1] - wrist[1] - hand.size[1] / 2 - (item === 'backpack' ? -0.1 : 0.5) * sc, hand.center[2] - wrist[2]);
       o.traverse((m) => { m.castShadow = true; });
       cast[id].rig.joints.RightWrist.add(o);
       mine[item] = o;
@@ -106,6 +130,20 @@ async function build(): Promise<(t: number) => void> {
     camera.fov = s.camera.fov;
     camera.updateProjectionMatrix();
     camera.lookAt(...s.camera.target);
+    camera.updateMatrixWorld(true);
+    const unit = 2 * Math.tan((camera.fov * Math.PI) / 360); // world height of the frame at distance 1
+    for (const [id, tag] of Object.entries(tags)) {
+      cast[id].rig.root.updateMatrixWorld(true);
+      // Meshes keep their pivot at the joint, so the head's own box says where the top of the head is (hat or crown included).
+      box.setFromObject(cast[id].rig.root);
+      tag.position.set((box.min.x + box.max.x) / 2, box.min.y - 0.7, (box.min.z + box.max.z) / 2);
+      const dist = camera.position.distanceTo(tag.position);
+      const h = dist * unit * 0.04;
+      tag.scale.set(h * 4, h, 1);
+      // Only while the whole character is small on screen (close-ups are named by the caption) and the feet are in frame.
+      ndc.copy(tag.position).project(camera);
+      tag.visible = (box.max.y - box.min.y) / (dist * unit) < 0.65 && Math.abs(ndc.x) < 0.9 && ndc.y > -0.9 && ndc.y < 0.9;
+    }
     renderer.render(scene, camera);
   };
 }

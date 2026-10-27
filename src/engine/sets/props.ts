@@ -125,12 +125,20 @@ export function phone(): THREE.Group {
   box(g, 0.38, 0.02, 0.78, C.blue, 0, 0.06, 0);
   return g;
 }
+/** A schoolbag that hangs from its top handle: the origin is the grip, the body is below it, the pocket faces -z. */
 export function backpack(): THREE.Group {
   const g = new THREE.Group();
-  box(g, 1.2, 1.5, 0.7, C.orange, 0, 0, 0);
-  box(g, 1, 0.6, 0.3, C.yellow, 0, 0.2, -0.45);
-  box(g, 0.15, 1.2, 0.1, C.dark, -0.4, 0.1, 0.4);
-  box(g, 0.15, 1.2, 0.1, C.dark, 0.4, 0.1, 0.4);
+  box(g, 1.2, 1.5, 0.6, C.blue, 0, -1.75, 0); // body
+  box(g, 1.2, 0.35, 0.65, C.purple, 0, -0.6, 0); // top flap
+  box(g, 0.9, 0.65, 0.25, C.yellow, 0, -1.65, -0.4); // front pocket
+  box(g, 0.5, 0.08, 0.27, C.dark, 0, -1.2, -0.4); // pocket zip
+  box(g, 0.2, 0.9, 0.3, C.pink, -0.7, -1.5, 0); // side pockets
+  box(g, 0.2, 0.9, 0.3, C.pink, 0.7, -1.5, 0);
+  box(g, 0.14, 1.1, 0.1, C.dark, -0.35, -1.6, 0.34); // shoulder straps on the back
+  box(g, 0.14, 1.1, 0.1, C.dark, 0.35, -1.6, 0.34);
+  box(g, 0.1, 0.4, 0.1, C.dark, -0.28, -0.35, 0); // top handle
+  box(g, 0.1, 0.4, 0.1, C.dark, 0.28, -0.35, 0);
+  box(g, 0.66, 0.1, 0.1, C.dark, 0, 0.0, 0);
   return g;
 }
 export function car(color = C.red): THREE.Group {

@@ -26,7 +26,7 @@ export const ACTIONS: Record<Act, ActionFn> = {
 /** Cross-fade time between consecutive actions, seconds. */
 export const BLEND = 0.2;
 /** walk_to/run_to toward a character stops this far from them. */
-const STOP_SHORT = 1.5;
+const STOP_SHORT = 2.4;
 
 /** Actions layered (upper body only) over a held seated/lying pose instead of standing. */
 const LAYERED = new Set<Act>(['idle', 'talk', 'point', 'wave', 'hug', 'cry', 'laugh', 'facepalm', 'shocked']);

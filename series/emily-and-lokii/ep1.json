@@ -4,16 +4,16 @@
   "protagonist": "emily",
   "cast": [
     {
+      "id": "bacon",
+      "ref": "bacon"
+    },
+    {
       "id": "emily",
       "ref": "emily"
     },
     {
       "id": "lokii",
       "ref": "lokii"
-    },
-    {
-      "id": "bacon",
-      "ref": "bacon"
     }
   ],
   "scenes": [
@@ -56,7 +56,7 @@
               "who": "bacon",
               "act": "run_to",
               "face": "scared",
-              "at": "door"
+              "at": "lockers"
             }
           ]
         },

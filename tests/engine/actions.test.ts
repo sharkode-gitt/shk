@@ -65,11 +65,11 @@ test('a character with no actions stays at its last position', () => {
   assert.deepEqual(bob.root, { pos: [2, 0, -1], yaw: 0 });
 });
 
-test('walk_to a cast id stops 1.5 studs short and point turns toward them', () => {
+test('walk_to a cast id stops 2.4 studs short and point turns toward them', () => {
   const others = (who: string): Vec3 => (who === 'mom' ? [0, 0, -6] : [0, 0, 0]);
   const beats = [beat([{ who: 'emily', act: 'walk_to', at: 'mom', start: 0, end: 2 }, { who: 'emily', act: 'point', at: 'mom', start: 2, end: 3 }])];
   const p = poseAt('emily', 2.5, beats, marks, home, 1, others);
-  assert.ok(Math.hypot(p.root.pos[0], p.root.pos[2] + 4.5) < 1e-6, `pos=${p.root.pos}`);
+  assert.ok(Math.hypot(p.root.pos[0], p.root.pos[2] + 3.6) < 1e-6, `pos=${p.root.pos}`);
   assert.ok(Math.abs(p.root.yaw) < 1e-6, 'faces -Z toward mom');
 });
 

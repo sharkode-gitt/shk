@@ -89,7 +89,7 @@ export async function writeComposition(opts: CompositionOptions): Promise<string
     tweens.push(`tl.to("#${id}-in",{opacity:0,y:-16,scale:0.96,duration:${num(outDur)},ease:"power2.in"},${num(Math.max(c.start + inDur, c.end - outDur))});`);
     c.words.forEach((w, j) => {
       const ws = Math.max(w.start, c.start), we = Math.min(Math.max(w.end, ws + 0.12), c.end);
-      tweens.push(`tl.fromTo("#${id}-w${j}",{color:"#ffffff",scale:1},{color:"${HIGHLIGHT}",scale:1.14,duration:0.12,ease:"back.out(2.2)"},${num(ws)});`);
+      tweens.push(`tl.fromTo("#${id}-w${j}",{color:"#ffffff",scale:1},{color:"${HIGHLIGHT}",scale:1.08,duration:0.12,ease:"back.out(2.2)"},${num(ws)});`);
       tweens.push(`tl.to("#${id}-w${j}",{color:"#ffffff",scale:1,duration:0.14,ease:"power2.out"},${num(Math.max(we - 0.04, ws + 0.12))});`);
     });
   });
@@ -159,7 +159,7 @@ html, body { margin: 0; background: #000; }
 .cap { position: absolute; top: 21%; height: 18%; left: 6%; right: 12%; display: flex; align-items: center; justify-content: center; text-align: center; }
 .cap-in { display: flex; flex-direction: column; align-items: center; font-family: "Rubik", sans-serif; color: #fff; will-change: transform, opacity; }
 .cap .who { font-size: 40px; font-weight: 800; letter-spacing: 0.02em; line-height: 1.1; margin-bottom: 10px; -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 4px 10px rgba(0,0,0,.55); }
-.cap .line { font-size: 84px; font-weight: 900; line-height: 1.08; -webkit-text-stroke: 12px #000; paint-order: stroke fill; text-shadow: 0 7px 16px rgba(0,0,0,.6); }
+.cap .line { white-space: nowrap; font-size: 80px; font-weight: 900; line-height: 1.08; -webkit-text-stroke: 12px #000; paint-order: stroke fill; text-shadow: 0 7px 16px rgba(0,0,0,.6); }
 #end { position: absolute; left: 5%; right: 5%; top: 56%; display: flex; flex-direction: column; align-items: center; gap: 28px; font-family: "Rubik", sans-serif; color: #fff; pointer-events: none; }
 #end > :not(.end-row), .end-row > * { will-change: transform, opacity; opacity: 0; }
 .end-badge { font-size: 110px; font-weight: 900; background: #ffd166; color: #1a1a1a; padding: 6px 44px; border-radius: 28px; border: 8px solid #000; box-shadow: 0 10px 0 #000; }
@@ -173,7 +173,7 @@ html, body { margin: 0; background: #000; }
 .end-card span { font-size: 40px; font-weight: 800; line-height: 1.1; }
 .end-card.a { background: #22c55e; } .end-card.b { background: #ef2d3c; }
 .end-hint { font-size: 48px; font-weight: 900; -webkit-text-stroke: 8px #000; paint-order: stroke fill; }
-.cap .w { display: inline-block; color: #fff; margin: 0 0.06em; }
+.cap .w { display: inline-block; color: #fff; margin: 0 0.14em; }
 </style>
 </head>
 <body>

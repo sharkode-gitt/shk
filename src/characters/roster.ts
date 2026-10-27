@@ -33,6 +33,8 @@ export const CharacterSchema = z.object({
     }),
     /** Accessory labels (see parts.json) whose UVs use the top-left origin. */
     unflipped: z.array(z.string()).default([]),
+    /** Flat light added to every part, 0 to 1 (linear), for models whose textures are near black and vanish in shadow. */
+    lift: z.number().min(0).max(1).default(0),
   }),
 });
 export type CharacterInfo = z.infer<typeof CharacterSchema>;

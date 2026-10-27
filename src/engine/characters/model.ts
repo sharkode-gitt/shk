@@ -50,7 +50,7 @@ export async function loadCharacter(baseUrl: string, info: CharacterInfo): Promi
     if (!g) return;
     const file = fileOf(mesh);
     const tex = 'part' in g ? (!file || file === m.atlas ? face.texture : await textureOf(mesh, 'body')) : await textureOf(mesh, g.accessory);
-    mesh.material = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.7, metalness: 0, side: THREE.DoubleSide });
+    mesh.material = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.7, metalness: 0, side: THREE.DoubleSide, emissive: new THREE.Color(m.lift, m.lift, m.lift) });
     mesh.castShadow = mesh.receiveShadow = true;
     mesh.position.add(new THREE.Vector3(...map.offset));
     if ('part' in g) parts[g.part] = mesh;

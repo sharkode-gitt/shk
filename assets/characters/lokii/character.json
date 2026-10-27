@@ -20,6 +20,7 @@
       "skin": "#090909",
       "flipX": false
     },
-    "unflipped": []
+    "unflipped": [],
+    "lift": 0.05
   }
 }

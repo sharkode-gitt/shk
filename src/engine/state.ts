@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import type { CharacterInfo } from '../characters/roster.ts';
 import type { Face, Pose, Prop, Story, TimedBeat, Timeline, Vec3 } from '../types.ts';
 import { poseAt } from './actions/index.ts';
+import { lerpAngle, yawToward } from './actions/util.ts';
 import { cameraAt, type Cam } from './camera.ts';
 import { buildBlockCharacter } from './characters/block.ts';
 import { applyPose, type Rig } from './rig.ts';
@@ -12,6 +13,10 @@ export type SetLayout = Record<number, BuiltSet>;
 export type SceneState = { sceneIndex: number; poses: Record<string, Pose>; camera: Cam; items: Record<string, Prop | null> };
 
 const FPS = 30;
+/** Characters never come closer than this (studs, on the floor); the one that is walking steers around the one standing. */
+const PERSONAL_SPACE = 2.4;
+/** Seconds to turn toward (and away from) the person they are talking with. */
+const TURN = 0.35;
 /** Mouth flips between half and fully open this often inside a word, seconds. */
 const MOUTH_STEP = 0.09;
 
@@ -66,6 +71,63 @@ function mouthOf(who: string, t: number, beat: TimedBeat): 0 | 1 | 2 {
   return Math.floor((t - w.start) / MOUTH_STEP) % 2 === 0 ? 1 : 2;
 }
 
+/**
+ * Keeps every pair at least PERSONAL_SPACE apart. The walker gives way (sideways, so it curves around the other one
+ * instead of stopping at it); two characters that both stand or both walk share the push. Smooth: the push is zero at
+ * the moment of contact and grows with the overlap. Skipped while someone hugs.
+ */
+function separate(ids: string[], poses: Record<string, Pose>, moving: (id: string) => boolean, enabled: boolean): void {
+  if (!enabled) return;
+  const mv = Object.fromEntries(ids.map((id) => [id, moving(id)]));
+  for (let pass = 0; pass < 3; pass++) {
+    for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) {
+      const A = poses[ids[i]].root.pos, B = poses[ids[j]].root.pos;
+      const dx = A[0] - B[0], dz = A[2] - B[2], d = Math.hypot(dx, dz);
+      if (d >= PERSONAL_SPACE) continue;
+      const nx = d > 1e-6 ? dx / d : 1, nz = d > 1e-6 ? dz / d : 0;
+      const push = PERSONAL_SPACE - d;
+      const wa = mv[ids[i]] === mv[ids[j]] ? 0.5 : mv[ids[i]] ? 1 : 0;
+      // Mostly sideways (perpendicular to the line between them), a little straight apart.
+      const sx = -nz, sz = nx;
+      const mix = (w: number, sign: number): [number, number] => [w * push * (0.35 * nx + 0.65 * sx) * sign, w * push * (0.35 * nz + 0.65 * sz) * sign];
+      const [ax, az] = mix(wa, 1), [bx, bz] = mix(1 - wa, -1);
+      A[0] += ax; A[2] += az; B[0] += bx; B[2] += bz;
+    }
+  }
+}
+
+/**
+ * While a character speaks, they and the one they are speaking to (the nearest other character) turn to face each
+ * other, easing in and out over TURN seconds so the turn is never a snap. Characters that are walking keep their yaw.
+ */
+function faceEachOther(ids: string[], poses: Record<string, Pose>, beats: TimedBeat[], t: number, moving: (id: string) => boolean, others: (id: string, t: number) => Vec3): void {
+  const talks = beats.filter((b) => b.kind === 'say' && ids.includes(b.speaker)).map((b) => {
+    const from = others(b.speaker, b.start);
+    const near = ids.filter((x) => x !== b.speaker).sort((x, y) => Math.hypot(...[0, 2].map((k) => others(x, b.start)[k] - from[k])) - Math.hypot(...[0, 2].map((k) => others(y, b.start)[k] - from[k])))[0];
+    return { ...b, near };
+  });
+  const base = Object.fromEntries(ids.map((id) => [id, poses[id].root.yaw]));
+  const pos = Object.fromEntries(ids.map((id) => [id, [...poses[id].root.pos] as Vec3]));
+  for (const id of ids) {
+    if (moving(id)) continue;
+    const mine = talks.filter((b) => b.speaker === id || b.near === id).sort((a, b) => a.start - b.start);
+    // Merge back-to-back lines into one stretch, so there is no turn away between them.
+    const runs: { start: number; end: number; with: { start: number; end: number; partner: string }[] }[] = [];
+    for (const b of mine) {
+      const partner = b.speaker === id ? b.near : b.speaker;
+      const last = runs.at(-1);
+      if (last && b.start - last.end < 0.1) { last.end = Math.max(last.end, b.end); last.with.push({ start: b.start, end: b.end, partner }); }
+      else runs.push({ start: b.start, end: b.end, with: [{ start: b.start, end: b.end, partner }] });
+    }
+    const run = runs.find((r) => t >= r.start - 1e-6 && t <= r.end + 1e-6);
+    if (!run) continue;
+    const x = Math.min(1, Math.max(0, Math.min(t - run.start, run.end - t) / TURN));
+    const w = 0.85 * x * x * (3 - 2 * x); // 85%: face to face but still a little toward the camera, so faces stay visible
+    const partner = (run.with.find((p) => t >= p.start && t <= p.end) ?? run.with.at(-1)!).partner;
+    poses[id].root.yaw = lerpAngle(base[id], yawToward(pos[id], pos[partner], base[id]), w);
+  }
+}
+
 /** Everything the renderer needs at time `t`; pure apart from the cached reference rig. */
 export function sceneState(time: number, payload: ScenePayload, layout: SetLayout): SceneState {
   const { story, timeline, seed } = payload;
@@ -91,9 +153,16 @@ export function sceneState(time: number, payload: ScenePayload, layout: SetLayou
     const p = poseAt(id, t, beats, set.marks, homes[id], seed, others);
     poses[id] = { ...p, face: faceOf(id, t, timeline.beats), mouth: mouthOf(id, t, beat) };
     items[id] = itemOf(id, t, timeline.beats);
-    heads[id] = headOf(poses[id]);
-    yaws[id] = p.root.yaw;
   }
+
+  const moving = (id: string) => {
+    const a = poseAt(id, t - 1 / FPS, beats, set.marks, homes[id], seed, others).root.pos, b = poseAt(id, t + 1 / FPS, beats, set.marks, homes[id], seed, others).root.pos;
+    return Math.hypot(b[0] - a[0], b[2] - a[2]) > 1e-4;
+  };
+  const hugging = beat.actions.some((a) => a.act === 'hug');
+  separate(ids, poses, moving, !hugging);
+  if (!hugging) faceEachOther(ids, poses, beats, t, moving, others);
+  for (const id of ids) { heads[id] = headOf(poses[id]); yaws[id] = poses[id].root.yaw; }
 
   const dur = beat.end - beat.start;
   const tIn = t - beat.start;
