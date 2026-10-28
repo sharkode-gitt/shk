@@ -3,10 +3,12 @@ import type { Story, TimedBeat, WordTiming } from '../types.ts';
 
 export type CaptionChunk = { start: number; end: number; speaker: string; kind: 'narrate' | 'say'; words: WordTiming[] };
 
-const MAX_WORDS = 3;
+const MAX_WORDS = 4;
+/** A chunk also stops growing at this many characters, so it always fits on one line. */
+const MAX_CHARS = 21;
 const TAIL = 0.2;
 
-/** Karaoke chunks: <= 3 words, broken after . , ! ? ; emotion tags like [sad] are removed. */
+/** Karaoke chunks: <= 4 words and <= 21 characters, broken after . , ! ? ; emotion tags like [sad] are removed. */
 export function captionChunks(beats: TimedBeat[]): CaptionChunk[] {
   const out: CaptionChunk[] = [];
   for (const beat of beats) {
@@ -17,7 +19,9 @@ export function captionChunks(beats: TimedBeat[]): CaptionChunk[] {
     let cur: WordTiming[] = [];
     for (const w of words) {
       cur.push(w);
-      if (cur.length === MAX_WORDS || /[.,!?]["')]*$/.test(w.word)) { groups.push(cur); cur = []; }
+      const next = words[words.indexOf(w) + 1];
+      const chars = cur.reduce((n, x) => n + x.word.length + 1, 0);
+      if (cur.length === MAX_WORDS || (next && chars + next.word.length + 1 > MAX_CHARS) || /[.,!?]["')]*$/.test(w.word)) { groups.push(cur); cur = []; }
     }
     if (cur.length) groups.push(cur);
     groups.forEach((g, i) => {

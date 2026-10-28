@@ -131,16 +131,23 @@ export function phone(): THREE.Group {
 export function backpack(): THREE.Group {
   const g = new THREE.Group();
   box(g, 1.2, 1.5, 0.6, C.blue, 0, -1.75, 0); // body
-  box(g, 1.2, 0.35, 0.65, C.purple, 0, -0.6, 0); // top flap
+  const flap = cyl(g, 0.32, 1.2, C.purple, 0, 0, 0); // rounded top flap, lying along x
+  flap.rotation.z = Math.PI / 2; flap.position.set(0, -0.5, 0); flap.scale.set(1, 1, 1.0);
+  box(g, 1.2, 0.35, 0.64, C.purple, 0, -0.78, 0);
   box(g, 0.9, 0.65, 0.25, C.yellow, 0, -1.65, -0.4); // front pocket
   box(g, 0.5, 0.08, 0.27, C.dark, 0, -1.2, -0.4); // pocket zip
-  box(g, 0.2, 0.9, 0.3, C.pink, -0.7, -1.5, 0); // side pockets
-  box(g, 0.2, 0.9, 0.3, C.pink, 0.7, -1.5, 0);
+  box(g, 0.12, 0.3, 0.06, 0xffd54a, 0, -0.85, -0.34); // buckle
+  box(g, 0.34, 0.07, 0.07, 0xffd54a, 0, -0.76, -0.34);
+  for (const s of [-1, 1]) { // side bottle pockets
+    const bottle = cyl(g, 0.22, 0.8, C.pink, s * 0.72, -1.95, 0); bottle.scale.set(1, 1, 1.1);
+    cyl(g, 0.1, 0.35, 0xe8e8ee, s * 0.72, -1.15, 0);
+  }
   box(g, 0.14, 1.1, 0.1, C.dark, -0.35, -1.6, 0.34); // shoulder straps on the back
   box(g, 0.14, 1.1, 0.1, C.dark, 0.35, -1.6, 0.34);
   box(g, 0.1, 0.4, 0.1, C.dark, -0.28, -0.35, 0); // top handle
   box(g, 0.1, 0.4, 0.1, C.dark, 0.28, -0.35, 0);
   box(g, 0.66, 0.1, 0.1, C.dark, 0, 0.0, 0);
+  box(g, 0.4, 0.28, 0.04, 0xffffff, 0.3, -1.1, -0.32); // name tag
   return g;
 }
 export function car(color = C.red): THREE.Group {
@@ -200,4 +207,4 @@ export function house(parent: THREE.Object3D, x: number, z: number, wallColor: n
   put(parent, g, x, 0, z);
 }
 
-export type Layout = { marks: Record<string, [number, number, number]>; homes: [number, number, number][] };
+export type Layout = { marks: Record<string, [number, number, number]>; homes: [number, number, number][]; /** Moves things in the set at time t (birds, clouds...). */ tick?: (t: number) => void };

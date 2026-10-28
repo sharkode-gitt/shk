@@ -46,6 +46,14 @@ export function cameraAt(
   /** Heads and yaws once the beat has settled: face-on shots are framed from them, so the camera neither flips sides nor whips while a character turns. */
   lock?: { heads: Record<string, Vec3>; yaws: Record<string, number> },
 ): Cam {
+  // Long beats get a second angle at 55%: a wide opens up to a two-shot, a two-shot to a close-up of the second person, a medium to a close-up.
+  if (_beatDur > 3.4 && u > 0.55) {
+    const ids = Object.keys(heads);
+    const alt: Shot | undefined = shot.kind === 'wide' && ids.length >= 2 ? { kind: 'two_shot', targets: [ids[0], ids[1]] }
+      : shot.kind === 'two_shot' ? { kind: 'closeup', targets: [shot.targets[1]] }
+      : shot.kind === 'medium' && speaker ? { kind: 'closeup', targets: [speaker] } : undefined;
+    if (alt) { shot = alt; u = (u - 0.55) / 0.45; }
+  }
   const all = Object.values(heads);
   const fallback: Vec3 = all[0] ?? [0, 4.5, 0];
   const bounds = set?.bounds;

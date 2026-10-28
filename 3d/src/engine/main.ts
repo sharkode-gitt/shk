@@ -117,9 +117,13 @@ async function build(): Promise<(t: number) => void> {
   return (t: number) => {
     const s = sceneState(t, payload, layout);
     for (const [i, set] of Object.entries(layout)) set.group.visible = Number(i) === s.sceneIndex;
+    layout[s.sceneIndex].tick?.(t);
     scene.background = new THREE.Color(SKY[timeline.scenes[s.sceneIndex].time]);
     for (const [id, c] of Object.entries(cast)) c.rig.root.visible = id in s.poses; // only this scene's cast is on screen
     for (const [id, pose] of Object.entries(s.poses)) {
+      // A model with a painted-on face has no mouth to animate: its head nods in time with the speech instead.
+      const fixedFace = payload.roster[rosterIdOf(story.cast.find((c) => c.id === id) ?? {}) ?? '']?.model.face.style === 'none';
+      if (fixedFace && pose.mouth) { const nk = pose.joints.Neck ?? [0, 0, 0]; pose.joints = { ...pose.joints, Neck: [nk[0] + 0.09 * pose.mouth, nk[1], nk[2]] }; }
       applyPose(cast[id].rig, pose);
       cast[id].face.set(pose.face, pose.mouth);
     }

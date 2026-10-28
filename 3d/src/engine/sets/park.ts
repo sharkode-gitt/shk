@@ -9,7 +9,23 @@ function balloon(g: THREE.Group, x: number, z: number, h: number, color: number)
   b.scale.y = 1.25;
 }
 
+/** A small bird: a body and two wings that flap. */
+function bird(g: THREE.Group, color: number): { root: THREE.Group; wings: THREE.Mesh[] } {
+  const root = new THREE.Group();
+  const body = sphere(root, 0.35, color, 0, 0, 0); body.scale.set(1.3, 0.8, 0.8); body.castShadow = false;
+  const wings: THREE.Mesh[] = [];
+  for (const s of [-1, 1]) {
+    const w = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.05, 0.4), new THREE.MeshStandardMaterial({ color, roughness: 0.8 }));
+    w.position.set(s * 0.55, 0, 0); w.geometry.translate(s * 0.4, 0, 0); w.position.x = s * 0.1;
+    root.add(w); wings.push(w);
+  }
+  g.add(root);
+  return { root, wings };
+}
+
 export function park(g: THREE.Group): Layout {
+  const flock = [[0x2f6fb5, 16, 14, 24, 0.0], [0xe2574c, 12, 17, 30, 2.1], [0xf2c14e, 20, 12, 20, 4.2]].map(([c, r, y, z, ph]) => ({ ...bird(g, c as number), r: r as number, y: y as number, z: z as number, ph: ph as number }));
+  const cloudsToMove: THREE.Mesh[] = [];
   const grass = floor(g, 240, 240, 0xffffff, grassTexture(), 0.95);
   (grass.material as THREE.MeshStandardMaterial).map!.repeat.set(30, 30); // one repeat = 8 studs
   // sky, hills and clouds: the park never ends in a flat horizon
@@ -23,7 +39,7 @@ export function park(g: THREE.Group): Layout {
   for (const [x, y, z, s] of [[-30, 46, 100, 1.2], [38, 54, 110, 1.5], [90, 40, 95, 1], [-80, 50, 105, 1.3]] as const) {
     for (const [dx, dy, r] of [[0, 0, 6], [6, -1, 5], [-6, -1, 4.5], [2, 2, 4.5]] as const) {
       const c = sphere(g, r * s, 0xffffff, x + dx * s, y + dy * s, z);
-      c.scale.y = 0.6; c.castShadow = false;
+      c.scale.y = 0.6; c.castShadow = false; cloudsToMove.push(c);
       (c.material as THREE.MeshStandardMaterial).emissive.set(0x9db7cc);
     }
   }
@@ -57,8 +73,20 @@ export function park(g: THREE.Group): Layout {
     flag.rotation.z = Math.PI; flag.position.set(x, y, 11); g.add(flag);
   }
   cyl(g, 0.12, 8, C.wood, 1.4, 0, 11); cyl(g, 0.12, 8, C.wood, 15.8, 0, 11);
+  const cloudStart = cloudsToMove.map((c) => c.position.x);
+  const tick = (t: number) => {
+    flock.forEach((b) => {
+      const a = t * 0.35 + b.ph;
+      b.root.position.set(Math.cos(a) * b.r, b.y + Math.sin(a * 2) * 0.8, b.z + Math.sin(a) * 6);
+      b.root.rotation.y = -a + Math.PI / 2;
+      const flap = Math.sin(t * 14 + b.ph) * 0.7;
+      b.wings[0].rotation.z = flap; b.wings[1].rotation.z = -flap;
+    });
+    cloudsToMove.forEach((c, i) => { c.position.x = cloudStart[i] + ((t * 0.5) % 400); if (c.position.x > 200) c.position.x -= 400; });
+  };
   return {
     marks: { center: [0, 0, 3], door: [15, 0, 4], bench: [-9, 0, 5.5], tree: [8, 0, 7.5], entry: [9, 0, 3], exit: [-11, 0, 3] },
     homes: [[-6, 0, 3], [-2, 0, 3], [2, 0, 3], [6, 0, 3]],
+    tick,
   };
 }

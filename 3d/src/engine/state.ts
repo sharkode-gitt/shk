@@ -175,6 +175,15 @@ function compute(time: number, payload: ScenePayload, layout: SetLayout, lock?: 
   for (const id of ids) {
     if (items[id] && !moving(id)) poses[id].joints = { ...poses[id].joints, RightShoulder: [0.08, 0, 0.1], RightElbow: [0.22, 0, 0] };
   }
+  // The one being talked to nods now and then while the other speaks (standing still, not gesturing).
+  if (beat.kind === 'say') {
+    for (const id of ids) {
+      if (id === beat.speaker || moving(id)) continue;
+      const nod = Math.max(0, Math.sin((2 * Math.PI * (t - beat.start)) / 1.9 + (seed % 7))) ** 3;
+      const neck = poses[id].joints.Neck ?? [0, 0, 0];
+      poses[id].joints = { ...poses[id].joints, Neck: [neck[0] + 0.11 * nod, neck[1], neck[2]] };
+    }
+  }
   const hugging = beat.actions.some((a) => a.act === 'hug');
   separate(ids, poses, moving, !hugging);
   if (!hugging) faceEachOther(ids, poses, beats, t, moving, others);

@@ -38,6 +38,19 @@ export class Paint {
     for (let j = 0; j < h; j++) { const t = j / Math.max(1, h - 1); this.rect(x, y + j, w, 1, [top[0] + (bottom[0] - top[0]) * t, top[1] + (bottom[1] - top[1]) * t, top[2] + (bottom[2] - top[2]) * t], k); }
     return this;
   }
+  /** Bilinear upscale by an integer factor: the hard pixel steps of shapes drawn at low resolution become soft, anti-aliased edges. */
+  smooth(f: number): Paint {
+    const o = new Paint(this.w * f, this.h * f);
+    for (let y = 0; y < o.h; y++) {
+      const sy = Math.min(this.h - 1.001, Math.max(0, (y + 0.5) / f - 0.5)), y0 = Math.floor(sy), fy = sy - y0;
+      for (let x = 0; x < o.w; x++) {
+        const sx = Math.min(this.w - 1.001, Math.max(0, (x + 0.5) / f - 0.5)), x0 = Math.floor(sx), fx = sx - x0;
+        const i00 = (y0 * this.w + x0) * 4, i10 = i00 + 4, i01 = i00 + this.w * 4, i11 = i01 + 4, j = (y * o.w + x) * 4;
+        for (let k = 0; k < 3; k++) o.data[j + k] = this.data[i00 + k] * (1 - fx) * (1 - fy) + this.data[i10 + k] * fx * (1 - fy) + this.data[i01 + k] * (1 - fx) * fy + this.data[i11 + k] * fx * fy;
+      }
+    }
+    return o;
+  }
   noise(amount: number, seed = 1): this {
     for (let y = 0; y < this.h; y++) for (let x = 0; x < this.w; x++) { const n = (hash(x, y, seed) - 0.5) * amount; const i = (y * this.w + x) * 4; for (let k = 0; k < 3; k++) this.data[i + k] = clamp(this.data[i + k] + n); }
     return this;
@@ -111,7 +124,7 @@ export function hallwayWallTexture(): THREE.DataTexture {
   poster(15.2 * PX, 2.6 * PX, 3.2 * PX, 0x5b8def, 0x7e63c8);
   poster(18.4 * PX, 2.6 * PX, 3.2 * PX, 0xf08a4b, 0xe2574c);
   // soft vignette toward the top and the floor so the wall is not flat
-  return p.noise(5, 9).texture();
+  return p.smooth(2).noise(4, 9).texture();
 }
 
 /** A soft rectangle of sunlight for floors and walls: additive, transparent, no depth write. */
@@ -200,5 +213,5 @@ export function classroomWallTexture(): THREE.DataTexture {
   p.circle(cx, cy, 1.0 * PX + 5, [60, 50, 45]).circle(cx, cy, 1.0 * PX, [252, 252, 250]).rect(cx - 2, cy - 36, 4, 36, [40, 40, 50]).rect(cx, cy - 2, 28, 4, [40, 40, 50]).circle(cx, cy, 5, [200, 50, 50]);
   // alphabet strip
   for (let i = 0; i < 24; i++) { const x = 0.4 * PX + i * 0.96 * PX; p.rect(x, top(12.3), 0.78 * PX, 0.8 * PX, rgb([0xf28ab2, 0xf2c14e, 0x6ec1e4, 0x8fdc8f][i % 4])).rect(x + 14, top(12.3) + 12, 6, 24, [255, 255, 255], 0.9).rect(x + 14, top(12.3) + 12, 18, 6, [255, 255, 255], 0.9); }
-  return p.noise(4, 21).texture();
+  return p.smooth(2).noise(3, 21).texture();
 }

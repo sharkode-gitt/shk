@@ -10,8 +10,8 @@ const mk = (words: string[], t0 = 1, speaker = 'mom', kind: 'narrate' | 'say' = 
 };
 const texts = (b: TimedBeat) => captionChunks([b]).map((c) => c.words.map((w) => w.word));
 
-test('groups up to 3 words and keeps punctuation attached', () =>
-  assert.deepEqual(texts(mk(['Mom', 'said', "it's", 'MY', 'party', 'now!'])), [['Mom', 'said', "it's"], ['MY', 'party', 'now!']]));
+test('groups up to 4 words / 21 characters and keeps punctuation attached', () =>
+  assert.deepEqual(texts(mk(['Mom', 'said', "it's", 'MY', 'party', 'now!'])), [['Mom', 'said', "it's", 'MY'], ['party', 'now!']]));
 
 test('breaks after a comma', () =>
   assert.deepEqual(texts(mk(['Well,', 'I', 'think', 'so'])), [['Well,'], ['I', 'think', 'so']]));

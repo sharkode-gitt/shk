@@ -13,7 +13,7 @@ export { buildProp } from './props.ts';
 
 /** `bounds`: for rooms, where a camera may stand (inside the side walls, in front of the back wall). */
 export type Bounds = { minX: number; maxX: number; maxZ: number };
-export type BuiltSet = { group: THREE.Group; marks: Record<string, Vec3>; homes: Vec3[]; lights: THREE.Light[]; bounds?: Bounds };
+export type BuiltSet = { group: THREE.Group; marks: Record<string, Vec3>; homes: Vec3[]; lights: THREE.Light[]; bounds?: Bounds; tick?: (t: number) => void };
 
 export const SET_MARKS: Record<SetName, string[]> = {
   bedroom: ['center', 'door', 'bed', 'window'],
@@ -40,7 +40,7 @@ const LIGHT: Record<TimeOfDay, { color: number; pos: Vec3; sun: number; hemi: nu
 export function buildSet(name: SetName, time: TimeOfDay): BuiltSet {
   const group = new THREE.Group();
   group.name = name;
-  const { marks, homes } = BUILDERS[name](group);
+  const { marks, homes, tick } = BUILDERS[name](group);
   const L = LIGHT[time];
   const indoor = INDOOR.has(name);
 
@@ -66,7 +66,13 @@ export function buildSet(name: SetName, time: TimeOfDay): BuiltSet {
     lights.push(fill);
     group.add(fill.target);
   }
+  // A warm back light (no shadows) gives hats and shoulders an edge, so dark clothes separate from the background.
+  const rim = new THREE.DirectionalLight(0xffe2b0, 1.1);
+  rim.position.set(-6, 14, 30);
+  rim.target.position.set(0, 3, 0);
+  lights.push(rim);
+  group.add(rim.target);
   group.add(...lights, sun.target);
   // room(): side walls' inner faces at x = +-12, back wall at z = 9; keep a margin so the near plane never clips a wall.
-  return { group, marks, homes, lights, ...(indoor ? { bounds: { minX: -11.2, maxX: 11.2, maxZ: 8.2 } } : {}) };
+  return { group, marks, homes, lights, ...(tick ? { tick } : {}), ...(indoor ? { bounds: { minX: -11.2, maxX: 11.2, maxZ: 8.2 } } : {}) };
 }

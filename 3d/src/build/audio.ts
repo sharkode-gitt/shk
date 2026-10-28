@@ -95,6 +95,17 @@ export function sfxEvents(timeline: Timeline, map: Record<string, string | strin
       if (file) out.push({ file, at: a.start, id: `act:${beat.id}:${i}` });
     });
   }
+  // Footsteps: one soft step every 0.46 s while walking and every 0.3 s while running, between the first and last stride.
+  for (const beat of timeline.beats) {
+    beat.actions.forEach((a, i) => {
+      if (a.act !== 'walk_to' && a.act !== 'run_to') return;
+      const gap = a.act === 'run_to' ? 0.3 : 0.46;
+      for (let n = 0, at = a.start + 0.2; at < a.end - 0.15; n++, at += gap) {
+        const file = take('step');
+        if (file) out.push({ file, at, id: `step:${beat.id}:${i}:${n}` });
+      }
+    });
+  }
   for (const s of timeline.scenes.slice(1)) {
     const file = take('cut');
     if (file) out.push({ file, at: s.start, id: `cut:${s.index}` });
