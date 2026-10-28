@@ -114,9 +114,11 @@ export function cake(): THREE.Group {
 export function gift(): THREE.Group {
   const g = new THREE.Group();
   box(g, 1.2, 1, 1.2, C.purple, 0, 0, 0);
-  box(g, 1.25, 1.02, 0.2, C.yellow, 0, 0, 0);
+  box(g, 1.25, 1.02, 0.2, C.yellow, 0, 0, 0); // ribbon
   box(g, 0.2, 1.02, 1.25, C.yellow, 0, 0, 0);
-  box(g, 0.5, 0.25, 0.25, C.yellow, 0, 1, 0);
+  box(g, 1.3, 0.2, 1.3, 0xb08cf0, 0, 0.95, 0); // lid
+  for (const s of [-1, 1]) { const b = sphere(g, 0.3, C.yellow, s * 0.28, 1.3, 0); b.scale.set(1.2, 0.8, 0.7); b.rotation.z = s * 0.5; } // bow loops
+  sphere(g, 0.16, C.yellow, 0, 1.2, 0);
   return g;
 }
 export function phone(): THREE.Group {

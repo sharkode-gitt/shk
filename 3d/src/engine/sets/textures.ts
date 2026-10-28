@@ -126,3 +126,79 @@ export function sunPatch(w: number, h: number, color = 0xfff0c0, opacity = 0.35)
   m.renderOrder = 2;
   return m;
 }
+
+/** Wooden floor boards: 8 boards of 16 px, each a slightly different tone, with dark seams and a few knots. */
+export function plankTexture(base = 0xd9a066, size = 128): THREE.DataTexture {
+  const p = new Paint(size, size), c = rgb(base), rows = 8, h = size / rows;
+  for (let r = 0; r < rows; r++) {
+    const k = 0.88 + hash(r, 1, 4) * 0.22, off = Math.floor(hash(r, 2, 4) * size);
+    p.rect(0, r * h, size, h, mul(c, k));
+    for (let x = 0; x < size; x += 3) p.rect(x, r * h + 2 + hash(x, r, 5) * (h - 4), 2 + hash(x, r, 6) * 5, 1, mul(c, k * 0.86), 0.5); // grain
+    p.rect(off, r * h, 2, h, mul(c, 0.55)); // end seam
+    p.rect(0, r * h + h - 2, size, 2, mul(c, 0.55)); // long seam
+  }
+  return p.noise(6, 8).texture();
+}
+
+/** Mown grass: wide light and dark stripes plus speckles. One repeat = 8 studs. */
+export function grassTexture(light = 0x7fcf62, dark = 0x6cc254, size = 128): THREE.DataTexture {
+  const p = new Paint(size, size, rgb(light));
+  for (let i = 0; i < 4; i++) p.rect(0, i * (size / 4), size, size / 8, rgb(dark));
+  for (let i = 0; i < 260; i++) p.rect(hash(i, 1, 11) * size, hash(i, 2, 11) * size, 2, 3, mul(rgb(dark), 0.82 + hash(i, 3, 11) * 0.2), 0.7);
+  for (let i = 0; i < 30; i++) p.circle(hash(i, 4, 11) * size, hash(i, 5, 11) * size, 1.4, [255, 255, 255], 0.55); // tiny flowers
+  return p.noise(5, 12).texture();
+}
+
+/** Paving stones for a park path: light slabs with grout, 4 x 4 per repeat. */
+export function pavingTexture(size = 128): THREE.DataTexture {
+  const p = new Paint(size, size, rgb(0xcfc9bb)), t = size / 4;
+  for (let y = 0; y < 4; y++) for (let x = 0; x < 4; x++) p.rect(x * t, y * t, t, t, mul(rgb(0xd8d2c4), 0.92 + hash(x, y, 13) * 0.14));
+  for (let i = 0; i < 4; i++) p.rect(0, i * t, size, 2, rgb(0x9a9486)).rect(i * t, 0, 2, size, rgb(0x9a9486));
+  return p.noise(6, 14).texture();
+}
+
+/** Vertical sky gradient for a dome (`bottom` at the horizon). */
+export function skyTexture(top: number, bottom: number): THREE.DataTexture {
+  const p = new Paint(4, 128);
+  p.vgrad(0, 0, 4, 128, rgb(top), rgb(bottom));
+  return p.texture();
+}
+
+/**
+ * The back wall of a classroom, 24 x 14 studs at 48 px per stud: green chalkboard with a doodle, shelves of books, a world-map
+ * poster, an alphabet strip, a clock and two windows with a sky and tree outside.
+ */
+export function classroomWallTexture(): THREE.DataTexture {
+  const PX = 48, W = 24 * PX, H = 14 * PX, p = new Paint(W, H);
+  const top = (y: number) => H - y * PX;
+  p.vgrad(0, 0, W, H, rgb(0xeaf3f7), rgb(0xcfe2ea));
+  p.rect(0, top(2.2), W, 2.2 * PX, rgb(0xb9d3dd)).rect(0, top(2.2), W, 5, rgb(0xffffff)); // wainscot and rail
+  // chalkboard
+  const bx = 6 * PX, bw = 12 * PX, by = top(8.6), bh = 5 * PX;
+  p.rect(bx - 12, by - 12, bw + 24, bh + 24, rgb(0x8a5a2b)).rect(bx, by, bw, bh, rgb(0x2f5d50)).vgrad(bx, by, bw, bh, [255, 255, 255], [0, 0, 0], 0.06);
+  for (let i = 0; i < 3; i++) p.rect(bx + 40, by + 50 + i * 40, bw * (0.7 - i * 0.18), 5, [235, 240, 235], 0.8); // chalk lines
+  p.circle(bx + bw - 120, by + 110, 38, [255, 226, 120], 0.9).rect(bx + bw - 124, by + 160, 8, 56, [235, 240, 235], 0.8); // doodle: sun and stem
+  for (let i = 0; i < 5; i++) p.rect(bx + 40 + i * 64, by + bh - 70, 40, 5, [235, 240, 235], 0.8).rect(bx + 40 + i * 64 + 18, by + bh - 100, 5, 35, [235, 240, 235], 0.8);
+  p.rect(bx, by + bh, bw, 14, rgb(0xa06f3a)); // chalk tray
+  for (let i = 0; i < 4; i++) p.rect(bx + 120 + i * 60, by + bh - 8, 40, 8, [250, 250, 245]); // chalk
+  // windows with sky and a tree
+  for (const wx of [1.2, 19.4]) {
+    const x = wx * PX, w = 3.4 * PX, y = top(10.6), h = 5.4 * PX;
+    p.rect(x - 8, y - 8, w + 16, h + 16, [255, 255, 255]).vgrad(x, y, w, h, rgb(0x8fd3ff), rgb(0xdff3ff)).circle(x + w * 0.5, y + h * 0.62, 70, rgb(0x66bb6a)).rect(x + w * 0.5 - 8, y + h * 0.62, 16, 110, rgb(0x8a5a2b));
+    p.rect(x + w / 2 - 3, y, 6, h, [255, 255, 255]).rect(x, y + h / 2 - 3, w, 6, [255, 255, 255]);
+  }
+  // shelves under the windows? bookshelf at the left of the board
+  const sx = 4.3 * PX, sy = top(6.4);
+  p.rect(sx, sy, 1.4 * PX, 4.4 * PX, rgb(0x9a6b3a));
+  for (let s = 0; s < 3; s++) { const yy = sy + 14 + s * 1.4 * PX; p.rect(sx + 4, yy + 1.2 * PX - 6, 1.4 * PX - 8, 6, rgb(0x6d4a24)); for (let b = 0; b < 5; b++) p.rect(sx + 8 + b * 11, yy + 8, 9, 1.2 * PX - 14, rgb([0xe2574c, 0x4a90e2, 0xf2c14e, 0x7e63c8, 0x3fae7a][b])); }
+  // world map poster
+  const mx = 18.6 * PX, my = top(7.3);
+  p.rect(mx - 6, my - 6, 2.4 * PX + 12, 1.7 * PX + 12, [255, 255, 255]).rect(mx, my, 2.4 * PX, 1.7 * PX, rgb(0x6ec1e4));
+  for (const [cx, cy, r] of [[0.6, 0.6, 22], [1.2, 0.5, 18], [1.7, 1.0, 26], [0.9, 1.2, 14]] as const) p.circle(mx + cx * PX, my + cy * PX, r, rgb(0x66bb6a));
+  // clock
+  const cx = 12 * PX, cy = top(10.4);
+  p.circle(cx, cy, 1.0 * PX + 5, [60, 50, 45]).circle(cx, cy, 1.0 * PX, [252, 252, 250]).rect(cx - 2, cy - 36, 4, 36, [40, 40, 50]).rect(cx, cy - 2, 28, 4, [40, 40, 50]).circle(cx, cy, 5, [200, 50, 50]);
+  // alphabet strip
+  for (let i = 0; i < 24; i++) { const x = 0.4 * PX + i * 0.96 * PX; p.rect(x, top(12.3), 0.78 * PX, 0.8 * PX, rgb([0xf28ab2, 0xf2c14e, 0x6ec1e4, 0x8fdc8f][i % 4])).rect(x + 14, top(12.3) + 12, 6, 24, [255, 255, 255], 0.9).rect(x + 14, top(12.3) + 12, 18, 6, [255, 255, 255], 0.9); }
+  return p.noise(4, 21).texture();
+}

@@ -184,5 +184,7 @@ function compute(time: number, payload: ScenePayload, layout: SetLayout, lock?: 
   const tIn = t - beat.start;
   const u = Math.min(1, Math.max(0, dur > 0 ? tIn / dur : 1));
   const camera = cameraAt(beat.shot, u, dur, tIn, heads, set, seed, beat.speaker, yaws, lock);
+  // A shouted line hits with a quick punch-in: the lens starts 12% tighter and relaxes over a third of a second.
+  if (beat.kind === 'say' && beat.words.some((w) => /!/.test(w.word)) && tIn < 0.35) { const k = tIn / 0.35; camera.fov *= 0.88 + 0.12 * (1 - (1 - k) ** 3); }
   return { sceneIndex: scene.index, poses, camera, items, heads, yaws, beatStart: startFrame(beat.start) / FPS, beatEnd: beat.end };
 }

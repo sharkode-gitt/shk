@@ -23,7 +23,7 @@ test('Review Focus 3: the last frame before a cut is the previous scene, the cut
   assert.equal(on.sceneIndex, 1);
   // The camera reads the same boundary: push_in (fov 35) closes scene 0, orbit (fov 40) opens scene 1.
   assert.equal(before.camera.fov, 35);
-  assert.equal(on.camera.fov, 40);
+  assert.ok(on.camera.fov <= 40 && on.camera.fov >= 40 * 0.88 - 0.01, `fov ${on.camera.fov}`); // a shouted first line opens with a punch-in
 });
 
 test("the speaker's mouth moves mid-word and is closed in the pause between beats", () => {

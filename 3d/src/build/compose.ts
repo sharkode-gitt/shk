@@ -94,6 +94,17 @@ export async function writeComposition(opts: CompositionOptions): Promise<string
     });
   });
 
+  // --- title card: part number and title over the first seconds, then it slides away ---
+  const part = story.episode ? `<div class="t-part">PART ${story.episode.number}</div>` : '';
+  const titleHtml = `<div id="title">${part}<div class="t-name">${esc(story.title)}</div></div>`;
+  tweens.push('tl.fromTo("#title",{opacity:0,y:-30},{opacity:1,y:0,duration:0.35,ease:"back.out(1.6)"},0.15);');
+  tweens.push('tl.to("#title",{opacity:0,y:-24,duration:0.3,ease:"power2.in"},2.7);');
+  // --- quick dip to black at every scene change, so a new place never pops in ---
+  timeline.scenes.slice(1).forEach((sc) => {
+    tweens.push(`tl.to("#dip",{opacity:1,duration:0.1,ease:"power1.in"},${num(Math.max(0, sc.start - 0.1))});`);
+    tweens.push(`tl.to("#dip",{opacity:0,duration:0.25,ease:"power1.out"},${num(sc.start)});`);
+  });
+
   // --- end card: from the last beat to the end, below the captions and above the unsafe bottom band ---
   const endHtml: string[] = [];
   const cta = story.cta;
@@ -155,6 +166,10 @@ html, body { margin: 0; background: #000; }
 #stage { position: absolute; inset: 0; }
 #stage canvas { width: 100%; height: 100%; display: block; filter: contrast(1.07) saturate(1.12); }
 #vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 46%, rgba(0,0,0,0) 52%, rgba(10,8,20,.34) 100%); }
+#dip { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; }
+#title { position: absolute; left: 0; right: 0; top: 9%; display: flex; flex-direction: column; align-items: center; gap: 6px; font-family: "Rubik", sans-serif; opacity: 0; pointer-events: none; }
+.t-part { font-size: 40px; font-weight: 800; letter-spacing: .18em; color: #ffd166; -webkit-text-stroke: 8px #000; paint-order: stroke fill; }
+.t-name { font-size: 62px; font-weight: 900; color: #fff; text-align: center; padding: 0 60px; line-height: 1.05; -webkit-text-stroke: 12px #000; paint-order: stroke fill; text-shadow: 0 6px 14px rgba(0,0,0,.55); }
 #captions { position: absolute; inset: 0; pointer-events: none; }
 /* The band is centred on 30% of the height without a CSS transform, so GSAP owns every transform of the inner block. */
 .cap { position: absolute; top: 21%; height: 18%; left: 6%; right: 12%; display: flex; align-items: center; justify-content: center; text-align: center; }
@@ -181,6 +196,8 @@ html, body { margin: 0; background: #000; }
 <div id="story" data-composition-id="story" data-start="0" data-width="${W}" data-height="${H}" data-duration="${duration}">
 <div id="stage"></div>
 <div id="vignette"></div>
+<div id="dip"></div>
+${titleHtml}
 <div id="captions" data-track-kind="captions">
 ${capHtml.join('\n')}
 </div>

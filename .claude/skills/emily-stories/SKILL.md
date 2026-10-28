@@ -69,7 +69,10 @@ Each scene lists `cast` (1 or 2 ids; the first stands on the left): only those c
 characters per scene**. **A narrator (Emily's voice-over) line comes before every character line**, then the character speaks.
 Episodes are 2 or 3 scenes (ep1 hallway: Lokii+Bacon, then Emily+Lokii; ep2 classroom: Emily+Lokii, then Lexi+Lokii; ep3 hallway: Bacon+Emily,
 then Lokii+Bacon; ep4 park: Lokii+Bacon, Emily+Bacon, Emily+Lokii), 27-35 s each, all four rendered. Hallway has the rebuilt painted-wall set;
-the classroom and the park are still plain (next job: bring them to the hallway's level, see `src/engine/sets/textures.ts`).
+all three sets are now rebuilt with painted textures (`src/engine/sets/textures.ts`: hallway wall, classroom wall, planks, tiles, grass, paving, sky).
+Also since the redo: a scene `starts` map puts a character on a mark (`entry` = screen-left, `exit` = screen-right) so entrances and exits are real walks;
+walks never snap to the camera; face-on shots are framed from the settled pose of the beat; shouted lines get a punch-in; the composition has a title card
+(PART n + title, first 3 s) and a dip to black at scene changes; `tools/spacing.ts <job>` prints the closest approach and the biggest camera step.
 
 ## Known issues / next steps
 

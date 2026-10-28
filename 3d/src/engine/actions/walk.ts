@@ -33,7 +33,8 @@ const mover = (stride: number, leg: number, arm: number, bounce: number, lean: n
       LeftAnkle: [0.25 * amp * Math.max(0, s), 0, 0], RightAnkle: [0.25 * amp * Math.max(0, -s), 0, 0],
       LeftShoulder: [-arm * amp * s, 0, 0], RightShoulder: [arm * amp * s, 0, 0],
       LeftElbow: [0.25 * amp + 0.35 * amp * Math.max(0, s), 0, 0], RightElbow: [0.25 * amp + 0.35 * amp * Math.max(0, -s), 0, 0],
-      Waist: [-lean * amp, 0, 0],
+      Waist: [-lean * amp, 0.14 * amp * s, 0],
+      Root: [0, 0, 0.03 * amp * s],
       Neck: [lean * 0.6 * amp, 0, 0],
     },
   };
