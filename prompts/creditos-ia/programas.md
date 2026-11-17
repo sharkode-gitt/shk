@@ -1,5 +1,7 @@
 # Programas de créditos de IA e nuvem: levantamento de 17/11/2026
 
+> Para todos os outros benefícios (ferramentas para estudante, outros provedores de IA, SaaS e programas brasileiros), veja [varredura-completa.md](varredura-completa.md).
+
 Lista de partida para o [prompt adaptado](prompt-adaptado.md). Os valores mudam com frequência:
 **confira sempre o link oficial antes de se inscrever.**
 
