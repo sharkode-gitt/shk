@@ -14,6 +14,7 @@ Muitos sites estavam bloqueados na rede da pesquisa, então quase tudo é 🔎. 
 | Prazo | O quê | Para quem |
 |---|---|---|
 | **27/11 e 09/12/2026** | FAPEMIG 018/2026 HubMG Gov (inovação aberta para o setor público, R$20 mi no total): proposta ao órgão até 27/11; submissão final até 09/12 | PJ **de MG** |
+| **28/11/2026** | SIDI/Softex CTE-IA: capacitação de 7 meses em IA; não está claro se dá créditos ⚠️ (sidi.org.br/cte-ia) | a confirmar |
 | **30/11/2026** | BNDES Garagem ciclo 3 (aceleração grátis, sem equity, até R$1 mi em prêmios; 50 vagas Criação + 50 Tração) — confirmado | PJ (Tração) ou equipe com ideia (Criação) |
 | **30/11/2026** | Inova Startups 6ª ed. (Sebrae/SC + Bossa): até R$800 mil, mas é **investimento** (equity) — confirmado | PJ de qualquer estado |
 | **01/12/2026** | Hackathon lablab × AMD AI Academy Challenge (online, individual, prêmios de US$5 mil) ⚠️ | Qualquer pessoa |
@@ -30,26 +31,27 @@ Muitos sites estavam bloqueados na rede da pesquisa, então quase tudo é 🔎. 
 
 | Programa | O que ganha | Valor | Requisito | Brasil? | Link | Conf. |
 |---|---|---|---|---|---|---|
-| **Google AI Plus** | Gemini com limites 2x, 400 GB | 12 meses grátis; resgate até **31/12/2026**; depois cobra (valor diverge: R$24,99 ou R$49,99) | 18+, SheerID, cartão | Sim | gemini.google.com/students | 🔎 |
+| **Google AI Plus** | Gemini com limites 2x, 400 GB | 12 meses grátis; resgate até **31/12/2026**; depois renova sozinho a R$24,99/mês. Desde 22/09/2026 inclui fila prioritária de GPU no Colab | 18+, SheerID, cartão | Sim | one.google.com/ai-student | 🔎 |
+| **Google AI Pro + YouTube Premium** (estudante) | AI Pro + YouTube Premium + 5 TB | **R$35,99/mês** (70–75% off) por até 4 anos, revalidando todo ano | SheerID | Sim | blog.youtube (back to school 2026) | 🔎 |
 | **GitHub Student Developer Pack** | GitHub Pro + ~75 parceiros (abaixo) | grátis, verificação vale ~2 anos | e-mail acadêmico ou comprovante | Sim | education.github.com/pack | ✅ |
-| ↳ **Copilot Student** | autocomplete ilimitado, chat, agente, 200 créditos de IA/mês (modo Auto, sem escolher Claude/GPT) | grátis | Pack (cadastros reabrindo aos poucos desde 16/06/2026) | Sim | education.github.com/pack | ✅ |
+| ↳ **Copilot Student** | autocomplete ilimitado, chat, agente, 200 créditos de IA/mês (modo Auto, sem escolher Claude/GPT) | grátis | Pack, "available to verified students" | Sim | education.github.com/pack | ✅ |
 | ↳ Heroku | hospedagem | US$13/mês por 24 meses | Pack | Sim | idem | ✅ |
 | ↳ MongoDB Atlas | banco + busca vetorial | US$50 + certificação grátis | Pack | Sim | mongodb.com/students | ✅ |
 | ↳ Domínios (Name.com, Namecheap, .TECH) | domínio 1 ano | grátis | Pack | Sim | idem | ✅ |
 | ↳ Datadog, Sentry, New Relic, Doppler, Clerk, LocalStack | observabilidade e infra | grátis (Datadog Pro 2 anos) | Pack | Sim | idem | ✅ |
 | ↳ DataCamp, Deepnote, Camber | cursos de dados/ML, notebooks | DataCamp 3 meses; demais grátis | Pack | Sim | idem | ✅ |
 | **JetBrains Student Pack** | todas as IDEs com **AI Assistant e Junie** | grátis durante o curso | e-mail acadêmico ou Pack | Sim | jetbrains.com/academy/student-pack | 🔎 |
-| **Notion Education Plus** | Plus grátis; 50% off no Notion AI | grátis | e-mail acadêmico | Sim | notion.com/help/notion-for-education | 🔎 |
-| **Figma Education** | Professional + Figma Make com créditos de IA | grátis | verificação | Sim | help.figma.com | 🔎 |
+| **Notion Education Plus** | Plus grátis; Notion AI com 50% off **ou** só trial de 30 dias (fontes divergem) | grátis | e-mail acadêmico | Sim | notion.com/help/notion-for-education | ⚠️ |
+| **Figma Education** | Professional + Figma Make com **3.000 créditos de IA/mês** | grátis | verificação | Sim | help.figma.com | 🔎 |
 | **Adobe CC Pro estudante** | 20+ apps com Firefly | R$55/mês no 1º ano (74% off) | matrícula | Sim | adobe.com/br/education | 🔎 |
-| **AWS Kiro Students** | agente de código Kiro, 1.000 créditos/mês por 1 ano | grátis | alunos de 13 universidades (USP, Unicamp, Insper, PUC-MG…) | Sim (se a sua estiver) | kiro.dev | ⚠️ |
-| Replit Core | agente de IA | 50% off | e-mail acadêmico | incerto | replit.com/education | ⚠️ |
-| Lovable Pro | criação de apps por IA | 50% off até 12 meses | e-mail .edu/carteirinha | incerto | lovable.dev/students | ⚠️ |
+| **AWS Kiro Students** | agente de código Kiro, 1.000 créditos/mês por 1 ano, sem cartão | grátis | 132 universidades em 18 países; no Brasil, 13 (USP, Unicamp, Insper, PUC-MG…) | Sim (se a sua estiver) | kiro.dev/students | 🔎 |
+| Replit Core | agente de IA | 50% off ou US$15 off por 6 meses (fontes divergem) | e-mail acadêmico | incerto | replit.com/education | ⚠️ |
+| **Lovable Pro** | criação de apps por IA | 50% off até 12 meses, qualquer país | estudante no plano grátis | Sim | lovable.dev/pt-br/students | 🔎 |
 | Perplexity Education Pro | Pro | ~US$10/mês (50% off) | SheerID | incerto | perplexity.ai | ⚠️ |
 | Canva para Universidades | Canva Pro com IA | grátis **se a universidade aderir** | conta institucional | depende | canva.com/pt_br/educacao | 🔎 |
-| Microsoft 365 estudante | Copilot no Office | desconto (~R$26/mês), não grátis | e-mail universitário | Sim | microsoft.com/pt-br | 🔎 |
+| Microsoft 365 estudante | Copilot no Office | desconto (~R$26/mês); a oferta de 12 meses grátis do M365 Premium foi até 31/08/2026, status atual incerto | e-mail universitário | Sim | microsoft.com/microsoft-365/college-student-pricing | ⚠️ |
 
-**Encerrados ou só para os EUA:** Cursor Pro grátis (fechado em 25/06/2026), Copilot Pro grátis (virou Copilot Student),
+**Encerrados ou só para os EUA:** Cursor Pro grátis (fechado em 25/06/2026; a Cursor promete promoções em eventos de campus), Codex for Students (US$100, só EUA/Canadá), Copilot Pro grátis (virou Copilot Student),
 ChatGPT Plus Back to School (EUA, até 31/10/2026), Google AI Pro grátis (só EUA em 2026), Colab Pro grátis (EUA),
 Perplexity Pro grátis (virou desconto), Windsurf estudante (provavelmente acabou), DigitalOcean saiu do Pack.
 
@@ -57,22 +59,22 @@ Perplexity Pro grátis (virou desconto), Windsurf estudante (provavelmente acabo
 
 | Programa | O que ganha | Valor | Requisito | Brasil? | Link | Conf. |
 |---|---|---|---|---|---|---|
-| **Azure for Students** | créditos Azure (inclui Azure OpenAI) | US$100/ano, renovável, **sem cartão** | e-mail institucional | Sim | azure.microsoft.com/free/students | 🔎 |
+| **Azure for Students** | créditos Azure (inclui Azure OpenAI) | US$100/ano, renovável, **sem cartão** | e-mail institucional | Sim | azure.microsoft.com/free/students | ✅ |
 | **Microsoft Student Ambassadors** (relançado 30/03/2026) | Azure, M365 Copilot, VS Enterprise, voucher por marco | **US$150/mês em Azure** | 18+, ensino superior, qualquer curso | Sim | learn.microsoft.com/training/student-hub | 🔎 |
 | **AWS Student Rewards** (desde 20/08/2026) | Skill Builder premium 12 meses + créditos + voucher | US$10 (7 badges) +US$20 (14); voucher US$100 (21 badges) | e-mail universitário, 18+ | Sim | builder.aws.com/student-rewards | 🔎 |
 | **Kaggle Notebooks** | GPU/TPU grátis | ~30 h GPU/semana | telefone verificado | Sim | kaggle.com | ⚠️ |
 | **Google Colab (free)** | GPU T4 | sessões ~12 h | conta Google | Sim | colab.research.google.com | ⚠️ |
 | **Gemini API (AI Studio)** | API grátis (Flash) | limites no console; dados podem treinar | conta Google | Sim | aistudio.google.com | 🔎 |
-| **Modal Starter** | GPU serverless | **US$30/mês recorrente** | conta | Sim | modal.com/pricing | ⚠️ |
+| **Modal Starter** | GPU serverless | **US$30/mês** em créditos (não acumulam) | conta (cartão: fontes divergem) | Sim | modal.com/pricing | 🔎 |
 | **Oracle University** | certificações **grátis**: OCI AI Foundations, Agentic AI Foundations, Architect Associate | grátis | conta MyLearn | Sim | mylearn.oracle.com | 🔎 |
 | Oracle Academy Cloud | créditos OCI | US$300/1 ano | universidade membro | se membro | academy.oracle.com | 🔎 |
 | Google Skills | labs/badges | 200 créditos (1 ano) | universidade | provável | cloud.google.com/edu/students | 🔎 |
 | Google Cloud Education | créditos GCP | US$50/aluno | **professor solicita** | provável | cloud.google.com/edu/faculty | 🔎 |
-| AWS Academy Learner Lab | sandbox AWS sem cartão | US$50–100/aluno | universidade membro | se membro | aws.amazon.com/training/awsacademy | ⚠️ |
+| AWS Academy Learner Lab | sandbox AWS sem cartão | US$50–100/aluno (valor definido pela universidade) | universidade membro + professor | se membro | aws.amazon.com/training/awsacademy | ✅ |
 | AWS Cloud Clubs | créditos, vouchers | não divulgado | liderar um clube | Sim | aws.amazon.com/developer/community/students | 🔎 |
 | GDG on Campus | eventos Build with AI + 1 mês de GDP premium | 1 mês | membro de capítulo | se houver | developers.google.com/community | 🔎 |
 | NVIDIA DLI | cursos com GPU e certificado | ~11–20 cursos grátis | conta | Sim | nvidia.com/training | 🔎 |
-| Claude Campus (Builder Club) | bolsa + créditos de API para o clube | US$3.600 | 18+ | Sim | claude.com/programs/campus | ✅ **fechado até o próximo ciclo** |
+| Claude Campus (Builder Club) | bolsa + créditos de API; trilhas de graduação, mestrado e doutorado | US$3.600 | 18+ | Sim | claude.com/programs/campus | ✅ **fechado; próxima coorte ainda sem data** |
 | Hackathons lablab.ai / MLH | créditos de API/GPU por evento | US$10–200 por evento | inscrição | Sim (online) | lablab.ai/ai-hackathons, mlh.io | 🔎 |
 | Cursos grátis | Claude Academy, OpenAI Academy (parte em PT-BR), DeepLearning.AI, IBM SkillsBuild, Databricks Free Edition | grátis | conta | Sim | academy.claude.com, academy.openai.com | 🔎/⚠️ |
 | Coursera Financial Aid | certificados de IA (Google, IBM, DeepLearning.AI) | até 100% | aplicação por curso | Sim | coursera.org | 🔎 |
@@ -93,13 +95,13 @@ Programa Centelha 3 (todas as UFs encontradas já fecharam).
 |---|---|---|---|
 | **Modal** | US$30/mês recorrente em GPU/CPU | modal.com/pricing | 🔎 |
 | **Groq** | API de LLM grátis (~30 req/min) | console.groq.com | 🔎 |
-| **Mistral** (Experiment) | API grátis com limite; só SMS; dados podem treinar | console.mistral.ai | 🔎 |
-| **OpenRouter** (modelos `:free`) | 50 req/dia (1.000/dia após comprar US$10 uma vez) | openrouter.ai | ⚠️ |
-| **Cloudflare Workers AI** | 10.000 neurons/dia | developers.cloudflare.com/workers-ai | 🔎 |
+| **Mistral** (Experiment) | API grátis com limite; só SMS; dados podem treinar (os US$10/mês em créditos saíram da página em out/2026) | console.mistral.ai | ⚠️ |
+| **OpenRouter** (modelos `:free`) | 20 req/min; 50 req/dia (1.000/dia após comprar US$10 uma vez) | openrouter.ai | 🔎 |
+| **Cloudflare Workers AI** | 10.000 neurons/dia (desde 28/07/2026, modelos grandes como Kimi K2.6 e GLM-5.2 exigem o plano pago de US$5) | developers.cloudflare.com/workers-ai | 🔎 |
 | **AssemblyAI** | US$50, não expira (voz para texto) | assemblyai.com | 🔎 |
 | **Deepgram** | US$200 no cadastro (voz) | deepgram.com | 🔎 |
-| **Alibaba Model Studio** | 1M tokens por modelo Qwen, 90 dias | alibabacloud.com | 🔎 |
-| Z.ai (GLM Flash) | modelos Flash grátis | docs.z.ai | ⚠️ |
+| **Alibaba Model Studio** | 1M tokens por modelo Qwen, 90 dias (só região Singapura) | alibabacloud.com | 🔎 |
+| Z.ai (GLM Flash) | GLM-4.7-Flash, 4.5-Flash e 4.6V-Flash grátis | docs.z.ai | 🔎 |
 | Cohere trial | 1.000 chamadas/mês, **sem uso comercial** | cohere.com | 🔎 |
 | Pinecone / Weaviate / Supabase | banco vetorial grátis (Pinecone trial US$300) | sites oficiais | 🔎 |
 | LangSmith Developer | 5k traces/mês | langchain.com | 🔎 |
@@ -110,8 +112,12 @@ Programa Centelha 3 (todas as UFs encontradas já fecharam).
 |---|---|---|---|---|---|
 | **ElevenLabs** | Startup Grants | **33M caracteres/12 meses (>US$5.500)** | <25 funcionários, qualquer país; logo + link no site por 12 meses | elevenlabs.io/startup-grants | 🔎 |
 | **Baseten** | Startup Program | até US$25k + US$2,5k (6 meses) | IA no centro do produto, cliente novo | baseten.co/startup-program | 🔎 |
-| **Deepgram** | Startup Program | a partir de US$1k (até US$100k) | captou <US$10M | deepgram.com/startup-program | 🔎 |
-| **RunPod** | Startup Starter | US$1k em GPU (1 ano) | captou <US$1M; seletivo | runpod.io/startup-program | 🔎 |
+| **Deepgram** | Startup Program | a partir de US$1k (até US$100k), expira em 12 meses | captou <US$10M | deepgram.com/startup-program | 🔎 |
+| **RunPod** | Startup Starter | US$1k em GPU (1 ano) | captou <US$1M; seletivo (agregadores dizem que exige VC ⚠️) | runpod.io/startup-credits | 🔎 |
+| **OpenRouter** | for Startups (novo) | US$3k–5k + taxa zerada por 12 meses | produto "AI-native", site + e-mail corporativo, gasto <US$500 no OpenRouter | openrouter.ai/startups | 🔎 |
+| **Zoom** | AI Launchpad (novo, 10/11/2026) | US$5k / US$50k / até US$150k em APIs de voz e IA conversacional | produto com voz/IA conversacional no centro; seleção contínua | zoom.ai/ai-launchpad | 🔎 |
+| **LiveKit** | Startups (novo) | US$6k em LiveKit Cloud + inferência | cliente novo, produto de voz ou vídeo | livekit.com/startups | 🔎 |
+| AssemblyAI | Startup Program (novo) | não publicado | pré-seed a Série A | assemblyai.com/startup-program | 🔎 |
 | LangSmith | Startup plan | 50% off por 2 anos | early-stage | docs.langchain.com | 🔎 |
 | Modal | for Builders | não publicado | projetos individuais | modal.com/builders | 🔎 |
 
@@ -133,19 +139,18 @@ A tabela está ordenada pela chance real de uma empresa de 2022 que presta servi
 
 | Empresa | Programa | O que dá | Valor | Requisitos | Link | Conf. |
 |---|---|---|---|---|---|---|
-| **Oracle** | OCI Always Free | VM ARM + Autonomous DB grátis para sempre | 2 OCPU + 12 GB (bom para hospedar o n8n) | só cadastro | oracle.com/cloud/free | 🔎 |
-| **IBM** | IBM for Startups, tier Builder | créditos IBM Cloud | US$1.000/mês por 12 meses (US$12k) | <5 anos, <US$1M de receita, site + e-mail no domínio. **A empresa completa 5 anos em 2027: peça logo** | ibm.com/startups | ⚠️ |
-| **Oracle** | Startup Growth Engine (lançado em SP em 23/06/2026) | créditos OCI + engenharia | até US$60k | inscrição na OPN; **não ter conta OCI paga antes**; seleção a critério da Oracle | oracle.com/br/artificial-intelligence/startup-growth-engine | 🔎 |
-| **Scaleway** | Startup Program | créditos de nuvem com GPU | €1.500/mês por 6 meses (€9k) | <5 anos, <50 pessoas, qualquer país, pede produto/MVP | scaleway.com/en/startup-program | 🔎 |
+| **Oracle** | OCI Always Free | VM ARM + Autonomous DB grátis para sempre (+ trial de US$300 por 30 dias) | 2 OCPU + 12 GB (bom para hospedar o n8n) | **cartão de crédito** (sem pré-pago ou virtual) | oracle.com/cloud/free | ✅ |
+| **IBM** | IBM for Startups, tier Builder | créditos IBM Cloud | US$1.000/mês por 12 meses (US$12k) ou US$3k/mês por 6 meses | <5 anos, <US$1M de receita, nunca ter tido crédito IBM nem ser cliente pago; não achei exclusão de agências. **A empresa completa 5 anos em 2027: peça logo** | developer.ibm.com/startups | 🔎 |
+| **Oracle** | Startup Growth Engine (lançado em SP em 23/06/2026) | créditos OCI (3 a 12 meses) + engenharia + OPN | **US$5k–100k** | **não exige investidor**; empresa de tecnologia/software/IA com **produto validado e clientes**; **sem relação comercial ativa com OCI** (não está claro se conta Always Free conta) | oracle.com/br/artificial-intelligence/startup-growth-engine | ✅ |
+| **Scaleway** | Startup Program | créditos de nuvem com GPU | Founders €1.000 por 1 ano; Early Stage até €3.600 (6 meses, consumo mínimo de €500/mês) | <5 anos, <50 pessoas; ⚠️ pode aceitar só empresas da UE | scaleway.com/en/startup-program | 🔎/⚠️ |
 | **OVHcloud** | Startup Program, tier Start | vouchers de nuvem | €10k, 12 meses | PoC/MVP técnico | startup.ovhcloud.com | 🔎 |
-| **n8n** | Startup Plan | plano Business self-hosted | desconto, 1 ano | <20 funcionários, <€5M; **confira a licença se for hospedar para clientes** | n8n.io/pricing/startup-plan | 🔎 |
-| **Notion** | for Startups | Plus com IA ilimitada | 3 meses (empresa de serviços pode ter só 1) | <100 funcionários, não pagante | notion.com/help/notion-for-startups | 🔎 |
-| **Intercom** | Early Stage | suporte com IA (Fin) | 93% → 50% → 25% de desconto em 3 anos | <15 funcionários, <US$10M | intercom.com | 🔎 |
+| **n8n** | Startup Plan | plano Business self-hosted | 50% off (~€333/mês no anual), renovável | <20 funcionários, <€5M; **confira a licença se for hospedar para clientes** | n8n.io/pricing/startup-plan | 🔎 |
+| **Notion** | for Startups | plano **Business** com IA | 3 meses (1 mês se a equipe não puder ser verificada) | site + e-mail no domínio, cliente novo, não pagante | notion.com/help/notion-for-startups | 🔎 |
+| **Intercom** | Early Stage (nova versão desde 16/11/2026) | suporte com IA (Fin) | US$30/mês no ano 1 (96% off), depois 50% e 25%; resultados do Fin cobrados à parte | <15 funcionários, <US$10M | intercom.com/help/en/articles/18297256 | 🔎 |
 | **Amplitude** | Startup Scholarship | analytics | 1 ano grátis | <20 funcionários | amplitude.com/startups | 🔎 |
-| **Neon** | Startup, tier self-funded | Postgres | até US$1k | <US$1M levantado | neon.com/startups | 🔎 |
-| **Mixpanel** | for Startups | plano Growth | 1 ano grátis | <5 anos (regra antiga), nunca pagante | docs.mixpanel.com | 🔎/⚠️ |
+| **Neon** | Databricks Startup Program, tier self-funded | Postgres | até US$1k | <US$1M levantado | neon.com/startups | 🔎 |
+| **Mixpanel** | for Startups | "Startup Plan" | 1 ano grátis | <5 anos, ≤US$8M captados, nunca pagante, enviar dados em até 90 dias | docs.mixpanel.com/docs/pricing/startup-program | 🔎 |
 | **Sebrae Startups** | clube de benefícios | descontos de até 90% (Pipedrive, Slack, Notion, HubSpot, AWS, Zendesk…) | "mais de R$250 mil" | critério de "startup" a confirmar | agenciasebrae.com.br | 🔎 |
-| **Twilio** | AI Startup Searchlight 2026 | prêmio competitivo | US$5k Twilio + US$2,5k OpenAI | startups de IA | twilio.com/en-us/lp/twilio-searchlight-ai-2026 | 🔎 |
 | Hetzner | indicação | crédito para conta nova | €20 | conta nova | hetzner.com | 🔎 |
 
 ### Excluem agências (não perder tempo, a menos que haja produto próprio)
@@ -159,7 +164,7 @@ HubSpot (90% de desconto), Atlassian, Linear, Datadog, Fly.io, Render, Netlify, 
 Alibaba Cloud (até US$120k), Railway, Supabase (via AWS Activate). Entrar no Sebrae Startups ou no InovAtiva
 pode render códigos de parceiro que destravam alguns deles.
 
-**Encerrados em 2026:** Webflow for Startups (30/06), créditos gerais Twilio/SendGrid, Figma for Startups ⚠️,
+**Encerrados em 2026:** Webflow for Startups (30/06), créditos gerais Twilio/SendGrid, Twilio AI Startup Searchlight 2026 (inscrições fecharam em 11/09), Figma for Startups ⚠️,
 Segment ⚠️, Supabase direto ⚠️. **Stripe Atlas** dá mais de US$50k em perks, mas exige abrir empresa nos EUA (US$500 + custo fiscal).
 
 ## 5. Programas brasileiros (empresa)
@@ -173,7 +178,7 @@ Segment ⚠️, Supabase direto ⚠️. **Stripe Atlas** dá mais de US$50k em p
 | FAPEMIG 018/2026 HubMG Gov | inovação aberta para o setor público de MG, contrapartida de 10% | R$20 mi no total | 27/11 (órgão) e 09/12 (final) | fapemig.br | 🔎 |
 | FAPES Nova Economia Capixaba | subvenção | R$500 mil a R$3 mi | fluxo contínuo; só ES | sigfapes.es.gov.br | 🔎 |
 | FAPESP PIPE Tecnologias Educacionais | subvenção | – | proposta completa até 13/01/2027 (pré-proposta fechou em 12/11) | agencia.fapesp.br | 🔎 |
-| **Sebrae Scale IA** | créditos AWS + NVIDIA + apoio do CEIA/UFG, para startups de IA voltadas a PMEs | não divulgado | 2026 fechado; acompanhar a próxima edição | agenciasebrae.com.br | 🔎 |
+| **Sebrae Scale IA** | créditos AWS + NVIDIA + apoio do CEIA/UFG, para startups de IA voltadas a PMEs | não divulgado | edição 2026 terminou (mai–out); acompanhar a de 2027 | agenciasebrae.com.br | 🔎 |
 | Prêmio Sebrae Startups | prêmio em dinheiro | campeã R$250 mil | 2026 fechado | sebrae.com.br | 🔎 |
 | AWS + governo do RS | créditos AWS | até US$5 mil | para empresas sediadas no RS | estado.rs.gov.br | ⚠️ |
 | AWS + Prefeitura do Rio (Rio.IA) | créditos AWS | até R$25,5 mil | para empresas com CNPJ no Rio | prefeitura.rio | ⚠️ |
