@@ -193,7 +193,7 @@ Segment ⚠️, Supabase direto ⚠️. **Stripe Atlas** dá mais de US$50k em p
 
 ## Atenção: agência ou produto
 
-Vários programas (NVIDIA Inception; Microsoft for Startups, segundo fontes de terceiros ⚠️; aceleradoras)
+Vários programas (NVIDIA Inception; Microsoft for Startups, confirmado na página oficial ✅; aceleradoras)
 **recusam agências ou consultorias**. Para aumentar a chance, inscreva-se apresentando um **produto próprio de IA**
 (por exemplo, uma plataforma de automação vendida por assinatura), desde que ele exista de verdade.
 Não descreva como produto algo que é serviço.
