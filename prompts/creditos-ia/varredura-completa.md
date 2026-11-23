@@ -1,4 +1,4 @@
-# Varredura completa: créditos de IA e benefícios para estudante e empresa (17/11/2026)
+# Varredura completa: créditos de IA e benefícios para estudante e empresa (atualizado em 23/11/2026)
 
 Complementa o [programas.md](programas.md), que cobre os 9 provedores principais (OpenAI, Anthropic, xAI,
 Google, NVIDIA, AWS, Microsoft, Vercel). Aqui está **todo o resto**: ferramentas para estudante, outros
@@ -13,10 +13,16 @@ Muitos sites estavam bloqueados na rede da pesquisa, então quase tudo é 🔎. 
 
 | Prazo | O quê | Para quem |
 |---|---|---|
-| **30/11/2026** | BNDES Garagem ciclo 3 (aceleração grátis, sem equity, até R$1 mi em prêmios; precisa de ângulo de impacto socioambiental) | PJ (Tração) ou equipe com ideia (Criação) |
-| **30/11/2026** | Inova Startups 6ª ed. (Sebrae/SC + Bossa): até R$800 mil, mas é **investimento** (equity) | PJ de qualquer estado |
+| **27/11 e 09/12/2026** | FAPEMIG 018/2026 HubMG Gov (inovação aberta para o setor público, R$20 mi no total): proposta ao órgão até 27/11; submissão final até 09/12 | PJ **de MG** |
+| **30/11/2026** | BNDES Garagem ciclo 3 (aceleração grátis, sem equity, até R$1 mi em prêmios; 50 vagas Criação + 50 Tração) — confirmado | PJ (Tração) ou equipe com ideia (Criação) |
+| **30/11/2026** | Inova Startups 6ª ed. (Sebrae/SC + Bossa): até R$800 mil, mas é **investimento** (equity) — confirmado | PJ de qualquer estado |
+| **01/12/2026** | Hackathon lablab × AMD AI Academy Challenge (online, individual, prêmios de US$5 mil) ⚠️ | Qualquer pessoa |
 | **31/12/2026** | Google AI Plus grátis por 12 meses (resgate) | Estudante 18+ |
-| 2027 (a anunciar) | Tecnova IV: subvenção não reembolsável via FAP/Sebrae do seu estado, para empresas com faturamento até R$16 mi | PJ |
+| **19/12/2026 – 18/01/2027** | Cosmo Hacks (Devpost, online), com créditos de API e nuvem dos patrocinadores | Estudante |
+| **até 22/01/2027** | SENAI/Finep Smart Factory, janela 3 (até 70% não reembolsável) | PJ fornecedora de solução para indústria, com Instituto SENAI |
+| **13/01/2027** | FAPESP PIPE Tecnologias Educacionais (só quem passou na pré-proposta) | PJ de SP |
+| 2027 (a anunciar) | Tecnova IV: nenhum estado abriu edital ainda (RN anunciou mais de R$8 mi para 2027) | PJ |
+| 1º sem. 2027 | Oracle ONE "AI For Tech" (formação grátis, 6 meses): pré-inscrição aberta ✅ | Estudante 18+ |
 
 ---
 
@@ -72,8 +78,12 @@ Perplexity Pro grátis (virou desconto), Windsurf estudante (provavelmente acabo
 | Coursera Financial Aid | certificados de IA (Google, IBM, DeepLearning.AI) | até 100% | aplicação por curso | Sim | coursera.org | 🔎 |
 
 **Bolsas para estudante:** Santander Apoio Financeiro Universitário (R$3 mil; edição 2026 fechou em 31/08),
-CNPq PIBITI (via edital da sua universidade), Oracle ONE com Alura (formação grátis; cadastre-se para a próxima turma),
-Programa Centelha 3 (subvenção para ideia, por estado).
+CNPq PIBITI (via edital da sua universidade), **Oracle ONE** com Alura (formação grátis: "AI For Tech" no 1º semestre
+de 2027 e "AI For Business" no 2º; pré-inscrição aberta ✅ oracle.com/br/education/oracle-next-education),
+Programa Centelha 3 (todas as UFs encontradas já fecharam).
+
+**Hackathons com créditos (próximos):** lablab × AMD AI Academy (até 01/12/2026) ⚠️, Cosmo Hacks na Devpost
+(19/12/2026 a 18/01/2027, para estudantes) 🔎, DeveloperWeek 2027 Hackathon (25/01 a 11/02/2027, online) 🔎.
 
 ## 3. Outros provedores de IA: créditos e níveis grátis
 
@@ -158,15 +168,19 @@ Segment ⚠️, Supabase direto ⚠️. **Stripe Atlas** dá mais de US$50k em p
 |---|---|---|---|---|---|
 | **BNDES Garagem ciclo 3** | aceleração grátis, sem equity, prêmios | até R$1 mi em prêmios; 100 vagas | **aberto até 30/11/2026** | garagem.bndes.gov.br | 🔎 |
 | **Sebrae + Embrapii** | P&D com até 90% coberto (pago via Unidade Embrapii) | R$116 mi no total | fluxo contínuo (confirmar) | embrapii.org.br | 🔎 |
-| **Tecnova IV** (MCTI/Finep) | subvenção não reembolsável | R$360 mi para ~713 empresas | editais estaduais devem sair entre o fim de 2026 e 2027 | finep.gov.br + FAP do estado | ⚠️ |
+| **Tecnova IV** (MCTI/Finep) | subvenção não reembolsável | R$360 mi para ~713 empresas | nenhum estado abriu ainda (em 23/11); RN prevê mais de R$8 mi em 2027 | finep.gov.br + FAP do estado | 🔎/⚠️ |
+| **Sebrae Startups** (plataforma) | cadastro grátis dá acesso ao clube de benefícios (AWS, Google Cloud, Microsoft, Notion, HubSpot…), em níveis bronze, prata e ouro | mais de R$250 mil em ofertas | contínuo; critério de nível não publicado | programas.sebraestartups.com.br | 🔎 |
+| FAPEMIG 018/2026 HubMG Gov | inovação aberta para o setor público de MG, contrapartida de 10% | R$20 mi no total | 27/11 (órgão) e 09/12 (final) | fapemig.br | 🔎 |
+| FAPES Nova Economia Capixaba | subvenção | R$500 mil a R$3 mi | fluxo contínuo; só ES | sigfapes.es.gov.br | 🔎 |
+| FAPESP PIPE Tecnologias Educacionais | subvenção | – | proposta completa até 13/01/2027 (pré-proposta fechou em 12/11) | agencia.fapesp.br | 🔎 |
 | **Sebrae Scale IA** | créditos AWS + NVIDIA + apoio do CEIA/UFG, para startups de IA voltadas a PMEs | não divulgado | 2026 fechado; acompanhar a próxima edição | agenciasebrae.com.br | 🔎 |
 | Prêmio Sebrae Startups | prêmio em dinheiro | campeã R$250 mil | 2026 fechado | sebrae.com.br | 🔎 |
 | AWS + governo do RS | créditos AWS | até US$5 mil | para empresas sediadas no RS | estado.rs.gov.br | ⚠️ |
 | AWS + Prefeitura do Rio (Rio.IA) | créditos AWS | até R$25,5 mil | para empresas com CNPJ no Rio | prefeitura.rio | ⚠️ |
 | Inova Startups (Sebrae/SC + Bossa) | aporte (equity) | até R$800 mil | até 30/11/2026 | inovastartups.com.br | ⚠️ |
-| Google for Startups Accelerator Brasil | aceleração + créditos | não divulgado | 2026 fechado; costuma abrir em janeiro | startup.google.com | 🔎 |
+| Google for Startups Accelerator Brasil | aceleração + créditos | não divulgado | página ainda mostra o ciclo 2026; costuma abrir em janeiro | startup.google.com | ✅ |
 | FAPESP PIPE / FAPERJ / FAPEMIG | subvenção estadual | varia | acompanhar editais | sites das FAPs | 🔎/⚠️ |
-| SENAI/Finep Smart Factory | até 70% do projeto (indústria) | R$47,5 mi | janelas até mar/2027 | Inovação para a Indústria | ⚠️ |
+| SENAI/Finep Smart Factory (11ª chamada) | até 70% do projeto (indústria); aceita fornecedor de software | R$47,5 mi | janela 3: 23/11/2026 a 22/01/2027; janela 4 até mar/2027 | portaldaindustria.com.br | 🔎 |
 | Brasil Mais Produtivo | consultoria digital com 70% de subsídio | – | só para MPE industrial | brasilmaisprodutivo.mdic.gov.br | 🔎 |
 | InovAtiva, Porto Digital, Hotmilk, Cubo | aceleração e mentoria | – | ciclos 2026 fechados ou sem data | sites oficiais | ⚠️ |
 
